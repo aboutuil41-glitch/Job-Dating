@@ -75,4 +75,13 @@ public function store()
         exit;
     }
 }
+
+public function test2()
+{
+    $this->renderTwigBack('test', [
+        'name' => 'Developer'
+    ]);
+}
+
+
 }
