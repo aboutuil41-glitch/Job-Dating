@@ -24,7 +24,7 @@ $router->post('user', function () {
     echo "</pre>";
 });
 
-
+$router->get('test', [UserController::class, 'test2']);
 $router->get('StudentsIndex', [UserController::class, 'index']);
 $router->get('AddStudents/new', [UserController::class, 'showCreateForm']);
 $router->post('AddStudents/store', [UserController::class, 'store']);

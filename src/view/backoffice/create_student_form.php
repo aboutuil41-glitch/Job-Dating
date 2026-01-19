@@ -101,15 +101,6 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-
-            <div class="form-group">
-                <label for="role">role</label>
-                <select name="role" id="role">
-                    <option value="admin">admin</option>
-                    <option value="student">student</option>
-                </select>
-            </div>
-
             <button type="submit">Create User</button>
         </form>
     </div>

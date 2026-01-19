@@ -17,6 +17,11 @@ protected function renderBack( $view,  $data = [])
         return View::BackOfficeView($view, $data);
     }
 
+protected function renderTwigBack(string $view, array $data = []): void
+{
+    View::renderTwigBack($view, $data);
+}
+
 }
 
 
