@@ -88,8 +88,8 @@
 
         <form action="/users/store" method="POST">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="name">name</label>
+                <input type="text" id="name" name="name" required>
             </div>
 
             <div class="form-group">
@@ -103,8 +103,11 @@
             </div>
 
             <div class="form-group">
-                <label for="bio">Bio</label>
-                <textarea id="bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+                <label for="role">role</label>
+                <select name="role" id="role">
+                    <option value="admin">admin</option>
+                    <option value="student">student</option>
+                </select>
             </div>
 
             <button type="submit">Create User</button>

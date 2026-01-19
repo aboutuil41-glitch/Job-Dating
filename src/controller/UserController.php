@@ -37,7 +37,7 @@ public function dashboard()
 {
     $userModel = new User();
     echo $this->render('create_user', [
-        'all' => $userModel->loadAll()
+        'all' => $userModel->loadStudents()
     ]);
     
     
@@ -62,10 +62,10 @@ public function store()
 
 
     $user = new \App\models\user();
-    $user->setUsername($_POST['username'] ?? '');
+    $user->setName($_POST['name'] ?? '');
     $user->setEmail($_POST['email'] ?? '');
     $user->setPassword($_POST['password'] ?? '');
-    $user->setBio($_POST['bio'] ?? '');
+    $user->setRole('student');
     $user->setDate(date('Y-m-d H:i:s'));
 
     if ($user->create()) {
