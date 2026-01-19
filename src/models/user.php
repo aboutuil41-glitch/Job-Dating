@@ -44,9 +44,17 @@ protected function getColumns(): array
     return ['name', 'email', 'password', 'role', 'created_at', 'updated_at'];
 }
 protected function fill(){
-
-
 }
+
+public function loadStudents(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->getTable()} WHERE role = 'student'"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 
