@@ -61,9 +61,9 @@
             
             <?php foreach($all as $user): ?>
                 <div class="card">
-                    <div class="username"><?= htmlspecialchars($user['username']) ?></div>
+                    <div class="username"><?= htmlspecialchars($user['name']) ?></div>
                     <div class="email"><?= htmlspecialchars($user['email']) ?></div>
-                    <div class="bio"><?= htmlspecialchars($user['bio']) ?></div>
+                    <div class="bio"><?= htmlspecialchars($user['role']) ?></div>
                     <form method="GET" action="/test/<?= $user['id'] ?>">
     <button type="submit">Update</button>
 </form>
