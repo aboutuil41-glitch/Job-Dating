@@ -12,6 +12,10 @@ abstract class BaseController
     {
         return View::view($view, $data);
     }
+protected function renderBack( $view,  $data = [])
+    {
+        return View::BackOfficeView($view, $data);
+    }
 
 }
 
