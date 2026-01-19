@@ -14,7 +14,7 @@ class View
         require $file;
         return ob_get_clean();
     }
-    public static function dashboard(string $view, array $data = []): string
+    public static function BackOfficeView(string $view, array $data = []): string
     {
         extract($data);
 

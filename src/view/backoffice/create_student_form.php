@@ -86,7 +86,7 @@
             <div class="error">Failed to create user. Please try again.</div>
         <?php endif; ?>
 
-        <form action="/users/store" method="POST">
+        <form action="/AddStudents/store" method="POST">
             <div class="form-group">
                 <label for="name">name</label>
                 <input type="text" id="name" name="name" required>

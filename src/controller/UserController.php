@@ -36,21 +36,21 @@ public function dashboard()
     public function index()
 {
     $userModel = new User();
-    echo $this->render('create_user', [
+    echo $this->renderBack('current_students', [
         'all' => $userModel->loadStudents()
     ]);
     
     
 }
 public function test($id){
-    echo $this->render('test', [
+    echo $this->renderBack('test', [
         'id' => $id
     ]);
 }
 
 public function showCreateForm()
 {
-    return $this->render('create_user_form', []);
+    return $this->renderBack('create_student_form', []);
 }
 
 public function store()
@@ -60,7 +60,6 @@ public function store()
         exit;
     }
 
-
     $user = new \App\models\user();
     $user->setName($_POST['name'] ?? '');
     $user->setEmail($_POST['email'] ?? '');
@@ -69,7 +68,7 @@ public function store()
     $user->setDate(date('Y-m-d H:i:s'));
 
     if ($user->create()) {
-        header('Location: /UserIndex');
+        header('Location: /StudentsIndex');
         exit;
     } else {
         header('Location: /users/new?error=1');

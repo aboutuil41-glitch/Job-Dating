@@ -63,7 +63,7 @@
                 <div class="card">
                     <div class="username"><?= htmlspecialchars($user['name']) ?></div>
                     <div class="email"><?= htmlspecialchars($user['email']) ?></div>
-                    <div class="bio"><?= htmlspecialchars($user['role']) ?></div>
+                    <div class="role"><?= htmlspecialchars($user['role']) ?></div>
                     <form method="GET" action="/test/<?= $user['id'] ?>">
     <button type="submit">Update</button>
 </form>
@@ -71,7 +71,7 @@
             <?php endforeach; ?>
         </div>
     </div>
-    <form method="GET "action="/users/new">
+    <form method="GET "action="/AddStudents/new">
         <button type="submit">GOO!!!</button>
     </form>
 </body>
