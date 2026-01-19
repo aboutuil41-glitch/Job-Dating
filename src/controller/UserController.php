@@ -62,10 +62,10 @@ public function store()
 
 
     $user = new \App\models\user();
-    $user->setUsername($_POST['username'] ?? '');
+    $user->setName($_POST['name'] ?? '');
     $user->setEmail($_POST['email'] ?? '');
     $user->setPassword($_POST['password'] ?? '');
-    $user->setBio($_POST['bio'] ?? '');
+    $user->setRole($_POST['role'] ?? '');
     $user->setDate(date('Y-m-d H:i:s'));
 
     if ($user->create()) {
