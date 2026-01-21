@@ -23,7 +23,7 @@ class CompanyController extends BaseController
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /AddCompany/New');
+            header('Location: /Job-Dating/public/AddCompany/new');
             exit;
         }
 
@@ -36,11 +36,11 @@ class CompanyController extends BaseController
         $company->setCreatedAt(date('Y-m-d H:i:s'));
 
         if ($company->create()) {
-            header('Location: /CompanyIndex');
+            header('Location: /Job-Dating/public/CompanyIndex');
             exit;
         }
 
-        header('Location: /AddCompany/New?error=1');
+        header('Location: /Job-Dating/public/AddCompany/new?error=1');
         exit;
     }
 
@@ -55,7 +55,7 @@ class CompanyController extends BaseController
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /Company/Edit/$id");
+            header("Location: /Job-Dating/public/Company/Edit/$id");
             exit;
         }
 
@@ -63,7 +63,7 @@ class CompanyController extends BaseController
         $company = $company->loadById($id);
 
         if (!$company) {
-            header('Location: /CompanyIndex');
+            header('Location: /Job-Dating/public/CompanyIndex');
             exit;
         }
 
@@ -75,11 +75,11 @@ class CompanyController extends BaseController
         $company->setUpdatedAt(date('Y-m-d H:i:s'));
 
         if ($company->update()) {
-            header('Location: /CompanyIndex');
+            header('Location: /Job-Dating/public/CompanyIndex');
             exit;
         }
 
-        header("Location: /Company/Edit/$id?error=1");
+        header("Location: /Job-Dating/public/Company/Edit/$id?error=1");
         exit;
     }
 
@@ -89,16 +89,16 @@ class CompanyController extends BaseController
         $company = $company->loadById($id);
 
         if (!$company) {
-            header('Location: /CompanyIndex?error=notfound');
+            header('Location: /Job-Dating/public/CompanyIndex?error=notfound');
             exit;
         }
 
         if ($company->delete()) {
-            header('Location: /CompanyIndex?success=deleted');
+            header('Location: /Job-Dating/public/CompanyIndex?success=deleted');
             exit;
         }
 
-        header('Location: /CompanyIndex?error=fail');
+        header('Location: /Job-Dating/public/CompanyIndex?error=fail');
         exit;
     }
 }

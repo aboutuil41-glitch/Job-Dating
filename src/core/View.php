@@ -33,7 +33,7 @@ class View
     public static function renderTwig(string $template, array $data = []): void
     {
         if (self::$twig === null) {
-            $loader = new FilesystemLoader('../view');
+            $loader = new FilesystemLoader(__DIR__ . '/../view');
 
             self::$twig = new Environment($loader, [
                 'cache' => false, // __DIR__ . '/../../storage/cache' in prod
