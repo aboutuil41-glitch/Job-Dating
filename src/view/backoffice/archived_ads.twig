@@ -1,17 +1,15 @@
 {% extends "layout.twig" %}
 
-{% set active = 'ads' %}
+{% set active = 'archive' %}
 
 {% block title %}Archived Job Ads - Job Dating Admin{% endblock %}
 
 {% block content %}
 <div class="header">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1><i class="fas fa-archive"></i> Archived Job Advertisements</h1>
-        <a href="/Ads" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Back to Active Ads
-        </a>
-    </div>
+    <h1><i class="fas fa-archive"></i> Archived Job Advertisements</h1>
+    <a href="/Ads" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Back to Active Ads
+    </a>
 </div>
 
 {% if app.request.query.get('success') == 'restored' %}
@@ -26,81 +24,54 @@
 </div>
 {% endif %}
 
-<div class="card">
-    <div style="margin-bottom: 20px; padding: 15px; background: rgba(240, 147, 251, 0.1); border-radius: 10px; border-left: 4px solid #f093fb;">
-        <i class="fas fa-info-circle"></i> <strong>Archive:</strong> These job ads are archived. You can restore them or permanently delete them.
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th><i class="fas fa-hashtag"></i> ID</th>
-                <th><i class="fas fa-briefcase"></i> Title</th>
-                <th><i class="fas fa-building"></i> Company ID</th>
-                <th><i class="fas fa-file-contract"></i> Contract Type</th>
-                <th><i class="fas fa-map-marker-alt"></i> Location</th>
-                <th><i class="fas fa-calendar"></i> Created At</th>
-                <th><i class="fas fa-cog"></i> Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if all is empty %}
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
-                        No archived job ads
-                    </td>
-                </tr>
-            {% else %}
-                {% for ad in all %}
-                <tr style="opacity: 0.7;">
-                    <td>{{ ad.id }}</td>
-                    <td>{{ ad.title }}</td>
-                    <td>{{ ad.company_id }}</td>
-                    <td>
-                        <span style="padding: 4px 12px; background: rgba(240, 147, 251, 0.2); border-radius: 20px; font-size: 12px;">
-                            {{ ad.contract_type }}
-                        </span>
-                    </td>
-                    <td>{{ ad.location }}</td>
-                    <td>{{ ad.created_at }}</td>
-                    <td>
-                        <a href="/Ads/Restore/{{ ad.id }}" class="btn" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-right: 10px;" onclick="return confirm('Restore this job ad?')">
-                            <i class="fas fa-undo"></i> Restore
-                        </a>
-                        <a href="/Ads/HardDelete/{{ ad.id }}" class="btn btn-danger" onclick="return confirm('⚠️ PERMANENTLY DELETE? This cannot be undone!')">
-                            <i class="fas fa-trash-alt"></i> Delete Forever
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+<div style="padding: 15px; background: #fff; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f39c12;">
+    <i class="fas fa-info-circle"></i> <strong>Archive:</strong> These job ads are archived. You can restore them or permanently delete them.
 </div>
 
-<style>
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .card {
-        animation: fadeIn 0.3s ease;
-    }
-
-    tr {
-        transition: all 0.3s ease;
-    }
-
-    tr:hover {
-        opacity: 1 !important;
-    }
-</style>
+{% if all is empty %}
+<div class="card">
+    <div class="empty-state">
+        <i class="fas fa-archive"></i>
+        <h3>No Archived Ads</h3>
+        <p>Deleted job ads will appear here</p>
+    </div>
+</div>
+{% else %}
+<div class="cards-grid">
+    {% for ad in all %}
+    <div class="card" style="opacity: 0.8;">
+        <div class="card-header">
+            <i class="fas fa-briefcase"></i>
+            {{ ad.title }}
+        </div>
+        <div class="card-body">
+            <div class="card-info">
+                <i class="fas fa-building"></i>
+                <span>Company: {{ ad.company_id }}</span>
+            </div>
+            <div class="card-info">
+                <i class="fas fa-file-contract"></i>
+                <span class="badge badge-warning">{{ ad.contract_type }}</span>
+            </div>
+            <div class="card-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{ ad.location }}</span>
+            </div>
+            <div class="card-info">
+                <i class="fas fa-calendar"></i>
+                <span>{{ ad.created_at }}</span>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a href="/Ads/Restore/{{ ad.id }}" class="btn btn-success" onclick="return confirm('Restore this job ad?')">
+                <i class="fas fa-undo"></i> Restore
+            </a>
+            <a href="/Ads/HardDelete/{{ ad.id }}" class="btn btn-danger" onclick="return confirm('⚠️ PERMANENTLY DELETE? This cannot be undone!')">
+                <i class="fas fa-trash-alt"></i> Delete Forever
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

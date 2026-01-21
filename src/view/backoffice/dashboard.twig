@@ -18,78 +18,65 @@
     }
 
     .stat-card {
-        background: linear-gradient(135deg, #1e1e30 0%, #151525 100%);
+        background: #fff;
         padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        position: relative;
-        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #3498db;
+        transition: all 0.3s ease;
     }
 
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .stat-card.purple::before {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    .stat-card.blue {
+        border-left-color: #3498db;
     }
 
-    .stat-card.blue::before {
-        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    .stat-card.green {
+        border-left-color: #27ae60;
     }
 
-    .stat-card.pink::before {
-        background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+    .stat-card.orange {
+        border-left-color: #f39c12;
     }
 
-    .stat-card.red::before {
-        background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+    .stat-card.red {
+        border-left-color: #e74c3c;
     }
 
     .stat-icon {
-        font-size: 40px;
+        font-size: 36px;
         margin-bottom: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #3498db;
     }
 
-    .stat-card.blue .stat-icon {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .stat-card.green .stat-icon {
+        color: #27ae60;
     }
 
-    .stat-card.pink .stat-icon {
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .stat-card.orange .stat-icon {
+        color: #f39c12;
     }
 
     .stat-card.red .stat-icon {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #e74c3c;
     }
 
     .stat-label {
-        color: #b0b0b0;
+        color: #7f8c8d;
         font-size: 14px;
         margin-bottom: 10px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
     }
 
     .stat-value {
         font-size: 36px;
         font-weight: bold;
-        color: #fff;
+        color: #2c3e50;
     }
 
     .quick-actions {
@@ -99,39 +86,52 @@
         margin-top: 30px;
     }
 
-    .action-btn {
-        background: linear-gradient(135deg, #1e1e30 0%, #151525 100%);
+    .action-card {
+        background: #fff;
         padding: 20px;
-        border-radius: 12px;
+        border-radius: 10px;
         text-decoration: none;
-        color: #e0e0e0;
+        color: #2c3e50;
         display: flex;
         align-items: center;
         gap: 15px;
         transition: all 0.3s ease;
-        border: 2px solid transparent;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
-    .action-btn:hover {
+    .action-card:hover {
         transform: translateY(-5px);
-        border-color: #667eea;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-    .action-btn i {
+    .action-card i {
         font-size: 28px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #3498db;
     }
 
     .action-text {
         font-weight: 600;
     }
+
+    .section-title {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+        margin: 0;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 </style>
 
 <div class="stats-grid">
-    <div class="stat-card purple">
+    <div class="stat-card blue">
         <div class="stat-icon">
             <i class="fas fa-user-graduate"></i>
         </div>
@@ -139,7 +139,7 @@
         <div class="stat-value">{{ studentsCount }}</div>
     </div>
 
-    <div class="stat-card blue">
+    <div class="stat-card green">
         <div class="stat-icon">
             <i class="fas fa-building"></i>
         </div>
@@ -147,7 +147,7 @@
         <div class="stat-value">{{ companiesCount }}</div>
     </div>
 
-    <div class="stat-card pink">
+    <div class="stat-card orange">
         <div class="stat-icon">
             <i class="fas fa-bullhorn"></i>
         </div>
@@ -164,27 +164,32 @@
     </div>
 </div>
 
-<div class="card">
-    <h2 style="margin-bottom: 20px; color: #fff;">
+<div class="section-title">
+    <h2>
         <i class="fas fa-bolt"></i> Quick Actions
     </h2>
-    <div class="quick-actions">
-        <a href="/AddStudents/new" class="action-btn">
-            <i class="fas fa-user-plus"></i>
-            <span class="action-text">Add Student</span>
-        </a>
-        <a href="/AddCompany/new" class="action-btn">
-            <i class="fas fa-building"></i>
-            <span class="action-text">Add Company</span>
-        </a>
-        <a href="/Ads/New" class="action-btn">
-            <i class="fas fa-plus-circle"></i>
-            <span class="action-text">Create Job Ad</span>
-        </a>
-        <a href="/StudentsIndex" class="action-btn">
-            <i class="fas fa-list"></i>
-            <span class="action-text">View Students</span>
-        </a>
-    </div>
+</div>
+
+<div class="quick-actions">
+    <a href="/AddCompany/new" class="action-card">
+        <i class="fas fa-building"></i>
+        <span class="action-text">Add Company</span>
+    </a>
+    <a href="/Ads/New" class="action-card">
+        <i class="fas fa-plus-circle"></i>
+        <span class="action-text">Create Job Ad</span>
+    </a>
+    <a href="/StudentsIndex" class="action-card">
+        <i class="fas fa-user-graduate"></i>
+        <span class="action-text">View Students</span>
+    </a>
+    <a href="/CompanyIndex" class="action-card">
+        <i class="fas fa-list"></i>
+        <span class="action-text">View Companies</span>
+    </a>
+    <a href="/Ads" class="action-card">
+        <i class="fas fa-bullhorn"></i>
+        <span class="action-text">View Job Ads</span>
+    </a>
 </div>
 {% endblock %}
