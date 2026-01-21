@@ -1,0 +1,360 @@
+{% extends "frontoffice/layout.twig" %}
+
+{% block title %}{{ job.title }} - YouCode Job Dating{% endblock %}
+
+{% block content %}
+    <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumb -->
+            <nav class="mb-6" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-2 text-sm">
+                    <li>
+                        <a href="/jobs" class="text-blue-600 hover:text-blue-800 transition">Job Offers</a>
+                    </li>
+                    <li class="text-gray-400">/</li>
+                    <li>
+                        <a href="/companies/{{ job.company_id }}" class="text-blue-600 hover:text-blue-800 transition">{{ job.company_name }}</a>
+                    </li>
+                    <li class="text-gray-400">/</li>
+                    <li class="text-gray-800 font-medium truncate">{{ job.title }}</li>
+                </ol>
+            </nav>
+
+            <!-- Main Job Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+                <!-- Job Header -->
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                        <div class="flex items-start space-x-4">
+                            <!-- Company Logo/Avatar -->
+                            <div class="w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center text-2xl font-bold text-blue-600">
+                                {{ job.company_name|slice(0,1) }}
+                            </div>
+
+                            <!-- Job Info -->
+                            <div class="flex-1">
+                                <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ job.title }}</h1>
+                                <div class="flex items-center text-gray-600 mb-1">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    <span class="font-medium">{{ job.company_name }}</span>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        {{ job.location }}
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        Posted {{ job.created_at|date("F d, Y") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contract Badge & Apply Button -->
+                        <div class="flex flex-col items-start md:items-end space-y-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase
+                            {% if job.contract_type == 'CDI' %}bg-green-100 text-green-800
+                            {% elseif job.contract_type == 'CDD' %}bg-yellow-100 text-yellow-800
+                            {% elseif job.contract_type == 'Internship' %}bg-blue-100 text-blue-800
+                            {% else %}bg-purple-100 text-purple-800
+                            {% endif %}">
+                            {{ job.contract_type }}
+                        </span>
+
+                            <button id="applyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Content -->
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Main Content -->
+                        <div class="lg:col-span-2">
+                            <!-- Job Description -->
+                            <section class="mb-8">
+                                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Job Description
+                                </h2>
+                                <div class="prose max-w-none text-gray-700">
+                                    {{ job.description|raw }}
+                                </div>
+                            </section>
+
+                            <!-- Required Skills -->
+                            <section class="mb-8">
+                                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    Required Skills
+                                </h2>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in job.skills|split(',') %}
+                                        <span class="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-100 transition">
+                                        {{ skill|trim }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </section>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="lg:col-span-1">
+                            <!-- Company Info Card -->
+                            <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    About the Company
+                                </h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 mr-3">
+                                            {{ job.company_name|slice(0,1) }}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900">{{ job.company_name }}</h4>
+                                            <p class="text-sm text-gray-600">{{ job.company_sector }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            </svg>
+                                            {{ job.company_location }}
+                                        </div>
+                                        <div class="flex items-center text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                            </svg>
+                                            {{ job.company_email }}
+                                        </div>
+                                        {% if job.company_phone %}
+                                            <div class="flex items-center text-gray-600">
+                                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                </svg>
+                                                {{ job.company_phone }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <a href="/companies/{{ job.company_id }}" class="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium text-sm">
+                                        View Company Profile →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Job Details Card -->
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Job Details
+                                </h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between py-2 border-b border-gray-200">
+                                        <span class="text-gray-600">Contract Type</span>
+                                        <span class="font-medium">{{ job.contract_type }}</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-gray-200">
+                                        <span class="text-gray-600">Location</span>
+                                        <span class="font-medium">{{ job.location }}</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-gray-200">
+                                        <span class="text-gray-600">Posted Date</span>
+                                        <span class="font-medium">{{ job.created_at|date("M d, Y") }}</span>
+                                    </div>
+                                    {% if job.updated_at and job.updated_at != job.created_at %}
+                                        <div class="flex justify-between py-2">
+                                            <span class="text-gray-600">Last Updated</span>
+                                            <span class="font-medium">{{ job.updated_at|date("M d, Y") }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Similar Jobs (Placeholder) -->
+                            <div class="mt-6">
+                                <h4 class="text-sm font-bold text-gray-900 mb-3">Similar Opportunities</h4>
+                                <div class="space-y-3">
+                                    {% for similar_job in similar_jobs|default([]) %}
+                                        <a href="/jobs/view/{{ similar_job.id }}" class="block p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <h5 class="font-medium text-gray-900 text-sm">{{ similar_job.title|slice(0, 30) }}{% if similar_job.title|length > 30 %}...{% endif %}</h5>
+                                                    <p class="text-xs text-gray-500">{{ similar_job.company_name }}</p>
+                                                </div>
+                                                <span class="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded">
+                                            {{ similar_job.contract_type }}
+                                        </span>
+                                            </div>
+                                        </a>
+                                    {% else %}
+                                        <p class="text-sm text-gray-500 text-center py-2">No similar jobs found</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Modal (Hidden by default) -->
+            <div id="applicationModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-900">Apply for Position</h3>
+                            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <p class="text-gray-600 mb-6">You're about to apply for <span class="font-bold">{{ job.title }}</span> at <span class="font-bold">{{ job.company_name }}</span>.</p>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="Your full name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                       placeholder="your.email@example.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cover Letter (Optional)</label>
+                                <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                          placeholder="Tell us why you're interested in this position..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Resume/CV</label>
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <p class="mt-1 text-sm text-gray-600">Drop your resume here, or click to browse</p>
+                                    <input type="file" class="hidden" accept=".pdf,.doc,.docx">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button id="cancelApply" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                                Cancel
+                            </button>
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                                Submit Application
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Jobs Link -->
+            <div class="text-center mt-8">
+                <a href="/jobs" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Job Offers
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Application Modal
+            const applyButton = document.getElementById('applyButton');
+            const applicationModal = document.getElementById('applicationModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelApply = document.getElementById('cancelApply');
+
+            if (applyButton) {
+                applyButton.addEventListener('click', function() {
+                    applicationModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeModal) {
+                closeModal.addEventListener('click', function() {
+                    applicationModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelApply) {
+                cancelApply.addEventListener('click', function() {
+                    applicationModal.classList.add('hidden');
+                });
+            }
+
+            // Close modal when clicking outside
+            applicationModal.addEventListener('click', function(e) {
+                if (e.target === applicationModal) {
+                    applicationModal.classList.add('hidden');
+                }
+            });
+
+            // File upload interaction
+            const fileInput = document.querySelector('input[type="file"]');
+            const fileDropZone = fileInput ? fileInput.parentElement : null;
+
+            if (fileDropZone) {
+                fileDropZone.addEventListener('click', function() {
+                    fileInput.click();
+                });
+
+                fileDropZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    fileDropZone.classList.add('border-blue-500', 'bg-blue-50');
+                });
+
+                fileDropZone.addEventListener('dragleave', function() {
+                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                });
+
+                fileDropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                    // Handle file drop here
+                });
+
+                fileInput.addEventListener('change', function() {
+                    if (fileInput.files.length > 0) {
+                        fileDropZone.innerHTML = `
+                    <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="mt-1 text-sm text-gray-600">${fileInput.files[0].name}</p>
+                `;
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -43,8 +43,8 @@ class Router
 
         $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         
-        // Remove the base path (Job-Dating/public) from URI
-        $uri = preg_replace('#^Job-Dating/public/?#', '', $uri);
+        // Remove any base path from URI for local development
+        $uri = preg_replace('#^(Job-Dating/public/?|public/?)#', '', $uri);
         $uri = trim($uri, '/');
 
         foreach (self::$routes[$method] ?? [] as $route => $action) {
