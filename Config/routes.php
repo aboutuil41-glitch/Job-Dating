@@ -8,7 +8,15 @@ use App\Controller\UserController;
 
 $router = Router::getRouter();
 
-/* ---------- ROUTES ---------- */
+/* ---------- AUTHENTICATION ROUTES ---------- */
+$router->get('login', [AuthController::class, 'login']);
+$router->post('login', [AuthController::class, 'login']);
+$router->get('register', [AuthController::class, 'register']);
+$router->post('register', [AuthController::class, 'register']);
+$router->get('logout', [AuthController::class, 'logout']);
+$router->get('dashboard', [AuthController::class, 'dashboard']);
+
+/* ---------- OTHER ROUTES ---------- */
 
 $router->get('', fn() => 'Home');
 $router->get('user/{name}/{id}', fn($name, $id) => 'Welcome ' .$name. ' Your ID is ' .$id);

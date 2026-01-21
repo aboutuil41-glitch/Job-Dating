@@ -1,6 +1,9 @@
 <?php
 // config/bootstrap.php
 
+// Start session
+session_start();
+
 // Base path of the project (wallet/)
 define('BASE_PATH', dirname(__DIR__));
 
