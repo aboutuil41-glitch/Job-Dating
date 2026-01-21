@@ -1,0 +1,38 @@
+{% extends "layout.twig" %}
+
+{% set active = 'students' %}
+
+{% block title %}Edit Student - Job Dating Admin{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1><i class="fas fa-user-edit"></i> Edit Student</h1>
+</div>
+
+<div class="card">
+    <form action="/Current/Students/Update/{{ student.id }}" method="POST">
+        <div class="form-group">
+            <label for="name">
+                <i class="fas fa-user"></i> Student Name
+            </label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ student.name }}" required placeholder="Enter student name">
+        </div>
+
+        <div class="form-group">
+            <label for="email">
+                <i class="fas fa-envelope"></i> Email Address (Read-only)
+            </label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ student.email }}" disabled style="opacity: 0.6;">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Update Student
+            </button>
+            <a href="/StudentsIndex" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -36,7 +36,7 @@ public function dashboard()
     public function index()
 {
     $userModel = new User();
-    echo $this->renderBack('current_students', [
+    echo $this->renderTwigBack('current_students', [
         'all' => $userModel->loadStudents()
     ]);
     
@@ -50,7 +50,7 @@ public function test($id){
 
 public function showCreateForm()
 {
-    return $this->renderBack('create_student_form', []);
+    return $this->renderTwigBack('create_student_form', []);
 }
 
 public function store()
@@ -82,6 +82,72 @@ public function test2()
         'name' => 'Developer'
     ]);
 }
+public function showEditForm($id)
+{
+    $userModel = new User();
+    return $this->renderTwigBack('edit_current', [
 
+    'student' => $userModel->findById($id)
+
+    ]);
+}
+
+public function update($id)
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header("Location: /Current/Students/Edit/$id");
+        exit;
+    }
+
+    $user = new User();
+    $user = $user->loadById($id);
+
+    if (!$user) {
+        header('Location: /StudentsIndex');
+        exit;
+    }
+
+    $user->setName($_POST['name'] ?? '');
+
+    if ($user->updateOnly(['name'])) {
+        header('Location: /StudentsIndex');
+        exit;
+    }
+
+    header("Location: /Current/Students/Edit/$id?error=1");
+    exit;
+}
+
+public function delete($id)
+{
+    $user = new User();
+    $user = $user->loadById($id);
+
+    if (!$user) {
+        header('Location: /StudentsIndex?error=notfound');
+        exit;
+    }
+
+    if ($user->delete()) {
+        header('Location: /StudentsIndex?success=deleted');
+        exit;
+    }
+
+    header('Location: /StudentsIndex?error=fail');
+    exit;
+}
+
+
+
+
+public function test3()
+{
+    $userModel = new User();
+    $student = $userModel->findById(10);
+    
+    echo "<pre>";
+    print_r($student);
+    echo "</pre>";
+}
 
 }
