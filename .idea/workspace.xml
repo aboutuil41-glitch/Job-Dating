@@ -7,13 +7,8 @@
     <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/Config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/AuthController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/jobController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/jobController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/details.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/home.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/index.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/job_details.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/job_list.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +121,7 @@
       <workItem from="1768896714482" duration="12555000" />
       <workItem from="1768941861651" duration="829000" />
       <workItem from="1768942730769" duration="3673000" />
-      <workItem from="1768982632318" duration="8629000" />
+      <workItem from="1768982632318" duration="10914000" />
     </task>
     <servers />
   </component>

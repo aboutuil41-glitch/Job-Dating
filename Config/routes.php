@@ -16,7 +16,9 @@ $router->get('register', [AuthController::class, 'register']);
 $router->post('register', [AuthController::class, 'register']);
 $router->get('logout', [AuthController::class, 'logout']);
 $router->get('dashboard', [AuthController::class, 'dashboard']);
-$router -> get('home',[JobController::class,'home']);
+
+/* ---------- JOB ROUTES ---------- */
+$router->get('home', [JobController::class, 'home']);
 /* ---------- OTHER ROUTES ---------- */
 
 $router->get('', fn() => 'Home');

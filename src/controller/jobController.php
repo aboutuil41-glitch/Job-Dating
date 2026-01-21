@@ -28,7 +28,7 @@ class JobController extends BaseController
     }
     private function getJobs()
     {
-        $sql = $this ->db->prepare("SELECT a.id,a.title,a.description,a.location,a.contract_type,a.skills,a.created_at,c.name as company_name FROM announcements a JOIN companies c ON a.company_id = c.id WHERE a.deleted = 0 ORDER BY a.created_at DESC");
+        $sql = "SELECT a.id,a.title,a.description,a.location,a.contract_type,a.skills,a.created_at,c.name as company_name FROM announcements a JOIN companies c ON a.company_id = c.id WHERE a.deleted = 0 ORDER BY a.created_at DESC";
         $stmt = $this -> db->prepare($sql);
         $stmt -> execute();
         return $stmt -> fetchAll();
