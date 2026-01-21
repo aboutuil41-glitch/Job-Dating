@@ -17,10 +17,15 @@ abstract class BaseController
         return View::BackOfficeView($view, $data);
     }
 
-protected function renderTwigBack(string $view, array $data = []): void
-{
-    View::renderTwigBack($view, $data);
-}
+    protected function renderTwig(string $view, array $data = []): void
+    {
+        View::renderTwig($view, $data);
+    }
+
+    protected function renderTwigBack(string $view, array $data = []): void
+    {
+        View::renderTwigBack($view, $data);
+    }
 
 }
 

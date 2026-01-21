@@ -8,6 +8,7 @@ use App\Controller\UserController;
 use App\Controller\CompanyController;
 use App\Controller\AdsController;
 use App\Controller\DashboardController;
+use App\Controller\FrontOfficeController;
 
 $router = Router::getRouter();
 
@@ -16,6 +17,11 @@ $router = Router::getRouter();
 // Home & Dashboard
 $router->get('', [DashboardController::class, 'index']);
 $router->get('dashboard', [DashboardController::class, 'index']);
+
+// ========== FRONTOFFICE (STUDENTS) ==========
+$router->get('home', [FrontOfficeController::class, 'home']);
+$router->get('jobs', [FrontOfficeController::class, 'jobs']);
+$router->get('job/{id}', [FrontOfficeController::class, 'jobDetails']);
 
 // Old test routes
 $router->get('user/{name}/{id}', fn($name, $id) => 'Welcome ' .$name. ' Your ID is ' .$id);
@@ -77,5 +83,14 @@ $router->get('/Ads/Restore/{id}', [AdsController::class, 'restore']);
 //Hard Reset
 $router->get('/Ads/HardDelete/{id}', [AdsController::class, 'delete']);
 
+// login
+$router->get('login', [AuthController::class, 'login']);
+$router->post('login', [AuthController::class, 'login']);
 
+// register
+$router->get('register', [AuthController::class, 'register']);
+$router->post('register', [AuthController::class, 'register']);
+
+// logout
+$router->get('logout', [AuthController::class, 'logout']);
 $router->dispatch();

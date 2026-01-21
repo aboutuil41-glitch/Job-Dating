@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/auth/login.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/login.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/auth/register.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/register.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" afterDir="false" />
-    </list>
+    <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,6 +25,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="McpProjectServerCommands">
@@ -66,7 +65,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "my-feature-work",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "C:/xampp/htdocs/Job-Dating/public/assets/images",
     "node.js.detected.package.eslint": "true",

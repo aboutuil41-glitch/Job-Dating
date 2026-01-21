@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Job Dating - YouCode{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .line-clamp-2 {
             display: -webkit-box;
@@ -12,28 +13,388 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-bg-blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .gradient-bg-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient-bg-pink {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Dark mode support */
+        .dark .bg-gray-50 {
+            background-color: #111827;
+        }
+
+        .dark .bg-white {
+            background-color: #1f2937;
+        }
+
+        .dark .text-gray-900 {
+            color: #f9fafb;
+        }
+
+        .dark .text-gray-600 {
+            color: #d1d5db;
+        }
+
+        .dark .border-gray-300 {
+            border-color: #374151;
+        }
+
+        /* Glass morphism effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark .glass-effect {
+            background: rgba(31, 41, 55, 0.7);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
     </style>
+    {% block styles %}{% endblock %}
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow-sm border-b">
-        <div class="max-w-6xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-xl font-bold text-blue-600">YouCode Job Dating</h1>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+<!-- Navigation -->
+<nav class="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo / Brand -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
+                    <i class="fas fa-briefcase text-white"></i>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/home" class="text-gray-600 hover:text-blue-600">Home</a>
-                    <a href="/dashboard" class="text-gray-600 hover:text-blue-600">Dashboard</a>
-                    <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</a>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        YouCode Job Dating
+                    </h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Opportunités professionnelles</p>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/Job-Dating/public/home" class="nav-link">
+                    <i class="fas fa-home mr-2"></i>
+                    Accueil
+                </a>
+                <a href="/Job-Dating/public/jobs" class="nav-link">
+                    <i class="fas fa-search mr-2"></i>
+                    Offres d'emploi
+                </a>
+                <a href="/Job-Dating/public/companies" class="nav-link">
+                    <i class="fas fa-building mr-2"></i>
+                    Entreprises
+                </a>
+                <a href="/Job-Dating/public/dashboard" class="nav-link">
+                    <i class="fas fa-tachometer-alt mr-2"></i>
+                    Dashboard
+                </a>
+
+                <!-- User Dropdown -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 focus:outline-none">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                            {{ user_initials|default('U') }}
+                        </div>
+                        <i class="fas fa-chevron-down text-gray-500 text-sm"></i>
+                    </button>
+
+                    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                        <div class="py-2">
+                            <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ user_name|default('Utilisateur') }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ user_email|default('user@example.com') }}</p>
+                            </div>
+                            <a href="/Job-Dating/public/profile" class="dropdown-item">
+                                <i class="fas fa-user mr-3"></i>
+                                Mon Profil
+                            </a>
+                            <a href="/Job-Dating/public/applications" class="dropdown-item">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                Mes Candidatures
+                            </a>
+                            <a href="/Job-Dating/public/saved-jobs" class="dropdown-item">
+                                <i class="fas fa-bookmark mr-3"></i>
+                                Offres Sauvegardées
+                            </a>
+                            <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
+                                <a href="/Job-Dating/public/logout" class="dropdown-item text-red-600 hover:text-red-700 dark:text-red-400">
+                                    <i class="fas fa-sign-out-alt mr-3"></i>
+                                    Déconnexion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden py-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="space-y-3">
+                <a href="/Job-Dating/public/home" class="mobile-nav-link">
+                    <i class="fas fa-home mr-3"></i>
+                    Accueil
+                </a>
+                <a href="/Job-Dating/public/jobs" class="mobile-nav-link">
+                    <i class="fas fa-search mr-3"></i>
+                    Offres d'emploi
+                </a>
+                <a href="/Job-Dating/public/companies" class="mobile-nav-link">
+                    <i class="fas fa-building mr-3"></i>
+                    Entreprises
+                </a>
+                <a href="/Job-Dating/public/dashboard" class="mobile-nav-link">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/Job-Dating/public/profile" class="mobile-nav-link">
+                    <i class="fas fa-user mr-3"></i>
+                    Mon Profil
+                </a>
+                <a href="/Job-Dating/public/applications" class="mobile-nav-link">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Mes Candidatures
+                </a>
+                <a href="/Job-Dating/public/saved-jobs" class="mobile-nav-link">
+                    <i class="fas fa-bookmark mr-3"></i>
+                    Offres Sauvegardées
+                </a>
+                <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <a href="/Job-Dating/public/logout" class="mobile-nav-link text-red-600 hover:text-red-700 dark:text-red-400">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Déconnexion
+                    </a>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+<!-- Main Content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
 
-    {% block scripts %}{% endblock %}
+<!-- Footer -->
+<footer class="bg-gray-800 text-white mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
+                        <i class="fas fa-briefcase text-white"></i>
+                    </div>
+                    <h2 class="text-xl font-bold">YouCode Job Dating</h2>
+                </div>
+                <p class="text-gray-400">
+                    Plateforme de mise en relation entre les apprenants YouCode et les entreprises partenaires.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold mb-4">Liens rapides</h3>
+                <ul class="space-y-2">
+                    <li><a href="/Job-Dating/public/jobs" class="text-gray-400 hover:text-white transition">Offres d'emploi</a></li>
+                    <li><a href="/Job-Dating/public/companies" class="text-gray-400 hover:text-white transition">Entreprises</a></li>
+                    <li><a href="/Job-Dating/public/about" class="text-gray-400 hover:text-white transition">À propos</a></li>
+                    <li><a href="/Job-Dating/public/contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold mb-4">Contact</h3>
+                <ul class="space-y-2 text-gray-400">
+                    <li class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-3"></i>
+                        YouCode, Safi, Maroc
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mr-3"></i>
+                        contact@youcode.ma
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone mr-3"></i>
+                        +212 5XX XX XX XX
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; {{ "now"|date("Y") }} YouCode Job Dating. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Flash Messages Container -->
+<div id="flashMessages" class="fixed top-20 right-4 z-50 space-y-2 max-w-sm"></div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Mobile menu toggle
+    $('#mobileMenuButton').on('click', function() {
+        $('#mobileMenu').slideToggle(200);
+    });
+
+    // Close mobile menu when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#mobileMenu, #mobileMenuButton').length) {
+            $('#mobileMenu').slideUp(200);
+        }
+    });
+
+    // Flash messages handling
+    function showFlashMessage(type, message) {
+        const colors = {
+            success: 'bg-green-500 border-green-600',
+            error: 'bg-red-500 border-red-600',
+            warning: 'bg-yellow-500 border-yellow-600',
+            info: 'bg-blue-500 border-blue-600'
+        };
+
+        const icon = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+
+        const flashHtml = `
+                <div class="flash-message ${colors[type]} text-white rounded-lg shadow-lg p-4 border-l-4 flex items-center space-x-3 animate-slide-in">
+                    <i class="fas fa-${icon[type]} text-lg"></i>
+                    <span class="flex-1">${message}</span>
+                    <button class="close-flash text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+        $('#flashMessages').append(flashHtml);
+
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            $(`.flash-message`).first().animate({opacity: 0, right: '-100%'}, 500, function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+    // Close flash message
+    $(document).on('click', '.close-flash', function() {
+        $(this).closest('.flash-message').animate({opacity: 0, right: '-100%'}, 500, function() {
+            $(this).remove();
+        });
+    });
+
+    // Initialize dark mode if saved
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+    }
+
+    // Show any server-side flash messages
+    {% if flash_messages is defined %}
+    {% for flash in flash_messages %}
+    showFlashMessage('{{ flash.type }}', '{{ flash.message }}');
+    {% endfor %}
+    {% endif %}
+</script>
+
+{% block scripts %}{% endblock %}
 </body>
 </html>
+
+<style>
+    /* Additional styles for layout */
+    .nav-link {
+        @apply text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+
+    .mobile-nav-link {
+        @apply block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+
+    .dropdown-item {
+        @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150;
+    }
+
+    /* Animation for flash messages */
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-slide-in {
+        animation: slideIn 0.3s ease-out;
+    }
+
+    /* Smooth transitions */
+    .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 200ms;
+    }
+</style>
