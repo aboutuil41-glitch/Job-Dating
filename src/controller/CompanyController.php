@@ -1,94 +1,104 @@
 <?php
-namespace App\Controller;
+namespace App\controller;
 
-use App\Core\BaseController;
-use App\Core\Auth;
-use App\Core\Database;
+use App\core\BaseController;
+use App\models\companies;
 
 class CompanyController extends BaseController
 {
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = Database::getInstance()->getConnection();
-    }
-
     public function loadAll()
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("SELECT * FROM companies ORDER BY name");
-        $stmt->execute();
-        $companies = $stmt->fetchAll();
-        
-        return $this->renderTwig('backoffice/companies/index.twig', [
-            'companies' => $companies
+        $companyModel = new companies();
+
+        echo $this->renderTwigBack('current_companies', [
+            'all' => $companyModel->loadAll()
         ]);
     }
 
     public function showCreateForm()
     {
-        Auth::requireAuth();
-        return $this->renderTwig('backoffice/companies/create.twig');
+        return $this->renderTwigBack('create_company_form', []);
     }
 
     public function store()
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("INSERT INTO companies (name, sector, location, email, phone, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
-        $stmt->execute([
-            $_POST['name'],
-            $_POST['sector'],
-            $_POST['location'],
-            $_POST['email'],
-            $_POST['phone']
-        ]);
-        
-        header('Location: /CompanyIndex');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /AddCompany/New');
+            exit;
+        }
+
+        $company = new companies();
+        $company->setName($_POST['name'] ?? '');
+        $company->setEmail($_POST['email'] ?? '');
+        $company->setSector($_POST['sector'] ?? '');
+        $company->setLocation($_POST['location'] ?? '');
+        $company->setPhone($_POST['phone'] ?? '');
+        $company->setCreatedAt(date('Y-m-d H:i:s'));
+
+        if ($company->create()) {
+            header('Location: /CompanyIndex');
+            exit;
+        }
+
+        header('Location: /AddCompany/New?error=1');
         exit;
     }
 
     public function showEditForm($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("SELECT * FROM companies WHERE id = ?");
-        $stmt->execute([$id]);
-        $company = $stmt->fetch();
-        
-        return $this->renderTwig('backoffice/companies/edit.twig', [
-            'company' => $company
+        $companyModel = new companies();
+        return $this->renderTwigBack('edit_company', [
+            'company' => $companyModel->findById($id)
         ]);
     }
 
     public function update($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("UPDATE companies SET name = ?, sector = ?, location = ?, email = ?, phone = ?, updated_at = NOW() WHERE id = ?");
-        $stmt->execute([
-            $_POST['name'],
-            $_POST['sector'],
-            $_POST['location'],
-            $_POST['email'],
-            $_POST['phone'],
-            $id
-        ]);
-        
-        header('Location: /CompanyIndex');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: /Company/Edit/$id");
+            exit;
+        }
+
+        $company = new companies();
+        $company = $company->loadById($id);
+
+        if (!$company) {
+            header('Location: /CompanyIndex');
+            exit;
+        }
+
+        $company->setName($_POST['name'] ?? '');
+        $company->setEmail($_POST['email'] ?? '');
+        $company->setSector($_POST['sector'] ?? '');
+        $company->setLocation($_POST['location'] ?? '');
+        $company->setPhone($_POST['phone'] ?? '');
+        $company->setUpdatedAt(date('Y-m-d H:i:s'));
+
+        if ($company->update()) {
+            header('Location: /CompanyIndex');
+            exit;
+        }
+
+        header("Location: /Company/Edit/$id?error=1");
         exit;
     }
 
     public function delete($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("DELETE FROM companies WHERE id = ?");
-        $stmt->execute([$id]);
-        
-        header('Location: /CompanyIndex');
+        $company = new companies();
+        $company = $company->loadById($id);
+
+        if (!$company) {
+            header('Location: /CompanyIndex?error=notfound');
+            exit;
+        }
+
+        if ($company->delete()) {
+            header('Location: /CompanyIndex?success=deleted');
+            exit;
+        }
+
+        header('Location: /CompanyIndex?error=fail');
         exit;
     }
 }

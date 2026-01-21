@@ -81,5 +81,16 @@ public function loadStudents(): array
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+public function StudentsCount(): int
+{
+    $stmt = $this->db->prepare(
+        "SELECT COUNT(*) as total FROM {$this->getTable()} WHERE role = 'student'"
+    );
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return (int)($result['total'] ?? 0);
+}
+
 }
 ?>

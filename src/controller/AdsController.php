@@ -1,149 +1,163 @@
 <?php
-namespace App\Controller;
+namespace App\controller;
 
-use App\Core\BaseController;
-use App\Core\Auth;
-use App\Core\Database;
+use PDO;
+use App\core\BaseController;
+use App\Models\Announcements;
 
 class AdsController extends BaseController
 {
-    private $db;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->db = Database::getInstance()->getConnection();
+        $this->db = new PDO("sqlite::memory:");
     }
 
     public function loadAll()
     {
-        Auth::requireAuth();
-        
-        $sql = "SELECT a.*, c.name as company_name FROM announcements a 
-                JOIN companies c ON a.company_id = c.id 
-                WHERE a.deleted = 0 ORDER BY a.created_at DESC";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $ads = $stmt->fetchAll();
-        
-        return $this->renderTwig('backoffice/ads/index.twig', [
-            'ads' => $ads
+        $adsModel = new Announcements();
+
+        echo $this->renderTwigBack('current_ads', [
+            'all' => $adsModel->RenderAds()
         ]);
     }
 
     public function showCreateForm()
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("SELECT id, name FROM companies ORDER BY name");
-        $stmt->execute();
-        $companies = $stmt->fetchAll();
-        
-        return $this->renderTwig('backoffice/ads/create.twig', [
-            'companies' => $companies
-        ]);
+        return $this->renderTwigBack('create_ad_form', []);
     }
 
     public function store()
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("INSERT INTO announcements (title, company_id, contract_type, description, location, skills, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())");
-        $stmt->execute([
-            $_POST['title'],
-            $_POST['company_id'],
-            $_POST['contract_type'],
-            $_POST['description'],
-            $_POST['location'],
-            $_POST['skills']
-        ]);
-        
-        header('Location: /Ads');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /Ads/New');
+            exit;
+        }
+
+        $ad = new Announcements();
+        $ad->setTitle($_POST['title'] ?? '');
+        $ad->setCompanyId((int)($_POST['company_id'] ?? 0));
+        $ad->setContractType($_POST['contract_type'] ?? '');
+        $ad->setDescription($_POST['description'] ?? '');
+        $ad->setLocation($_POST['location'] ?? '');
+        $ad->setSkills($_POST['skills'] ?? '');
+        $ad->setDeleted(0); 
+        $ad->setCreatedAt(date('Y-m-d H:i:s'));
+
+        if ($ad->create()) {
+            header('Location: /Ads');
+            exit;
+        }
+
+        header('Location: /Ads/New?error=1');
         exit;
     }
 
     public function showEditForm($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("SELECT * FROM announcements WHERE id = ?");
-        $stmt->execute([$id]);
-        $ad = $stmt->fetch();
-        
-        $stmt = $this->db->prepare("SELECT id, name FROM companies ORDER BY name");
-        $stmt->execute();
-        $companies = $stmt->fetchAll();
-        
-        return $this->renderTwig('backoffice/ads/edit.twig', [
-            'ad' => $ad,
-            'companies' => $companies
+        $adsModel = new Announcements();
+        return $this->renderTwigBack('edit_ad', [
+            'ad' => $adsModel->findById($id)
         ]);
     }
 
     public function update($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("UPDATE announcements SET title = ?, company_id = ?, contract_type = ?, description = ?, location = ?, skills = ?, updated_at = NOW() WHERE id = ?");
-        $stmt->execute([
-            $_POST['title'],
-            $_POST['company_id'],
-            $_POST['contract_type'],
-            $_POST['description'],
-            $_POST['location'],
-            $_POST['skills'],
-            $id
-        ]);
-        
-        header('Location: /Ads');
-        exit;
-    }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: /Ads/Edit/$id");
+            exit;
+        }
 
-    public function softDelete($id)
-    {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("UPDATE announcements SET deleted = 1 WHERE id = ?");
-        $stmt->execute([$id]);
-        
-        header('Location: /Ads');
-        exit;
-    }
+        $ad = new Announcements();
+        $ad = $ad->loadById($id);
 
-    public function showArchived()
-    {
-        Auth::requireAuth();
-        
-        $sql = "SELECT a.*, c.name as company_name FROM announcements a 
-                JOIN companies c ON a.company_id = c.id 
-                WHERE a.deleted = 1 ORDER BY a.created_at DESC";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $ads = $stmt->fetchAll();
-        
-        return $this->renderTwig('backoffice/ads/archive.twig', [
-            'ads' => $ads
-        ]);
-    }
+        if (!$ad) {
+            header('Location: /Ads');
+            exit;
+        }
 
-    public function restore($id)
-    {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("UPDATE announcements SET deleted = 0 WHERE id = ?");
-        $stmt->execute([$id]);
-        
-        header('Location: /Ads/Archive');
+        $ad->setTitle($_POST['title'] ?? '');
+        $ad->setCompanyId((int)($_POST['company_id'] ?? 0));
+        $ad->setContractType($_POST['contract_type'] ?? '');
+        $ad->setDescription($_POST['description'] ?? '');
+        $ad->setLocation($_POST['location'] ?? '');
+        $ad->setSkills($_POST['skills'] ?? '');
+        $ad->setUpdatedAt(date('Y-m-d H:i:s'));
+
+        if ($ad->update()) {
+            header('Location: /Ads');
+            exit;
+        }
+
+        header("Location: /Ads/Edit/$id?error=1");
         exit;
     }
 
     public function delete($id)
     {
-        Auth::requireAuth();
-        
-        $stmt = $this->db->prepare("DELETE FROM announcements WHERE id = ?");
-        $stmt->execute([$id]);
-        
-        header('Location: /Ads/Archive');
+        $ad = new Announcements();
+        $ad = $ad->loadById($id);
+
+        if (!$ad) {
+            header('Location: /Ads/Archive?error=notfound');
+            exit;
+        }
+
+        if ($ad->delete()) {
+            header('Location: /Ads/Archive?success=deleted');
+            exit;
+        }
+
+        header('Location: /Ads/Archive?error=fail');
+        exit;
+    }
+        public function softDelete($id)
+    {
+        $ad = new Announcements();
+        $ad = $ad->loadById($id);
+
+        if (!$ad) {
+            header('Location: /Ads?error=notfound');
+            exit;
+        }
+
+        if ($ad->softDelete()) {
+            header('Location: /Ads?success=archived');
+            exit;
+        }
+
+        header('Location: /Ads?error=fail');
+        exit;
+    }
+
+  public function showArchived()
+    {
+        $adsModel = new Announcements();
+
+        echo $this->renderTwigBack('archived_ads', [
+            'all' => $adsModel->RenderArchivedAds()
+        ]);
+    }
+
+
+     public function restore($id)
+    {
+        $ad = new Announcements();
+        $ad = $ad->loadById($id);
+
+        if (!$ad) {
+            header('Location: /Ads/Archive?error=notfound');
+            exit;
+        }
+
+        if ($ad->restore()) {
+            header('Location: /Ads/Archive?success=restored');
+            exit;
+        }
+
+        header('Location: /Ads/Archive?error=fail');
         exit;
     }
 }
+
