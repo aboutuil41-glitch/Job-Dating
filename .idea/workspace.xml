@@ -5,21 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/assets/css/auth.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/view/auth/login.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/view/auth/register.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/Config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/public/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/assets/SqlDiagram.sql" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/SqlDiagram.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/jobController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/jobController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/BaseController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Session.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Session.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/router.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/router.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/details.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/home.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/index.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/job_details.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/job_list.twig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,34 +61,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/Job-Dating&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/xampp/htdocs/Job-Dating/public/assets/images",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\Job-Dating\public\assets\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\Job-Dating\public\Diagrams" />
       <recent name="C:\xampp\htdocs\Job-Dating\public" />
@@ -129,7 +126,7 @@
       <workItem from="1768896714482" duration="12555000" />
       <workItem from="1768941861651" duration="829000" />
       <workItem from="1768942730769" duration="3673000" />
-      <workItem from="1768982632318" duration="945000" />
+      <workItem from="1768982632318" duration="8629000" />
     </task>
     <servers />
   </component>

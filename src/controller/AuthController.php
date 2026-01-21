@@ -119,9 +119,16 @@ class AuthController extends BaseController
         Auth::requireAuth();
 
         $user = Auth::user();
-        echo "<h1>Dashboard</h1>";
-        echo "<p>Welcome, " . Security::sanitize($user['username']) . "!</p>";
-        echo "<a href='/logout'>Logout</a>";
+        if($user['role'] === 'admin')
+        {
+            echo  "<h1>Admin Dashboard</h1>";
+            echo "<p> Welcome admin , " . Security::sanitize($user['name']) . "!</p>";
+        }
+        else
+        {
+            header('Location: /home');
+            exit;
+        }
     }
 
 

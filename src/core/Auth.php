@@ -34,7 +34,7 @@ class Auth
             return false; // Email already exists
         }
         
-        if ($userModel->create($data)) {
+        if ($userModel->createUser($data)) {
             // Auto-login after registration
             $userData = $userModel->findByEmail($data['email']);
             Session::login($userData);

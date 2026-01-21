@@ -5,6 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\UserController;
+use App\Controller\JobController;
 
 $router = Router::getRouter();
 
@@ -15,7 +16,7 @@ $router->get('register', [AuthController::class, 'register']);
 $router->post('register', [AuthController::class, 'register']);
 $router->get('logout', [AuthController::class, 'logout']);
 $router->get('dashboard', [AuthController::class, 'dashboard']);
-
+$router -> get('home',[JobController::class,'home']);
 /* ---------- OTHER ROUTES ---------- */
 
 $router->get('', fn() => 'Home');

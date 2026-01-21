@@ -41,7 +41,7 @@ public function verifyPassword(string $plainPassword, string $hashedPassword): b
 
     public function setRole($r) { $this->role =$r; }
     public function getRole() { return $this->role; }
-    public function create($data): bool
+    public function createUser($data): bool
     {
         $stmt = $this->db->prepare(
             "INSERT INTO {$this->getTable()} (name, email, password, role, created_at, updated_at) 
