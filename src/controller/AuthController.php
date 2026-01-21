@@ -11,106 +11,94 @@ use App\Core\Session;
 
 class AuthController extends BaseController
 {
-    public function register()
-    {
-        Auth::requireGuest();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Security::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-                header('Location: /register');
-                exit;
-            }
-
-            $validator = Validator::make($_POST)
-                ->required('name')
-                ->min('name', 3)
-                ->max('name', 100)
-                ->required('email')
-                ->email('email')
-                ->unique('email', 'users', 'email')
-                ->required('password')
-                ->min('password', 6);
-
-            if ($validator->fails()) {
-                Session::set('errors', $validator->errors());
-                Session::set('old', $_POST);
-                header('Location: /register');
-                exit;
-            }
-
-            if (Auth::register($_POST)) {
-                header('Location: /dashboard');
-                exit;
-            } else {
-                header('Location: /register');
-                exit;
-            }
-        }
-
-        $errors = Session::get('errors') ?? [];
-        $old = Session::get('old') ?? [];
-        Session::remove('errors');
-        Session::remove('old');
-        
-        echo $this->renderTwig('auth/register.twig', [
-            'title' => 'Inscription',
-            'heading' => 'Inscription',
-            'subtitle' => 'Créez votre compte YouCode',
-            'action' => '/register',
-            'csrf_token' => Security::generateCsrfToken(),
-            'errors' => $errors,
-            'old' => $old
-        ]);
-    }
-
     public function login()
     {
         Auth::requireGuest();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Security::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-                header('Location: /login');
-                exit;
-            }
-
-            $validator = Validator::make($_POST)
-                ->required('email')
-                ->email('email')
-                ->required('password');
-
-            if ($validator->fails()) {
-                Session::set('error', 'All fields are required.');
-                header('Location: /login');
+                header('Location: /Job-Dating/public/login');
                 exit;
             }
 
             if (Auth::login($_POST['email'], $_POST['password'])) {
-                header('Location: /dashboard');
+                // Get user data to check role
+                $user = Auth::user();
+                
+                // Redirect based on role
+                if ($user['role'] === 'admin') {
+                    header('Location: /Job-Dating/public/dashboard');
+                } else {
+                    header('Location: /Job-Dating/public/home');
+                }
                 exit;
             } else {
                 Session::set('error', 'Invalid credentials.');
-                header('Location: /login');
+                header('Location: /Job-Dating/public/login');
                 exit;
             }
         }
 
         $error = Session::get('error');
         Session::remove('error');
-        echo $this->renderTwig('auth/login.twig', [
+
+        $this->renderTwig('auth/login', [
             'title' => 'Connexion',
-            'heading' => 'Connexion',
-            'subtitle' => 'Accédez à votre espace sécurisé',
-            'action' => '/login',
+            'action' => '/Job-Dating/public/login',
+            'csrf_token' => Security::generateCsrfToken(),
+            'error' => $error
+        ]);
+    }
+
+    public function register()
+    {
+        Auth::requireGuest();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Security::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+                header('Location: /Job-Dating/public/register');
+                exit;
+            }
+
+            if (Auth::register($_POST)) {
+                // Get user data to check role
+                $user = Auth::user();
+                
+                // Redirect based on role
+                if ($user['role'] === 'admin') {
+                    header('Location: /Job-Dating/public/dashboard');
+                } else {
+                    header('Location: /Job-Dating/public/home');
+                }
+                exit;
+            } else {
+                Session::set('error', 'Registration failed.');
+                header('Location: /Job-Dating/public/register');
+                exit;
+            }
+        }
+
+        $error = Session::get('error');
+        $errors = Session::get('errors') ?? [];
+        $old = Session::get('old') ?? [];
+        Session::remove('error');
+        Session::remove('errors');
+        Session::remove('old');
+
+        $this->renderTwig('auth/register', [
+            'title' => 'Inscription',
+            'action' => '/Job-Dating/public/register',
             'csrf_token' => Security::generateCsrfToken(),
             'error' => $error,
-            'old' => []
+            'errors' => $errors,
+            'old' => $old
         ]);
     }
 
     public function logout()
     {
         Auth::logout();
-        header('Location: /login');
+        header('Location: /Job-Dating/public/login');
         exit;
     }
 
@@ -131,13 +119,4 @@ class AuthController extends BaseController
         }
     }
 
-
-
-    public function index()
-    {
-        return $this->render('create_user', [
-            'name' => 'Ali',
-            'LastName' => 'joe'
-        ]);
-    }
 }

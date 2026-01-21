@@ -66,7 +66,7 @@ class Auth
     public static function requireAuth(): void
     {
         if (!self::check()) {
-            header('Location: /login');
+            header('Location: /Job-Dating/public/login');
             exit;
         }
     }
@@ -75,7 +75,7 @@ class Auth
     public static function requireGuest(): void
     {
         if (self::check()) {
-            header('Location: /dashboard');
+            header('Location: /Job-Dating/public/dashboard');
             exit;
         }
     }
