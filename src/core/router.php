@@ -42,6 +42,10 @@ class Router
         }
 
         $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        
+        // Remove any base path from URI for local development
+        $uri = preg_replace('#^(Job-Dating/public/?|public/?)#', '', $uri);
+        $uri = trim($uri, '/');
 
         foreach (self::$routes[$method] ?? [] as $route => $action) {
             $pattern = preg_replace('#\{[\w]+\}#', '([\w-]+)', $route);
@@ -52,7 +56,7 @@ class Router
         }
 
         http_response_code(404);
-        echo "404 Page Not Found";
+        echo "404 Page Not Found - URI: $uri";
     }
 
     private function resolve($action, array $params): void
