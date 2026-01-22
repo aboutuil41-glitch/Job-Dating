@@ -31,7 +31,7 @@ class AdsController extends BaseController
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /Job-Dating/public/Ads/New');
+            header('Location: /Ads/New');
             exit;
         }
 
@@ -46,11 +46,11 @@ class AdsController extends BaseController
         $ad->setCreatedAt(date('Y-m-d H:i:s'));
 
         if ($ad->create()) {
-            header('Location: /Job-Dating/public/Ads');
+            header('Location: /Ads');
             exit;
         }
 
-        header('Location: /Job-Dating/public/Ads/New?error=1');
+        header('Location: /Ads/New?error=1');
         exit;
     }
 
@@ -65,7 +65,7 @@ class AdsController extends BaseController
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: /Job-Dating/public/Ads/Edit/$id");
+            header("Location: /Ads/Edit/$id");
             exit;
         }
 
@@ -73,7 +73,7 @@ class AdsController extends BaseController
         $ad = $ad->loadById($id);
 
         if (!$ad) {
-            header('Location: /Job-Dating/public/Ads');
+            header('Location: /Ads');
             exit;
         }
 
@@ -86,11 +86,11 @@ class AdsController extends BaseController
         $ad->setUpdatedAt(date('Y-m-d H:i:s'));
 
         if ($ad->update()) {
-            header('Location: /Job-Dating/public/Ads');
+            header('Location: /Ads');
             exit;
         }
 
-        header("Location: /Job-Dating/public/Ads/Edit/$id?error=1");
+        header("Location: /Ads/Edit/$id?error=1");
         exit;
     }
 
@@ -100,16 +100,16 @@ class AdsController extends BaseController
         $ad = $ad->loadById($id);
 
         if (!$ad) {
-            header('Location: /Job-Dating/public/Ads/Archive?error=notfound');
+            header('Location: /Ads/Archive?error=notfound');
             exit;
         }
 
         if ($ad->delete()) {
-            header('Location: /Job-Dating/public/Ads/Archive?success=deleted');
+            header('Location: /Ads/Archive?success=deleted');
             exit;
         }
 
-        header('Location: /Job-Dating/public/Ads/Archive?error=fail');
+        header('Location: /Ads/Archive?error=fail');
         exit;
     }
         public function softDelete($id)
@@ -118,16 +118,16 @@ class AdsController extends BaseController
         $ad = $ad->loadById($id);
 
         if (!$ad) {
-            header('Location: /Job-Dating/public/Ads?error=notfound');
+            header('Location: /Ads?error=notfound');
             exit;
         }
 
         if ($ad->softDelete()) {
-            header('Location: /Job-Dating/public/Ads?success=archived');
+            header('Location: /Ads?success=archived');
             exit;
         }
 
-        header('Location: /Job-Dating/public/Ads?error=fail');
+        header('Location: /Ads?error=fail');
         exit;
     }
 
@@ -147,16 +147,16 @@ class AdsController extends BaseController
         $ad = $ad->loadById($id);
 
         if (!$ad) {
-            header('Location: /Job-Dating/public/Ads/Archive?error=notfound');
+            header('Location: /Ads/Archive?error=notfound');
             exit;
         }
 
         if ($ad->restore()) {
-            header('Location: /Job-Dating/public/Ads/Archive?success=restored');
+            header('Location: /Ads/Archive?success=restored');
             exit;
         }
 
-        header('Location: /Job-Dating/public/Ads/Archive?error=fail');
+        header('Location: /Ads/Archive?error=fail');
         exit;
     }
 }

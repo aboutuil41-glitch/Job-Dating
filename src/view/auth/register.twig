@@ -1,106 +1,35 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title ?? 'Inscription' }} | YouCode Job Dating</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h1>{{ heading }}</h1>
+<p>{{ subtitle }}</p>
 
-    <link rel="stylesheet" href="/Job-Dating/public/assets/css/auth.css">
-</head>
-<body>
+{% if error %}
+<div style="color:red;">{{ error }}</div>
+{% endif %}
 
-<div class="auth-container">
-    <div class="auth-card">
-
-        <div class="auth-header">
-            <img src="/assets/images/youcode-logo.jpg" alt="YouCode" class="logo">
-            <h2>{{ heading ?? 'Inscription' }}</h2>
-            <p>{{ subtitle ?? 'Créez votre compte YouCode' }}</p>
-        </div>
-
-        {% if error %}
-            <div class="alert alert-error">
-                {{ error }}
-            </div>
-        {% endif %}
-
-        {% if success %}
-            <div class="alert alert-success">
-                {{ success }}
-            </div>
-        {% endif %}
-
-        <form method="POST" action="{{ action }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-
-            <div class="form-group">
-                <label for="name">Nom complet</label>
-                <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        placeholder="John Doe"
-                        value="{{ old.name ?? '' }}"
-                >
-                {% if errors.name %}
-                    <span style="color: red; font-size: 12px;">{{ errors.name[0] }}</span>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label for="email">Adresse email</label>
-                <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        placeholder="exemple@youcode.ma"
-                        value="{{ old.email ?? '' }}"
-                >
-                {% if errors.email %}
-                    <span style="color: red; font-size: 12px;">{{ errors.email[0] }}</span>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        placeholder="••••••••"
-                        minlength="6"
-                >
-                {% if errors.password %}
-                    <span style="color: red; font-size: 12px;">{{ errors.password[0] }}</span>
-                {% endif %}
-            </div>
-
-            <div class="form-group checkbox">
-                <input
-                        type="checkbox"
-                        id="terms"
-                        name="terms"
-                        required
-                >
-                <label for="terms">
-                    J'accepte les <a href="/terms" target="_blank">conditions d'utilisation</a>
-                </label>
-            </div>
-
-            <button type="submit" class="btn-primary">
-                Créer mon compte
-            </button>
-        </form>
-
-        <div class="auth-footer">
-            <p>Vous avez déjà un compte? <a href="/Job-Dating/public/login">Se connecter</a></p>
-        </div>
-
-    </div>
+{% if errors %}
+<div style="color:red;">
+    <ul>
+    {% for field, messages in errors %}
+        {% for msg in messages %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
 </div>
+{% endif %}
 
-</body>
-</html>
+<form action="{{ action }}" method="POST">
+    {{ csrf_token|raw }}
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{ old.name|default('') }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ old.email|default('') }}" required>
+
+    <label>Password</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Register</button>
+</form>
+
+<p>Already have an account? <a href="/login">Login</a></p>
