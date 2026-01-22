@@ -15,13 +15,8 @@ $router = Router::getRouter();
 /* ---------- ROUTES ---------- */
 
 // Home & Dashboard
-$router->get('', [DashboardController::class, 'index']);
+$router->get('', [AuthController::class, 'login']);
 $router->get('dashboard', [DashboardController::class, 'index']);
-
-// ========== FRONTOFFICE (STUDENTS) ==========
-$router->get('home', [FrontOfficeController::class, 'home']);
-$router->get('jobs', [FrontOfficeController::class, 'jobs']);
-$router->get('job/{id}', [FrontOfficeController::class, 'jobDetails']);
 
 // Old test routes
 $router->get('user/{name}/{id}', fn($name, $id) => 'Welcome ' .$name. ' Your ID is ' .$id);
@@ -83,14 +78,26 @@ $router->get('/Ads/Restore/{id}', [AdsController::class, 'restore']);
 //Hard Reset
 $router->get('/Ads/HardDelete/{id}', [AdsController::class, 'delete']);
 
-// login
-$router->get('login', [AuthController::class, 'login']);
-$router->post('login', [AuthController::class, 'login']);
-
-// register
+// ========== AUTH ==========
+// Register
 $router->get('register', [AuthController::class, 'register']);
 $router->post('register', [AuthController::class, 'register']);
 
-// logout
+// Login
+$router->get('login', [AuthController::class, 'login']);
+$router->post('login', [AuthController::class, 'login']);
+
+// Logout
 $router->get('logout', [AuthController::class, 'logout']);
+
+// Dashboard (admin)
+$router->get('dashboard', [DashboardController::class, 'index']);
+
+// Home (student)
+$router->get('home',[FrontOfficeController::class,'home']); // You can replace with StudentController later
+$router -> get('jobs',[FrontOfficeController::class,'jobs']);
+$router -> get('jobs/search',[FrontOfficeController::class,'searchJobs']);
+$router -> get('job/{id}',[FrontOfficeController::class,'jobDetails']);
+
+
 $router->dispatch();

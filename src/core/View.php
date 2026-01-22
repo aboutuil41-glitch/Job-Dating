@@ -17,6 +17,7 @@ class View
         require $file;
         return ob_get_clean();
     }
+
     public static function BackOfficeView(string $view, array $data = []): string
     {
         extract($data);
@@ -28,6 +29,7 @@ class View
         require $file;
         return ob_get_clean();
     }
+
     private static ?Environment $twig = null;
 
     public static function renderTwig(string $template, array $data = []): void
@@ -45,10 +47,38 @@ class View
     }
 
 
-        public static function renderTwigBack(string $template, array $data = []): void
+    public static function renderTwigBack(string $template, array $data = []): void
     {
         if (self::$twig === null) {
-            $loader = new FilesystemLoader(__DIR__.'/../view/backoffice');
+            $loader = new FilesystemLoader(__DIR__ . '/../view/backoffice');
+
+            self::$twig = new Environment($loader, [
+                'cache' => false, // __DIR__ . '/../../storage/cache' in prod
+                'debug' => true,
+            ]);
+        }
+
+        echo self::$twig->render($template . '.twig', $data);
+    }
+
+    public static function renderTwigFront(string $template, array $data = []): void
+    {
+        if (self::$twig === null) {
+            $loader = new FilesystemLoader(__DIR__ . '/../view/frontoffice');
+
+            self::$twig = new Environment($loader, [
+                'cache' => false, // __DIR__ . '/../../storage/cache' in prod
+                'debug' => true,
+            ]);
+        }
+
+        echo self::$twig->render($template . '.twig', $data);
+    }
+
+    public static function renderTwigAuth(string $template, array $data = []): void
+    {
+        if (self::$twig === null) {
+            $loader = new FilesystemLoader(__DIR__ . '/../view/auth');
 
             self::$twig = new Environment($loader, [
                 'cache' => false, // __DIR__ . '/../../storage/cache' in prod

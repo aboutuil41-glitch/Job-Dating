@@ -32,25 +32,25 @@
             {% if all is empty %}
                 <tr>
                     <td colspan="8" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block; opacity: 0.3;"></i>
                         No job ads found
                     </td>
                 </tr>
             {% else %}
                 {% for ad in all %}
-                <tr>
-                    <td>{{ ad.id }}</td>
-                    <td>{{ ad.title }}</td>
+                <tr style="transition: all 0.3s ease;">
+                    <td style="font-weight: 600; color: #ff6b6b;">{{ ad.id }}</td>
+                    <td style="font-weight: 600;">{{ ad.title }}</td>
                     <td>{{ ad.company_id }}</td>
                     <td>
-                        <span style="padding: 4px 12px; background: rgba(102, 126, 234, 0.2); border-radius: 20px; font-size: 12px;">
+                        <span style="padding: 6px 14px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 71, 87, 0.2)); border-radius: 20px; font-size: 12px; font-weight: 600; color: #ff9a9a;">
                             {{ ad.contract_type }}
                         </span>
                     </td>
-                    <td>{{ ad.location }}</td>
+                    <td><i class="fas fa-map-marker-alt" style="color: #ff6b6b; margin-right: 5px;"></i>{{ ad.location }}</td>
                     <td>{{ ad.skills|length > 50 ? ad.skills|slice(0, 50) ~ '...' : ad.skills }}</td>
-                    <td>{{ ad.created_at }}</td>
-                    <td>
+                    <td style="color: #b0b0b0;">{{ ad.created_at }}</td>
+                    <td style="white-space: nowrap;">
                         <a href="/Ads/Edit/{{ ad.id }}" class="btn btn-warning" style="margin-right: 10px;">
                             <i class="fas fa-edit"></i> Edit
                         </a>
@@ -64,4 +64,26 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    tbody tr {
+        animation: slideIn 0.3s ease-out;
+    }
+
+    tbody tr:hover {
+        background: rgba(255, 107, 107, 0.1) !important;
+        transform: scale(1.01);
+    }
+</style>
 {% endblock %}

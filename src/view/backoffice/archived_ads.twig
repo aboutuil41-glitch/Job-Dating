@@ -1,6 +1,6 @@
 {% extends "layout.twig" %}
 
-{% set active = 'ads' %}
+{% set active = 'archived' %}
 
 {% block title %}Archived Job Ads - Job Dating Admin{% endblock %}
 
@@ -27,8 +27,8 @@
 {% endif %}
 
 <div class="card">
-    <div style="margin-bottom: 20px; padding: 15px; background: rgba(240, 147, 251, 0.1); border-radius: 10px; border-left: 4px solid #f093fb;">
-        <i class="fas fa-info-circle"></i> <strong>Archive:</strong> These job ads are archived. You can restore them or permanently delete them.
+    <div style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 71, 87, 0.1)); border-radius: 10px; border-left: 4px solid #ff6b6b;">
+        <i class="fas fa-info-circle" style="color: #ff6b6b;"></i> <strong style="color: #ff9a9a;">Archive:</strong> <span style="color: #b0b0b0;">These job ads are archived. You can restore them or permanently delete them.</span>
     </div>
 
     <table>
@@ -47,25 +47,25 @@
             {% if all is empty %}
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block; opacity: 0.3;"></i>
                         No archived job ads
                     </td>
                 </tr>
             {% else %}
                 {% for ad in all %}
-                <tr style="opacity: 0.7;">
-                    <td>{{ ad.id }}</td>
+                <tr style="opacity: 0.6; transition: all 0.3s ease;">
+                    <td style="color: #ff6b6b; font-weight: 600;">{{ ad.id }}</td>
                     <td>{{ ad.title }}</td>
                     <td>{{ ad.company_id }}</td>
                     <td>
-                        <span style="padding: 4px 12px; background: rgba(240, 147, 251, 0.2); border-radius: 20px; font-size: 12px;">
+                        <span style="padding: 6px 14px; background: linear-gradient(135deg, rgba(255, 154, 86, 0.2), rgba(255, 99, 72, 0.2)); border-radius: 20px; font-size: 12px; font-weight: 600; color: #ffb088;">
                             {{ ad.contract_type }}
                         </span>
                     </td>
                     <td>{{ ad.location }}</td>
-                    <td>{{ ad.created_at }}</td>
-                    <td>
-                        <a href="/Ads/Restore/{{ ad.id }}" class="btn" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-right: 10px;" onclick="return confirm('Restore this job ad?')">
+                    <td style="color: #b0b0b0;">{{ ad.created_at }}</td>
+                    <td style="white-space: nowrap;">
+                        <a href="/Ads/Restore/{{ ad.id }}" class="btn" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; margin-right: 10px; box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);" onclick="return confirm('Restore this job ad?')">
                             <i class="fas fa-undo"></i> Restore
                         </a>
                         <a href="/Ads/HardDelete/{{ ad.id }}" class="btn btn-danger" onclick="return confirm('⚠️ PERMANENTLY DELETE? This cannot be undone!')">
@@ -86,21 +86,18 @@
             transform: translateY(10px);
         }
         to {
-            opacity: 1;
+            opacity: 0.6;
             transform: translateY(0);
         }
     }
 
-    .card {
+    tbody tr {
         animation: fadeIn 0.3s ease;
     }
 
-    tr {
-        transition: all 0.3s ease;
-    }
-
-    tr:hover {
+    tbody tr:hover {
         opacity: 1 !important;
+        background: rgba(255, 107, 107, 0.1);
     }
 </style>
 {% endblock %}

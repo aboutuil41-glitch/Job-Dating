@@ -1,4 +1,4 @@
-{% extends "frontoffice/layout.twig" %}
+{% extends "layout.twig" %}
 {% block title %} Find Your opportunite - youcode job datin {% endblock %}
 {% block content %}
     <div class="bg-gray-50 min-h-screen">
@@ -87,8 +87,8 @@
 
                             <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
                                 <span class="text-gray-400 text-xs italic">Posted {{ job.created_at|date("d M Y") }}</span>
-                                <a href="/jobs/view/{{ job.id }}" class="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition">
-                                    View Details
+                                <a href="job/{{ job.id }}" class="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition">
+                                View Details
                                 </a>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
         $(document).ready(function() {
             // Basic AJAX logic for Module 6 (Real-time Search)
             $('#jobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
-                const query = $('#jobSearch').val();
+                const query = $('#jobSearch').val() || '';
                 const formData = $('#filterForm').serialize();
 
                 // This would call your JobController search method
@@ -117,12 +117,20 @@
                     url: '/jobs/search',
                     method: 'GET',
                     data: formData + '&q=' + query,
-                    success: function(response) {
-                        // Update #jobsContainer with the partial view returned
-                        $('#jobsContainer').html(response);
+                    dataType: 'json',
+                    success: function(jobs) {
+                        updateJobContainer(jobs);
+                    }
+                    error: function ()
+                    {
+                        console.log('search fail');
                     }
                 });
             });
         });
+        function  updateJobContainer(jobs)
+        {
+            let
+        }
     </script>
 {% endblock %}

@@ -29,18 +29,18 @@
             {% if all is empty %}
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block; opacity: 0.3;"></i>
                         No students found
                     </td>
                 </tr>
             {% else %}
                 {% for student in all %}
-                <tr>
-                    <td>{{ student.id }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ student.created_at }}</td>
-                    <td>
+                <tr style="transition: all 0.3s ease;">
+                    <td style="font-weight: 600; color: #ff6b6b;">{{ student.id }}</td>
+                    <td style="font-weight: 600;"><i class="fas fa-user-circle" style="color: #ff9a56; margin-right: 8px;"></i>{{ student.name }}</td>
+                    <td><i class="fas fa-envelope" style="color: #ff9a56; margin-right: 5px;"></i>{{ student.email }}</td>
+                    <td style="color: #b0b0b0;">{{ student.created_at }}</td>
+                    <td style="white-space: nowrap;">
                         <a href="/Current/Students/Edit/{{ student.id }}" class="btn btn-warning" style="margin-right: 10px;">
                             <i class="fas fa-edit"></i> Edit
                         </a>
@@ -54,4 +54,26 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    tbody tr {
+        animation: slideIn 0.3s ease-out;
+    }
+
+    tbody tr:hover {
+        background: rgba(255, 107, 107, 0.1) !important;
+        transform: scale(1.01);
+    }
+</style>
 {% endblock %}
