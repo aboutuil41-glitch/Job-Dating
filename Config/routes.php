@@ -96,6 +96,7 @@ $router->get('dashboard', [DashboardController::class, 'index']);
 // Home (student)
 $router->get('home',[FrontOfficeController::class,'home']); // You can replace with StudentController later
 $router -> get('jobs',[FrontOfficeController::class,'jobs']);
+$router -> get('offres',[FrontOfficeController::class ,'jobs']);
 $router -> get('jobs/search',[FrontOfficeController::class,'searchJobs']);
 $router -> get('job/{id}',[FrontOfficeController::class,'jobDetails']);
 

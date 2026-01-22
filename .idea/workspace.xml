@@ -7,29 +7,6 @@
     <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/Config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/FrontOfficeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/FrontOfficeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/BaseController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Security.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Security.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/Session.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Session.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/core/View.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/View.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/user.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/auth/login.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/login.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/auth/register.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/register.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/archived_ads.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/archived_ads.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_company_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_company_form.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_student_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_student_form.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_ads.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_ads.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_companies.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_companies.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_students.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_students.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/dashboard.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/dashboard.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/edit_ad.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/edit_ad.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/edit_company.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/edit_company.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/edit_current.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/edit_current.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/backoffice/layout.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/layout.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/frontoffice/home.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/home.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
