@@ -190,5 +190,14 @@ public function restore(): bool
 
     return $stmt->execute(['id' => $this->id]);
 }
+    public function RenderRecentAds(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->getTable()} ORDER BY created_at DESC LIMIT 3"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

@@ -5,6 +5,7 @@ use PDO;
 use App\core\BaseController;
 use App\Models\Announcements;
 
+
 class AdsController extends BaseController
 {
     private PDO $db;
@@ -158,6 +159,14 @@ class AdsController extends BaseController
 
         header('Location: /Ads/Archive?error=fail');
         exit;
+    }
+    public function showrecent(){
+        $ad = new Announcements();
+        $Recent = $ad->RenderRecentAds();
+
+        echo "<pre>";
+        print_r($Recent);
+        echo "</pre>";
     }
 }
 

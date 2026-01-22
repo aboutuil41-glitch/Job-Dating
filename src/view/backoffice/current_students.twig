@@ -8,9 +8,6 @@
 <div class="header">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1><i class="fas fa-user-graduate"></i> Students</h1>
-        <a href="/AddStudents/new" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add Student
-        </a>
     </div>
 </div>
 
@@ -40,14 +37,6 @@
                     <td style="font-weight: 600;"><i class="fas fa-user-circle" style="color: #ff9a56; margin-right: 8px;"></i>{{ student.name }}</td>
                     <td><i class="fas fa-envelope" style="color: #ff9a56; margin-right: 5px;"></i>{{ student.email }}</td>
                     <td style="color: #b0b0b0;">{{ student.created_at }}</td>
-                    <td style="white-space: nowrap;">
-                        <a href="/Current/Students/Edit/{{ student.id }}" class="btn btn-warning" style="margin-right: 10px;">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <a href="/Current/Students/Delete/{{ student.id }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this student?')">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
-                    </td>
                 </tr>
                 {% endfor %}
             {% endif %}
