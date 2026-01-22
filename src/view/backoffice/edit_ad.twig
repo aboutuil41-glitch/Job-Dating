@@ -29,7 +29,7 @@
             <label for="contract_type">
                 <i class="fas fa-file-contract"></i> Contract Type
             </label>
-            <select id="contract_type" name="contract_type" class="form-control" required>
+            <select id="contract_type" name="contract_type" class="form-control" required style="cursor: pointer;">
                 <option value="">Select contract type</option>
                 <option value="Full-time" {% if ad.contract_type == 'Full-time' %}selected{% endif %}>Full-time</option>
                 <option value="Part-time" {% if ad.contract_type == 'Part-time' %}selected{% endif %}>Part-time</option>
@@ -70,4 +70,26 @@
         </div>
     </form>
 </div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    select.form-control option {
+        background: #1a0f0f;
+        color: #e0e0e0;
+    }
+</style>
 {% endblock %}

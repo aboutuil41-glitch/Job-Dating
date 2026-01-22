@@ -21,6 +21,10 @@ protected function renderTwigBack(string $view, array $data = []): void
 {
     View::renderTwigBack($view, $data);
 }
+protected function renderTwigAuth(string $view, array $data = []): void
+{
+    View::renderTwigAuth($view, $data);
+}
 
 }
 

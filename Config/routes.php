@@ -14,7 +14,7 @@ $router = Router::getRouter();
 /* ---------- ROUTES ---------- */
 
 // Home & Dashboard
-$router->get('', [DashboardController::class, 'index']);
+$router->get('', [AuthController::class, 'login']);
 $router->get('dashboard', [DashboardController::class, 'index']);
 
 // Old test routes
@@ -76,6 +76,25 @@ $router->get('/Ads/Restore/{id}', [AdsController::class, 'restore']);
 
 //Hard Reset
 $router->get('/Ads/HardDelete/{id}', [AdsController::class, 'delete']);
+
+// ========== AUTH ==========
+// Register
+$router->get('register', [AuthController::class, 'register']);
+$router->post('register', [AuthController::class, 'register']);
+
+// Login
+$router->get('login', [AuthController::class, 'login']);
+$router->post('login', [AuthController::class, 'login']);
+
+// Logout
+$router->get('logout', [AuthController::class, 'logout']);
+
+// Dashboard (admin)
+$router->get('dashboard', [DashboardController::class, 'index']);
+
+// Home (student)
+$router->get('home', fn() => "Welcome student!"); // You can replace with StudentController later
+
 
 
 $router->dispatch();
