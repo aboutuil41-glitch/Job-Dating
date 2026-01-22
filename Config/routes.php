@@ -8,6 +8,7 @@ use App\Controller\UserController;
 use App\Controller\CompanyController;
 use App\Controller\AdsController;
 use App\Controller\DashboardController;
+use App\Controller\HomeController;
 
 $router = Router::getRouter();
 
@@ -76,6 +77,7 @@ $router->get('/Ads/Restore/{id}', [AdsController::class, 'restore']);
 
 //Hard Reset
 $router->get('/Ads/HardDelete/{id}', [AdsController::class, 'delete']);
+$router->get('/Ads/Resent', [AdsController::class, 'showrecent']);
 
 // ========== AUTH ==========
 // Register
@@ -92,9 +94,6 @@ $router->get('logout', [AuthController::class, 'logout']);
 // Dashboard (admin)
 $router->get('dashboard', [DashboardController::class, 'index']);
 
-// Home (student)
-$router->get('home', fn() => "Welcome student!"); // You can replace with StudentController later
-
-
+$router->get('home', [HomeController::class, 'home']);
 
 $router->dispatch();
