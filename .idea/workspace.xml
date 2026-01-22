@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/models/applications.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/Config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/home.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/home.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/FrontOfficeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/FrontOfficeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/job_details.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/job_details.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/frontoffice/layout.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

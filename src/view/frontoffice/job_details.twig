@@ -1,19 +1,32 @@
-{% extends "frontoffice/layout.twig" %}
+{% extends "layout.twig" %}
 
 {% block title %}{{ job.title }} - YouCode Job Dating{% endblock %}
 
 {% block content %}
     <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
+            <!-- Success/Error Messages -->
+            {% if app.request.query.get('success') == 'applied' %}
+                <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                    Application submitted successfully!
+                </div>
+            {% endif %}
+            {% if app.request.query.get('error') == 'already_applied' %}
+                <div class="mb-6 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+                    You have already applied to this position.
+                </div>
+            {% endif %}
+            {% if app.request.query.get('error') == 'failed' %}
+                <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    Failed to submit application. Please try again.
+                </div>
+            {% endif %}
+
             <!-- Breadcrumb -->
             <nav class="mb-6" aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-2 text-sm">
                     <li>
-                        <a href="/jobs" class="text-blue-600 hover:text-blue-800 transition">Job Offers</a>
-                    </li>
-                    <li class="text-gray-400">/</li>
-                    <li>
-                        <a href="/companies/{{ job.company_id }}" class="text-blue-600 hover:text-blue-800 transition">{{ job.company_name }}</a>
+                        <a href="/Job-Dating/public/jobs" class="text-blue-600 hover:text-blue-800 transition">Job Offers</a>
                     </li>
                     <li class="text-gray-400">/</li>
                     <li class="text-gray-800 font-medium truncate">{{ job.title }}</li>
@@ -69,9 +82,15 @@
                             {{ job.contract_type }}
                         </span>
 
-                            <button id="applyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Apply Now
-                            </button>
+                            {% if hasApplied %}
+                                <button disabled class="bg-gray-400 text-white font-semibold px-6 py-3 rounded-lg cursor-not-allowed">
+                                    Already Applied
+                                </button>
+                            {% else %}
+                                <button id="applyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    Apply Now
+                                </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -155,10 +174,6 @@
                                             </div>
                                         {% endif %}
                                     </div>
-
-                                    <a href="/companies/{{ job.company_id }}" class="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium text-sm">
-                                        View Company Profile →
-                                    </a>
                                 </div>
                             </div>
 
@@ -183,34 +198,6 @@
                                         <span class="text-gray-600">Posted Date</span>
                                         <span class="font-medium">{{ job.created_at|date("M d, Y") }}</span>
                                     </div>
-                                    {% if job.updated_at and job.updated_at != job.created_at %}
-                                        <div class="flex justify-between py-2">
-                                            <span class="text-gray-600">Last Updated</span>
-                                            <span class="font-medium">{{ job.updated_at|date("M d, Y") }}</span>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <!-- Similar Jobs (Placeholder) -->
-                            <div class="mt-6">
-                                <h4 class="text-sm font-bold text-gray-900 mb-3">Similar Opportunities</h4>
-                                <div class="space-y-3">
-                                    {% for similar_job in similar_jobs|default([]) %}
-                                        <a href="/jobs/view/{{ similar_job.id }}" class="block p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition">
-                                            <div class="flex justify-between items-start">
-                                                <div>
-                                                    <h5 class="font-medium text-gray-900 text-sm">{{ similar_job.title|slice(0, 30) }}{% if similar_job.title|length > 30 %}...{% endif %}</h5>
-                                                    <p class="text-xs text-gray-500">{{ similar_job.company_name }}</p>
-                                                </div>
-                                                <span class="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded">
-                                            {{ similar_job.contract_type }}
-                                        </span>
-                                            </div>
-                                        </a>
-                                    {% else %}
-                                        <p class="text-sm text-gray-500 text-center py-2">No similar jobs found</p>
-                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -218,64 +205,61 @@
                 </div>
             </div>
 
-            <!-- Application Modal (Hidden by default) -->
+            <!-- Application Modal -->
             <div id="applicationModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
                 <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-gray-900">Apply for Position</h3>
-                            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <p class="text-gray-600 mb-6">You're about to apply for <span class="font-bold">{{ job.title }}</span> at <span class="font-bold">{{ job.company_name }}</span>.</p>
-
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="Your full name">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                       placeholder="your.email@example.com">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Cover Letter (Optional)</label>
-                                <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                          placeholder="Tell us why you're interested in this position..."></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Resume/CV</label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <form method="POST" action="/Job-Dating/public/job/{{ job.id }}/apply">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold text-gray-900">Apply for Position</h3>
+                                <button type="button" id="closeModal" class="text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
-                                    <p class="mt-1 text-sm text-gray-600">Drop your resume here, or click to browse</p>
-                                    <input type="file" class="hidden" accept=".pdf,.doc,.docx">
+                                </button>
+                            </div>
+
+                            <p class="text-gray-600 mb-6">You're about to apply for <span class="font-bold">{{ job.title }}</span> at <span class="font-bold">{{ job.company_name }}</span>.</p>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                    <input type="text" name="full_name" required
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="Your full name" value="{{ user.name }}">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                    <input type="email" name="email" required
+                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                           placeholder="your.email@example.com" value="{{ user.email }}">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Cover Letter (Optional)</label>
+                                    <textarea name="cover_letter" rows="4"
+                                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                              placeholder="Tell us why you're interested in this position..."></textarea>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="mt-6 flex justify-end space-x-3">
-                            <button id="cancelApply" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                                Cancel
-                            </button>
-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
-                                Submit Application
-                            </button>
+                            <div class="mt-6 flex justify-end space-x-3">
+                                <button type="button" id="cancelApply"
+                                        class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                                    Submit Application
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
             <!-- Back to Jobs Link -->
             <div class="text-center mt-8">
-                <a href="/jobs" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                <a href="/Job-Dating/public/jobs" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
@@ -289,7 +273,6 @@
 {% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Application Modal
             const applyButton = document.getElementById('applyButton');
             const applicationModal = document.getElementById('applicationModal');
             const closeModal = document.getElementById('closeModal');
@@ -313,48 +296,11 @@
                 });
             }
 
-            // Close modal when clicking outside
             applicationModal.addEventListener('click', function(e) {
                 if (e.target === applicationModal) {
                     applicationModal.classList.add('hidden');
                 }
             });
-
-            // File upload interaction
-            const fileInput = document.querySelector('input[type="file"]');
-            const fileDropZone = fileInput ? fileInput.parentElement : null;
-
-            if (fileDropZone) {
-                fileDropZone.addEventListener('click', function() {
-                    fileInput.click();
-                });
-
-                fileDropZone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    fileDropZone.classList.add('border-blue-500', 'bg-blue-50');
-                });
-
-                fileDropZone.addEventListener('dragleave', function() {
-                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-                });
-
-                fileDropZone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
-                    // Handle file drop here
-                });
-
-                fileInput.addEventListener('change', function() {
-                    if (fileInput.files.length > 0) {
-                        fileDropZone.innerHTML = `
-                    <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="mt-1 text-sm text-gray-600">${fileInput.files[0].name}</p>
-                `;
-                    }
-                });
-            }
         });
     </script>
 {% endblock %}

@@ -100,5 +100,6 @@ $router -> get('offres',[FrontOfficeController::class ,'jobs']);
 $router -> get('jobs/search',[FrontOfficeController::class,'searchJobs']);
 $router -> get('job/{id}',[FrontOfficeController::class,'jobDetails']);
 
+$router -> post('job/{id}/apply',[FrontOfficeController::class, 'applyToJob']);
 
 $router->dispatch();
