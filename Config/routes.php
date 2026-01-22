@@ -9,6 +9,7 @@ use App\Controller\CompanyController;
 use App\Controller\AdsController;
 use App\Controller\DashboardController;
 use App\Controller\HomeController;
+use App\Controller\ApplicationController;
 
 $router = Router::getRouter();
 
@@ -95,5 +96,10 @@ $router->get('logout', [AuthController::class, 'logout']);
 $router->get('dashboard', [DashboardController::class, 'index']);
 
 $router->get('home', [HomeController::class, 'home']);
+$router->get('applicantes', [ApplicationController::class, 'loadTheApplicantes']);
+$router->get('applicantes/accept/{id}', [ApplicationController::class, 'accept']);
+$router->get('applicantes/refuse/{id}', [ApplicationController::class, 'refuse']);
+
+
 
 $router->dispatch();

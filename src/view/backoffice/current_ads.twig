@@ -5,85 +5,449 @@
 {% block title %}Job Ads - Job Dating Admin{% endblock %}
 
 {% block content %}
-<div class="header">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1><i class="fas fa-bullhorn"></i> Job Advertisements</h1>
-        <a href="/Ads/New" class="btn btn-primary">
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+</div>
+
+<div class="header-modern">
+    <div class="header-content">
+        <div>
+            <h1><i class="fas fa-bullhorn"></i> Job Advertisements</h1>
+            <p class="subtitle">Manage and create job opportunities</p>
+        </div>
+        <a href="/Ads/New" class="btn-modern btn-primary-modern">
             <i class="fas fa-plus"></i> Create New Ad
         </a>
     </div>
 </div>
 
-<div class="card">
-    <table>
-        <thead>
-            <tr>
-                <th><i class="fas fa-hashtag"></i> ID</th>
-                <th><i class="fas fa-briefcase"></i> Title</th>
-                <th><i class="fas fa-building"></i> Company ID</th>
-                <th><i class="fas fa-file-contract"></i> Contract Type</th>
-                <th><i class="fas fa-map-marker-alt"></i> Location</th>
-                <th><i class="fas fa-tools"></i> Skills</th>
-                <th><i class="fas fa-calendar"></i> Created At</th>
-                <th><i class="fas fa-cog"></i> Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if all is empty %}
-                <tr>
-                    <td colspan="8" style="text-align: center; padding: 40px; color: #b0b0b0;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block; opacity: 0.3;"></i>
-                        No job ads found
-                    </td>
-                </tr>
-            {% else %}
-                {% for ad in all %}
-                <tr style="transition: all 0.3s ease;">
-                    <td style="font-weight: 600; color: #ff6b6b;">{{ ad.id }}</td>
-                    <td style="font-weight: 600;">{{ ad.title }}</td>
-                    <td>{{ ad.company_id }}</td>
-                    <td>
-                        <span style="padding: 6px 14px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 71, 87, 0.2)); border-radius: 20px; font-size: 12px; font-weight: 600; color: #ff9a9a;">
-                            {{ ad.contract_type }}
-                        </span>
-                    </td>
-                    <td><i class="fas fa-map-marker-alt" style="color: #ff6b6b; margin-right: 5px;"></i>{{ ad.location }}</td>
-                    <td>{{ ad.skills|length > 50 ? ad.skills|slice(0, 50) ~ '...' : ad.skills }}</td>
-                    <td style="color: #b0b0b0;">{{ ad.created_at }}</td>
-                    <td style="white-space: nowrap;">
-                        <a href="/Ads/Edit/{{ ad.id }}" class="btn btn-warning" style="margin-right: 10px;">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <a href="/Ads/Delete/{{ ad.id }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this job ad?')">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+<div class="cards-container">
+    {% if all is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <h2>No Job Ads Yet</h2>
+            <p>Start by creating your first job advertisement</p>
+            <a href="/Ads/New" class="btn-modern btn-primary-modern">
+                <i class="fas fa-plus"></i> Create First Ad
+            </a>
+        </div>
+    {% else %}
+        {% for ad in all %}
+        <div class="job-card">
+            <div class="card-header-badge">
+                <span class="contract-badge">{{ ad.contract_type }}</span>
+                <span class="date-badge">
+                    <i class="fas fa-calendar-alt"></i> {{ ad.created_at|date('M d, Y') }}
+                </span>
+            </div>
+            
+            <h3 class="job-title">{{ ad.title }}</h3>
+            
+            <div class="job-meta">
+                <div class="meta-item">
+                    <i class="fas fa-building"></i>
+                    <span>{{ ad.company_name }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ ad.location }}</span>
+                </div>
+            </div>
+            
+            <div class="skills-section">
+                <div class="skills-label">
+                    <i class="fas fa-tools"></i> Skills
+                </div>
+                <div class="skills-tags">
+                    {% if ad.skills_array is defined and ad.skills_array is iterable %}
+                        {% for skill in ad.skills_array|slice(0, 5) %}
+                            <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                        {% if ad.skills_array|length > 5 %}
+                            <span class="skill-tag more-tag">+{{ ad.skills_array|length - 5 }} more</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="skill-tag">{{ ad.skills|slice(0, 30) }}...</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-actions">
+                <a href="/Ads/Edit/{{ ad.id }}" class="btn-modern btn-edit">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="/Ads/Delete/{{ ad.id }}" class="btn-modern btn-delete" onclick="return confirm('Archive this job ad?')">
+                    <i class="fas fa-archive"></i> Archive
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 <style>
-    @keyframes slideIn {
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #8b5cf6;
+        --accent: #ec4899;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark-bg: #0f0f23;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+    }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+        animation-delay: 0s;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    .orb-3 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        animation-delay: -14s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(50px, -50px) scale(1.1); }
+        50% { transform: translate(-30px, 50px) scale(0.9); }
+        75% { transform: translate(40px, 30px) scale(1.05); }
+    }
+
+    .header-modern {
+        margin-bottom: 40px;
+        animation: slideDown 0.6s ease-out;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        backdrop-filter: blur(10px);
+    }
+
+    .header-content h1 {
+        font-size: 32px;
+        margin: 0 0 8px 0;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    @keyframes slideDown {
         from {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateY(-30px);
         }
         to {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
     }
 
-    tbody tr {
-        animation: slideIn 0.3s ease-out;
+    .btn-modern {
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
     }
 
-    tbody tr:hover {
-        background: rgba(255, 107, 107, 0.1) !important;
-        transform: scale(1.01);
+    .btn-primary-modern {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 24px;
+        padding: 20px 0;
+    }
+
+    .job-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 24px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .job-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .job-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .job-card:hover {
+        transform: translateY(-8px);
+        background: var(--card-hover);
+        border-color: var(--primary);
+        box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .job-card:nth-child(1) { animation-delay: 0.1s; }
+    .job-card:nth-child(2) { animation-delay: 0.15s; }
+    .job-card:nth-child(3) { animation-delay: 0.2s; }
+    .job-card:nth-child(4) { animation-delay: 0.25s; }
+    .job-card:nth-child(5) { animation-delay: 0.3s; }
+    .job-card:nth-child(6) { animation-delay: 0.35s; }
+
+    .card-header-badge {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .contract-badge {
+        padding: 6px 16px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .date-badge {
+        color: var(--text-secondary);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .job-title {
+        font-size: 22px;
+        margin: 0 0 16px 0;
+        color: var(--text-primary);
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    .meta-item i {
+        color: var(--primary);
+        width: 16px;
+    }
+
+    .skills-section {
+        margin-bottom: 20px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+    }
+
+    .skills-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .skills-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .skill-tag {
+        padding: 6px 12px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+        color: var(--success);
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 182, 212, 0.25) 100%);
+        transform: translateY(-2px);
+    }
+
+    .more-tag {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+        color: var(--secondary);
+        border-color: rgba(139, 92, 246, 0.2);
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 10px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+    }
+
+    .btn-edit {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%);
+        color: var(--warning);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        justify-content: center;
+    }
+
+    .btn-edit:hover {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(251, 146, 60, 0.3) 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-delete {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        justify-content: center;
+    }
+
+    .btn-delete:hover {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 20px;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .empty-icon {
+        font-size: 80px;
+        color: var(--primary);
+        margin-bottom: 24px;
+        opacity: 0.3;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.05); }
+    }
+
+    .empty-state h2 {
+        font-size: 28px;
+        margin: 0 0 12px 0;
+        color: var(--text-primary);
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin: 0 0 24px 0;
+        font-size: 16px;
     }
 </style>
 {% endblock %}
