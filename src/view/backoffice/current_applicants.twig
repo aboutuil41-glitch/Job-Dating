@@ -1,81 +1,436 @@
+{% extends "layout.twig" %}
+
+{% set active = 'applicants' %}
+
+{% block title %}Applicants - Job Dating Admin{% endblock %}
+
+{% block content %}
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+</div>
+
+<div class="header-modern">
+    <div class="header-content">
+        <div>
+            <h1><i class="fas fa-user-check"></i> Applicants</h1>
+            <p class="subtitle">Review and manage job applications</p>
+        </div>
+    </div>
+</div>
+
+<div class="cards-container">
+    {% if all is empty %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <h2>No Applicants Yet</h2>
+            <p>Applications will appear here when students apply for positions</p>
+        </div>
+    {% else %}
+        {% for app in all %}
+        <div class="applicant-card">
+            <div class="applicant-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            
+            <h3 class="applicant-name">{{ app.first_name }} {{ app.last_name }}</h3>
+            
+            <div class="specialization-badge">
+                <i class="fas fa-graduation-cap"></i>
+                {{ app.specialization }}
+            </div>
+            
+            <div class="applicant-details">
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ app.email }}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Promotion {{ app.promotion }}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>applied at {{ app.created_at }}</span>
+                </div>
+            </div>
+            
+            <div class="motivation-section">
+                <div class="motivation-label">
+                    <i class="fas fa-comment-dots"></i> Motivation
+                </div>
+                <p class="motivation-text">{{ app.motivational_message }}</p>
+            </div>
+            
+            <div class="card-actions">
+                <a href="/applicantes/accept/{{ app.id }}" class="btn-modern btn-accept">
+                    <i class="fas fa-check"></i> Accept
+                </a>
+                <a href="/applicantes/refuse/{{ app.id }}" class="btn-modern btn-refuse" onclick="return confirm('Refuse this applicant?')">
+                    <i class="fas fa-times"></i> Refuse
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
 <style>
-    .applicants-container {
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #8b5cf6;
+        --accent: #ec4899;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark-bg: #0f0f23;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+        --cyan: #06b6d4;
+        --teal: #14b8a6;
+        --purple: #a855f7;
+    }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+        animation-delay: 0s;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    .orb-3 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        animation-delay: -14s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(50px, -50px) scale(1.1); }
+        50% { transform: translate(-30px, 50px) scale(0.9); }
+        75% { transform: translate(40px, 30px) scale(1.05); }
+    }
+
+    .header-modern {
+        margin-bottom: 40px;
+        animation: slideDown 0.6s ease-out;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        backdrop-filter: blur(10px);
+    }
+
+    .header-content h1 {
+        font-size: 32px;
+        margin: 0 0 8px 0;
+        background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn-modern {
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .cards-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+        padding: 20px 0;
     }
 
     .applicant-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 16px;
-        background: #fff;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
     }
 
-    .applicant-card h3 {
-        margin: 0 0 8px;
-        font-size: 18px;
+    .applicant-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--purple), var(--accent), var(--primary));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
     }
 
-    .applicant-card p {
-        margin: 4px 0;
+    .applicant-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .applicant-card:hover {
+        transform: translateY(-8px);
+        background: var(--card-hover);
+        border-color: var(--purple);
+        box-shadow: 0 20px 60px rgba(168, 85, 247, 0.25);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .applicant-card:nth-child(1) { animation-delay: 0.1s; }
+    .applicant-card:nth-child(2) { animation-delay: 0.15s; }
+    .applicant-card:nth-child(3) { animation-delay: 0.2s; }
+    .applicant-card:nth-child(4) { animation-delay: 0.25s; }
+    .applicant-card:nth-child(5) { animation-delay: 0.3s; }
+    .applicant-card:nth-child(6) { animation-delay: 0.35s; }
+
+    .applicant-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: var(--purple);
+        border: 2px solid rgba(168, 85, 247, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .applicant-card:hover .applicant-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    }
+
+    .applicant-name {
+        font-size: 24px;
+        margin: 0 0 16px 0;
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    .specialization-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 18px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        margin-bottom: 24px;
+    }
+
+    .applicant-details {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding: 20px 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--text-secondary);
         font-size: 14px;
-        color: #333;
+        text-align: left;
     }
 
-    .message {
-        margin-top: 10px;
+    .detail-item i {
+        color: var(--purple);
+        width: 20px;
+        font-size: 16px;
+    }
+
+    .detail-item span {
+        flex: 1;
+        word-break: break-word;
+    }
+
+    .motivation-section {
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .motivation-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .motivation-text {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 16px;
+        border-radius: 12px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
         font-style: italic;
-        color: #555;
+        border-left: 3px solid var(--accent);
+        margin: 0;
     }
 
-    .actions {
-        margin-top: 12px;
+    .card-actions {
         display: flex;
         gap: 10px;
     }
 
-    .btn {
-        padding: 6px 12px;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #fff;
+    .btn-accept {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(20, 184, 166, 0.2) 100%);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        justify-content: center;
+    }
+
+    .btn-accept:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(20, 184, 166, 0.3) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-refuse {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        justify-content: center;
+    }
+
+    .btn-refuse:hover {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
         text-align: center;
+        padding: 80px 20px;
+        animation: fadeIn 0.6s ease-out;
     }
 
-    .btn.accept {
-        background-color: #28a745;
+    .empty-icon {
+        font-size: 80px;
+        color: var(--purple);
+        margin-bottom: 24px;
+        opacity: 0.3;
+        animation: pulse 2s infinite;
     }
 
-    .btn.refuse {
-        background-color: #dc3545;
+    @keyframes pulse {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.05); }
+    }
+
+    .empty-state h2 {
+        font-size: 28px;
+        margin: 0 0 12px 0;
+        color: var(--text-primary);
+    }
+
+    .empty-state p {
+        color: var(--text-secondary);
+        margin: 0 0 24px 0;
+        font-size: 16px;
     }
 </style>
-
-<div class="applicants-container">
-    {% for app in all %}
-        <div class="applicant-card">
-            <h3>{{ app.first_name }} {{ app.last_name }}</h3>
-
-            <p><strong>Email:</strong> {{ app.email }}</p>
-            <p><strong>Specialization:</strong> {{ app.specialization }}</p>
-            <p><strong>Promotion:</strong> {{ app.promotion }}</p>
-
-            <p class="message">
-                {{ app.motivational_message }}
-            </p>
-
-            <div class="actions">
-                <a href="/applicantes/accept/{{ app.id }}" class="btn accept">
-                    Accept
-                </a>
-                <a href="/applicantes/refuse/{{ app.id }}" class="btn refuse">
-                    Refuse
-                </a>
-            </div>
-        </div>
-    {% else %}
-        <p>No applicants found.</p>
-    {% endfor %}
-</div>
+{% endblock %}

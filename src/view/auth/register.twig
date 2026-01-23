@@ -1,206 +1,421 @@
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 25%, #c44569 50%, #ff6348 75%, #ff4757 100%);
-        padding: 20px;
-    }
-    
-    .container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        padding: 50px 40px;
-        width: 100%;
-        max-width: 420px;
-        animation: slideIn 0.5s ease-out;
-    }
-    
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Job Dating</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="animated-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="register-container">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1>{{ heading }}</h1>
+            <p class="subtitle">{{ subtitle }}</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        {% if errors %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="error-list">
+                {% for field, messages in errors %}
+                    {% for msg in messages %}
+                        <div>{{ msg }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <form action="{{ action }}" method="POST" class="register-form">
+            {{ csrf_token|raw }}
+
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-user"></i>
+                    Full Name
+                </label>
+                <input 
+                    type="text" 
+                    id="name"
+                    name="name" 
+                    value="{{ old.name|default('') }}" 
+                    placeholder="Enter your full name"
+                    required
+                    autocomplete="name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Email Address
+                </label>
+                <input 
+                    type="email" 
+                    id="email"
+                    name="email" 
+                    value="{{ old.email|default('') }}" 
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                    Password
+                </label>
+                <input 
+                    type="password" 
+                    id="password"
+                    name="password" 
+                    placeholder="Create a strong password"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <button type="submit" class="btn-register">
+                <span>Create Account</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            Already have an account? 
+            <a href="/login">Sign in here</a>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark-bg: #0f0f23;
+            --card-bg: #1a1a2e;
+            --card-hover: #25253f;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a4a;
+            --teal: #14b8a6;
+            --cyan: #06b6d4;
         }
-        to {
-            opacity: 1;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark-bg);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--teal) 0%, transparent 70%);
+            top: -20%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -60px) scale(1.1); }
+            50% { transform: translate(-40px, 60px) scale(0.9); }
+            75% { transform: translate(50px, 40px) scale(1.05); }
+        }
+
+        .register-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(20, 184, 166, 0.6); }
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+            border-left: 4px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert i {
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .error-list {
+            flex: 1;
+        }
+
+        .error-list div {
+            margin-bottom: 4px;
+        }
+
+        .error-list div:last-child {
+            margin-bottom: 0;
+        }
+
+        .error-list div:before {
+            content: "• ";
+            margin-right: 6px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: var(--teal);
+        }
+
+        .form-group input {
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--teal);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 100%);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(20, 184, 166, 0.5);
+        }
+
+        .btn-register:active {
             transform: translateY(0);
         }
-    }
-    
-    h1 {
-        background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-    
-    .subtitle {
-        color: #666;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 14px;
-    }
-    
-    .error {
-        background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        color: white;
-        padding: 12px 16px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        animation: shake 0.3s ease-in-out;
-    }
-    
-    .errors {
-        background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        color: white;
-        padding: 12px 16px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        animation: shake 0.3s ease-in-out;
-    }
-    
-    .errors ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .errors li {
-        padding: 4px 0;
-    }
-    
-    .errors li:before {
-        content: "• ";
-        margin-right: 8px;
-    }
-    
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-    
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    label {
-        font-weight: 600;
-        color: #333;
-        font-size: 14px;
-        margin-bottom: -12px;
-    }
-    
-    input {
-        padding: 14px 16px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 15px;
-        transition: all 0.3s ease;
-        background: white;
-    }
-    
-    input:focus {
-        outline: none;
-        border-color: #ff6b6b;
-        box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
-    }
-    
-    button {
-        background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        color: white;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-    }
-    
-    button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-    }
-    
-    button:active {
-        transform: translateY(0);
-    }
-    
-    .footer-text {
-        text-align: center;
-        margin-top: 25px;
-        color: #666;
-        font-size: 14px;
-    }
-    
-    .footer-text a {
-        color: #ff6b6b;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
-    }
-    
-    .footer-text a:hover {
-        color: #ff4757;
-        text-decoration: underline;
-    }
-</style>
 
-<div class="container">
-    <h1>{{ heading }}</h1>
-    <p class="subtitle">{{ subtitle }}</p>
+        .btn-register i {
+            transition: transform 0.3s ease;
+        }
 
-    {% if error %}
-    <div class="error">{{ error }}</div>
-    {% endif %}
+        .btn-register:hover i {
+            transform: translateX(4px);
+        }
 
-    {% if errors %}
-    <div class="errors">
-        <ul>
-        {% for field, messages in errors %}
-            {% for msg in messages %}
-                <li>{{ msg }}</li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+        .footer-text {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
 
-    <form action="{{ action }}" method="POST">
-        {{ csrf_token|raw }}
+        .footer-text a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
 
-        <label>Name</label>
-        <input type="text" name="name" value="{{ old.name|default('') }}" required>
+        .footer-text a:hover {
+            color: var(--cyan);
+            text-decoration: underline;
+        }
 
-        <label>Email</label>
-        <input type="email" name="email" value="{{ old.email|default('') }}" required>
+        @media (max-width: 500px) {
+            .register-container {
+                padding: 40px 30px;
+            }
 
-        <label>Password</label>
-        <input type="password" name="password" required>
+            .logo-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 32px;
+            }
 
-        <button type="submit">Register</button>
-    </form>
-
-    <p class="footer-text">Already have an account? <a href="/login">Login</a></p>
-</div>
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</body>
+</html>
