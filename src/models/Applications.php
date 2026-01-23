@@ -1,6 +1,5 @@
 <?php
 namespace App\models;
-
 use App\Core\BaseModel;
 use PDO;
 
@@ -10,15 +9,14 @@ class Applications extends BaseModel
     protected $announcement_id;
     protected $first_name;
     protected $last_name;
-    protected $name;
     protected $email;
+    protected $name;
     protected $specialization;
     protected $promotion;
     protected $motivational_message;
     protected $status;
     protected $created_at;
 
-    // Setters and getters
     public function setUserId(int $userId): void { $this->user_id = $userId; }
     public function getUserId(): ?int { return $this->user_id; }
 
@@ -52,7 +50,6 @@ class Applications extends BaseModel
     public function setCreatedAt(string $date): void { $this->created_at = $date; }
     public function getCreatedAt(): ?string { return $this->created_at; }
 
-    // Table and columns
     protected function getTable(): string
     {
         return 'applications';

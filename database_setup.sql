@@ -48,6 +48,22 @@ CREATE TABLE `announcements` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+CREATE TABLE applications (
+                              id int PRIMARY KEY AUTO_INCREMENT,
+                              user_id int NOT NULL,
+                              announcement_id int NOT NULL,
+                              first_name varchar(100) NOT NULL,
+                              last_name varchar(100) NOT NULL,
+                              email varchar(150) NOT NULL,
+                              name varchar(100) NOT NULL,
+                              specialization varchar(100) NOT NULL,
+                              promotionvarchar(100) NOT NULL,
+  motivational_message text,
+  status enum('pending','accepted','rejected') DEFAULT 'pending',
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (announcement_id) REFERENCES announcements (id)
+);
 
 -- Add foreign keys
 ALTER TABLE `students` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
