@@ -56,7 +56,7 @@ public function showCreateForm()
 public function store()
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: /Job-Dating/public/AddStudents/new');
+        header('Location: /AddStudents/new');
         exit;
     }
 
