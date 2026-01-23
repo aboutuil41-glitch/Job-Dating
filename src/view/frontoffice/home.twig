@@ -1,160 +1,292 @@
 {% extends "layout.twig" %}
+
 {% block title %}Find Your Opportunity - YouCode Job Dating{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #8b5cf6;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+        --cyan: #06b6d4;
+    }
+
+    body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(50px, -50px); }
+        50% { transform: translate(-30px, 50px); }
+        75% { transform: translate(40px, 30px); }
+    }
+
+    .hero-section {
+        padding: 60px 24px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+        border-radius: 24px;
+        margin-bottom: 40px;
+        text-align: center;
+        animation: slideDown 0.6s ease-out;
+        border: 1px solid var(--border);
+    }
+
+    .hero-section h1 {
+        font-size: 40px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+    }
+
+    .job-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 24px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .job-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .job-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .job-card:hover {
+        transform: translateY(-8px);
+        background: var(--card-hover);
+        box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    }
+
+    .job-card:nth-child(1) { animation-delay: 0.1s; }
+    .job-card:nth-child(2) { animation-delay: 0.2s; }
+    .job-card:nth-child(3) { animation-delay: 0.3s; }
+    .job-card:nth-child(4) { animation-delay: 0.4s; }
+    .job-card:nth-child(5) { animation-delay: 0.5s; }
+    .job-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .company-avatar {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .job-card:hover .company-avatar {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .contract-badge {
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(20, 184, 166, 0.2) 100%);
+        border: 2px solid rgba(6, 182, 212, 0.3);
+        color: var(--cyan);
+        white-space: nowrap;
+    }
+
+    .skill-tag {
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        color: var(--text-secondary);
+        font-size: 11px;
+    }
+
+    .view-button {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        white-space: nowrap;
+    }
+
+    .view-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <!-- Hero Section -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 py-12 px-6">
-            <div class="max-w-6xl mx-auto text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                    Ready for your next challenge, Apprenant?
-                </h1>
-                <p class="text-blue-100 text-lg">Browse and apply to exclusive offers from YouCode partners.</p>
-            </div>
-        </div>
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+</div>
 
-        <!-- Jobs Grid -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-8">
-            <main>
-                <div id="jobsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {% for job in jobs %}
-                        <div class="job-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all group h-full flex flex-col">
-                            <div class="flex items-start justify-between mb-4">
-                                <div class="flex gap-3">
-                                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 dark:text-blue-400">
-                                        {{ job.company_name|slice(0,1) }}
-                                    </div>
-                                    <div class="flex-1">
-                                        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-1">
-                                            {{ job.title }}
-                                        </h2>
-                                        <p class="text-gray-600 dark:text-gray-300 text-sm font-medium mt-1">
-                                            {{ job.company_name }}
-                                        </p>
-                                        <p class="text-gray-400 dark:text-gray-500 text-sm">{{ job.location }}</p>
-                                    </div>
-                                </div>
-                                <span class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap">
-                                    {{ job.contract_type }}
-                                </span>
-                            </div>
-
-                            <div class="mt-3 mb-4 flex-grow">
-                                <p class="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
-                                    {{ job.description|striptags }}
-                                </p>
-                            </div>
-
-                            <div class="mt-4 flex flex-wrap gap-1.5">
-                                {% for skill in job.skills|split(',') %}
-                                    {% if loop.index <= 4 %}
-                                        <span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs">
-                                            #{{ skill|trim }}
-                                        </span>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if job.skills|split(',')|length > 4 %}
-                                    <span class="text-gray-400 dark:text-gray-500 text-xs">
-                                        +{{ job.skills|split(',')|length - 4 }} more
-                                    </span>
-                                {% endif %}
-                            </div>
-
-                            <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                                <span class="text-gray-400 dark:text-gray-500 text-xs italic">
-                                    Posted {{ job.created_at|date("d M Y") }}
-                                </span>
-                                <a href="/job/{{ job.id }}" class="bg-gray-900 dark:bg-gray-700 text-white dark:text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 transition whitespace-nowrap">
-                                    View Details
-                                </a>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="col-span-3 bg-white dark:bg-gray-800 p-12 text-center rounded-xl shadow-sm">
-                            <p class="text-gray-500 dark:text-gray-400 text-lg">No offers matching your criteria were found.</p>
-                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Try adjusting your filters or search terms</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            </main>
-        </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="hero-section">
+        <h1>🚀 Ready for Your Next Challenge?</h1>
+        <p style="color: var(--text-secondary); font-size: 18px;">
+            Browse and apply to exclusive offers from YouCode partners
+        </p>
     </div>
+
+    <div id="jobsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for job in jobs %}
+            <div class="job-card">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex gap-3 flex-1 min-w-0">
+                        <div class="company-avatar">
+                            {{ job.company_name|slice(0,1) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{ job.title }}
+                            </h2>
+                            <p style="color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 2px;">
+                                {{ job.company_name }}
+                            </p>
+                            <p style="color: var(--text-secondary); font-size: 13px;">
+                                {{ job.location }}
+                            </p>
+                        </div>
+                    </div>
+                    <span class="contract-badge">
+                        {{ job.contract_type }}
+                    </span>
+                </div>
+
+                <div style="flex-grow: 1; margin-bottom: 16px;">
+                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6;" class="line-clamp-3">
+                        {{ job.description|striptags }}
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                    {% for skill in job.skills|split(',') %}
+                        {% if loop.index <= 4 %}
+                            <span class="skill-tag">#{{ skill|trim }}</span>
+                        {% endif %}
+                    {% endfor %}
+                    {% if job.skills|split(',')|length > 4 %}
+                        <span style="color: var(--text-secondary); font-size: 11px;">
+                            +{{ job.skills|split(',')|length - 4 }} more
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-secondary); font-size: 12px; font-style: italic;">
+                        📅 {{ job.created_at|date("d M Y") }}
+                    </span>
+                    <a href="/job/{{ job.id }}" class="view-button">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-3" style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; text-align: center;">
+                <div style="font-size: 48px; margin-bottom: 16px;">📭</div>
+                <h3 style="color: var(--text-primary); font-size: 20px; font-weight: 700; margin-bottom: 8px;">
+                    No Offers Found
+                </h3>
+                <p style="color: var(--text-secondary);">
+                    Try adjusting your filters or search terms
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        // Additional home page specific JavaScript
-        $(document).ready(function() {
-            // Initialize job cards interaction
-            $('.job-card').hover(
-                function() {
-                    $(this).addClass('shadow-lg');
-                },
-                function() {
-                    $(this).removeClass('shadow-lg');
-                }
-            );
-
-            // AJAX search implementation
-            function updateJobContainer(jobs) {
-                let html = '';
-                if (jobs && jobs.length > 0) {
-                    jobs.forEach(function(job) {
-                        const skills = job.skills ? job.skills.split(',').map((skill, index) => {
-                            if (index < 4) {
-                                return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs">#${skill.trim()}</span>`;
-                            }
-                            return '';
-                        }).join('') : '';
-
-                        const extraSkills = job.skills ? job.skills.split(',').length - 4 : 0;
-                        const extraSkillsHtml = extraSkills > 0 ?
-                            `<span class="text-gray-400 dark:text-gray-500 text-xs">+${extraSkills} more</span>` : '';
-
-                        html += `
-                    <div class="job-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all group h-full flex flex-col">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex gap-3">
-                                <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 dark:text-blue-400">
-                                    ${job.company_name ? job.company_name.charAt(0) : 'C'}
-                                </div>
-                                <div class="flex-1">
-                                    <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-1">
-                                        ${job.title || 'No Title'}
-                                    </h2>
-                                    <p class="text-gray-600 dark:text-gray-300 text-sm font-medium mt-1">
-                                        ${job.company_name || 'Unknown Company'}
-                                    </p>
-                                    <p class="text-gray-400 dark:text-gray-500 text-sm">${job.location || 'Remote'}</p>
-                                </div>
-                            </div>
-                            <span class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap">
-                                ${job.contract_type || 'Contract'}
-                            </span>
-                        </div>
-                        <div class="mt-3 mb-4 flex-grow">
-                            <p class="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
-                                ${job.description || 'No description available'}
-                            </p>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-1.5">
-                            ${skills}
-                            ${extraSkillsHtml}
-                        </div>
-                        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                            <span class="text-gray-400 dark:text-gray-500 text-xs italic">
-                                Posted ${job.created_at ? new Date(job.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
-                            </span>
-                            <a href="/job/${job.id}" class="bg-gray-900 dark:bg-gray-700 text-white dark:text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 transition whitespace-nowrap">
-                                View Details
-                            </a>
-                        </div>
-                    </div>`;
-                    });
-                } else {
-                    html = '<div class="col-span-3 bg-white dark:bg-gray-800 p-12 text-center rounded-xl shadow-sm"><p class="text-gray-500 dark:text-gray-400 text-lg">No offers matching your criteria were found.</p><p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Try adjusting your filters or search terms</p></div>';
-                }
-                $('#jobsContainer').html(html);
-            }
+<script>
+    // Add interactive hover effects
+    document.querySelectorAll('.job-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
         });
-    </script>
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
 {% endblock %}

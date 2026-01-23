@@ -2,133 +2,371 @@
 
 {% block title %}{{ company.name }} - Job Dating{% endblock %}
 
+{% block styles %}
+<style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #8b5cf6;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+        --cyan: #06b6d4;
+        --success: #10b981;
+    }
+
+    body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(50px, -50px); }
+        50% { transform: translate(-30px, 50px); }
+        75% { transform: translate(40px, 30px); }
+    }
+
+    .breadcrumb {
+        margin-bottom: 32px;
+        animation: slideDown 0.6s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+
+    .company-header-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        overflow: hidden;
+        margin-bottom: 32px;
+        animation: fadeInUp 0.6s ease-out;
+        position: relative;
+    }
+
+    .company-header-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary), var(--cyan));
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    }
+
+    .company-logo {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        flex-shrink: 0;
+    }
+
+    .stat-badge {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+        border: 2px solid rgba(16, 185, 129, 0.3);
+        border-radius: 16px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--success) 0%, var(--cyan) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .jobs-section-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        overflow: hidden;
+        animation: fadeInUp 0.7s ease-out;
+    }
+
+    .job-item {
+        padding: 28px;
+        border-bottom: 1px solid var(--border);
+        transition: all 0.3s ease;
+    }
+
+    .job-item:last-child {
+        border-bottom: none;
+    }
+
+    .job-item:hover {
+        background: var(--card-hover);
+    }
+
+    .job-title {
+        font-size: 18px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--text-primary) 0%, var(--cyan) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .skill-tag {
+        padding: 6px 12px;
+        border-radius: 8px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        color: var(--text-secondary);
+        font-size: 12px;
+    }
+
+    .contract-badge {
+        padding: 6px 16px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .view-job-btn {
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        display: inline-block;
+        font-size: 14px;
+    }
+
+    .view-job-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: var(--cyan);
+        transform: translateX(-4px);
+    }
+
+    .empty-state {
+        padding: 60px 40px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Breadcrumb -->
-            <nav class="mb-6" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-2 text-sm">
-                    <li>
-                        <a href="/Job-Dating/public/companies" class="text-blue-600 hover:text-blue-800 transition">Companies</a>
-                    </li>
-                    <li class="text-gray-400">/</li>
-                    <li class="text-gray-800 font-medium truncate">{{ company.name }}</li>
-                </ol>
-            </nav>
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+</div>
 
-            <!-- Company Header -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
-                <div class="p-8">
-                    <div class="flex items-start space-x-6">
-                        <!-- Company Logo -->
-                        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl">
-                            {{ company.name|slice(0,2)|upper }}
-                        </div>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm" style="color: var(--text-secondary);">
+            <li>
+                <a href="/Job-Dating/public/companies" class="back-link" style="color: var(--primary);">Companies</a>
+            </li>
+            <li>/</li>
+            <li style="color: var(--text-primary); font-weight: 600;">{{ company.name }}</li>
+        </ol>
+    </nav>
 
-                        <!-- Company Info -->
-                        <div class="flex-1">
-                            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ company.name }}</h1>
-                            <p class="text-lg text-gray-600 mb-4">{{ company.sector }}</p>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-map-marker-alt w-5 text-gray-400 mr-2"></i>
-                                    {{ company.location }}
-                                </div>
-                                <div class="flex items-center text-gray-600">
-                                    <i class="fas fa-envelope w-5 text-gray-400 mr-2"></i>
-                                    {{ company.email }}
-                                </div>
-                                {% if company.phone %}
-                                    <div class="flex items-center text-gray-600">
-                                        <i class="fas fa-phone w-5 text-gray-400 mr-2"></i>
-                                        {{ company.phone }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <!-- Stats -->
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600">{{ company.active_jobs }}</div>
-                            <div class="text-sm text-gray-500">Active Jobs</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Job Listings -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Current Job Openings</h2>
+    <!-- Company Header -->
+    <div class="company-header-card">
+        <div class="p-8">
+            <div class="flex flex-col md:flex-row items-start gap-6">
+                <!-- Company Logo -->
+                <div class="company-logo">
+                    {{ company.name|slice(0,2)|upper }}
                 </div>
 
-                {% if jobs %}
-                    <div class="divide-y divide-gray-200">
-                        {% for job in jobs %}
-                            <div class="p-6 hover:bg-gray-50 transition">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ job.title }}</h3>
-                                        <p class="text-gray-600 mb-3 line-clamp-2">{{ job.description|striptags }}</p>
-                                        
-                                        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-map-marker-alt mr-1"></i>
-                                                {{ job.location }}
-                                            </div>
-                                            <div class="flex items-center">
-                                                <i class="fas fa-calendar mr-1"></i>
-                                                Posted {{ job.created_at|date("M d, Y") }}
-                                            </div>
-                                        </div>
-
-                                        <div class="flex flex-wrap gap-2 mt-3">
-                                            {% for skill in job.skills|split(',') %}
-                                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">
-                                                    {{ skill|trim }}
-                                                </span>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-
-                                    <div class="ml-6 flex flex-col items-end space-y-3">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                            {% if job.contract_type == 'CDI' %}bg-green-100 text-green-800
-                                            {% elseif job.contract_type == 'CDD' %}bg-yellow-100 text-yellow-800
-                                            {% elseif job.contract_type == 'Internship' %}bg-blue-100 text-blue-800
-                                            {% else %}bg-purple-100 text-purple-800
-                                            {% endif %}">
-                                            {{ job.contract_type }}
-                                        </span>
-
-                                        <a href="/Job-Dating/public/job/{{ job.id }}" 
-                                           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
+                <!-- Company Info -->
+                <div class="flex-1">
+                    <h1 style="font-size: 32px; font-weight: 800; background: linear-gradient(135deg, var(--text-primary) 0%, var(--cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px;">
+                        {{ company.name }}
+                    </h1>
+                    <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 20px;">
+                        {{ company.sector }}
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="flex items-center" style="color: var(--text-secondary);">
+                            <i class="fas fa-map-marker-alt w-5 mr-2" style="color: var(--primary);"></i>
+                            {{ company.location }}
+                        </div>
+                        <div class="flex items-center" style="color: var(--text-secondary);">
+                            <i class="fas fa-envelope w-5 mr-2" style="color: var(--primary);"></i>
+                            {{ company.email }}
+                        </div>
+                        {% if company.phone %}
+                            <div class="flex items-center" style="color: var(--text-secondary);">
+                                <i class="fas fa-phone w-5 mr-2" style="color: var(--primary);"></i>
+                                {{ company.phone }}
                             </div>
-                        {% endfor %}
+                        {% endif %}
                     </div>
-                {% else %}
-                    <div class="p-12 text-center">
-                        <i class="fas fa-briefcase text-4xl text-gray-300 mb-4"></i>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-2">No Active Job Openings</h3>
-                        <p class="text-gray-500">This company doesn't have any active job postings at the moment.</p>
-                    </div>
-                {% endif %}
-            </div>
+                </div>
 
-            <!-- Back to Companies -->
-            <div class="text-center mt-8">
-                <a href="/Job-Dating/public/companies" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Back to Companies
-                </a>
+                <!-- Stats -->
+                <div class="stat-badge">
+                    <div class="stat-value">{{ company.active_jobs }}</div>
+                    <div style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">Active Jobs</div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Job Listings -->
+    <div class="jobs-section-card">
+        <div class="p-6" style="border-bottom: 1px solid var(--border);">
+            <h2 style="font-size: 24px; font-weight: 800; color: var(--text-primary);">
+                🎯 Current Job Openings
+            </h2>
+        </div>
+
+        {% if jobs %}
+            <div>
+                {% for job in jobs %}
+                    <div class="job-item">
+                        <div class="flex items-start justify-between gap-6">
+                            <div class="flex-1">
+                                <h3 class="job-title mb-2">{{ job.title }}</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px; line-height: 1.6;" class="line-clamp-2">
+                                    {{ job.description|striptags }}
+                                </p>
+                                
+                                <div class="flex flex-wrap items-center gap-4 text-sm mb-4" style="color: var(--text-secondary);">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>
+                                        {{ job.location }}
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar mr-2"></i>
+                                        Posted {{ job.created_at|date("M d, Y") }}
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2">
+                                    {% for skill in job.skills|split(',') %}
+                                        {% if loop.index <= 5 %}
+                                            <span class="skill-tag">
+                                                #{{ skill|trim }}
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if job.skills|split(',')|length > 5 %}
+                                        <span class="skill-tag">
+                                            +{{ job.skills|split(',')|length - 5 }} more
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-end gap-3">
+                                <span class="contract-badge
+                                    {% if job.contract_type == 'CDI' %}
+                                        style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%); border: 2px solid rgba(16, 185, 129, 0.3); color: var(--success);'
+                                    {% elseif job.contract_type == 'CDD' %}
+                                        style='background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(251, 191, 36, 0.2) 100%); border: 2px solid rgba(245, 158, 11, 0.3); color: #f59e0b;'
+                                    {% elseif job.contract_type == 'Internship' %}
+                                        style='background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 2px solid rgba(99, 102, 241, 0.3); color: var(--primary);'
+                                    {% else %}
+                                        style='background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(192, 132, 252, 0.2) 100%); border: 2px solid rgba(168, 85, 247, 0.3); color: #a855f7;'
+                                    {% endif %}">
+                                    {{ job.contract_type }}
+                                </span>
+
+                                <a href="/Job-Dating/public/job/{{ job.id }}" class="view-job-btn">
+                                    View Details →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size: 48px; margin-bottom: 16px;">💼</div>
+                <h3 style="color: var(--text-primary); font-size: 20px; font-weight: 700; margin-bottom: 8px;">
+                    No Active Job Openings
+                </h3>
+                <p style="color: var(--text-secondary);">
+                    This company doesn't have any active job postings at the moment.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Back to Companies -->
+    <div class="text-center mt-8">
+        <a href="/Job-Dating/public/companies" class="back-link" style="font-size: 16px;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Companies
+        </a>
+    </div>
+</div>
 {% endblock %}
