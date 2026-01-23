@@ -4,7 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="" />
+    <list default="true" id="49bc05d8-aa2c-49f2-b0a5-203f0f651216" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/controller/ApplicationController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controller/HomeController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/view/backoffice/current_applicants.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/Config/routes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/AdsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/AdsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/CompanyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/CompanyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/BaseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/BaseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/View.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/View.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Applications.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Applications.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/announcements.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/announcements.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/auth/login.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/login.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/auth/register.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/auth/register.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/archived_ads.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/archived_ads.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_ad_form.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/create_company_form.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/create_company_form.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_ads.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_ads.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_companies.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_companies.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/current_students.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/current_students.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/dashboard.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/dashboard.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/edit_ad.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/edit_ad.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/edit_company.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/edit_company.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/backoffice/layout.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/backoffice/layout.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,33 +80,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;my-feature-work&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/Job-Dating/public/assets/images&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Merging my-feature-work",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/xampp/htdocs/Job-Dating/public/assets/images",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\Job-Dating\public\assets\images" />
