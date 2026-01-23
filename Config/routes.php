@@ -99,6 +99,9 @@ $router -> get('jobs',[FrontOfficeController::class,'jobs']);
 $router -> get('offres',[FrontOfficeController::class ,'jobs']);
 $router -> get('jobs/search',[FrontOfficeController::class,'searchJobs']);
 $router -> get('job/{id}',[FrontOfficeController::class,'jobDetails']);
+$router -> get('companies',[FrontOfficeController::class,'companies']);
+$router -> get('entreprises',[FrontOfficeController::class,'companies']);
+$router -> get('company/{id}',[FrontOfficeController::class,'companyDetails']);
 
 $router -> post('job/{id}/apply',[FrontOfficeController::class, 'applyToJob']);
 

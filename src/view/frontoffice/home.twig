@@ -1,100 +1,77 @@
 {% extends "layout.twig" %}
-{% block title %} Find Your opportunite - youcode job datin {% endblock %}
+{% block title %}Find Your Opportunity - YouCode Job Dating{% endblock %}
 {% block content %}
-    <div class="bg-gray-50 min-h-screen">
-        <div class="bg-blue-700 py-12 px-6 mb-8">
+    <div class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 py-12 px-6">
             <div class="max-w-6xl mx-auto text-center">
                 <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
                     Ready for your next challenge, Apprenant?
                 </h1>
-                <p class="text-blue-100 text-lg mb-8">Browse and apply to exclusive offers from YouCode partners.</p>
-
-                <div class="max-w-2xl mx-auto relative">
-                    <input type="text" id="jobSearch"
-                           placeholder="Search by title, company, or keywords..."
-                           class="w-full pl-12 pr-4 py-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <span class="absolute left-4 top-4 text-gray-400">🔍</span>
-                </div>
+                <p class="text-blue-100 text-lg">Browse and apply to exclusive offers from YouCode partners.</p>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto px-6 pb-12 flex flex-col md:flex-row gap-8">
-
-            <aside class="w-full md:w-1/4">
-                <div class="bg-white p-6 rounded-xl shadow-sm sticky top-6">
-                    <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                        <span class="mr-2">📂</span> Filters
-                    </h3>
-
-                    <form id="filterForm" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Company</label>
-                            <select name="company" class="w-full border-gray-200 rounded-lg text-sm focus:ring-blue-500">
-                                <option value="">All Companies</option>
-                                {% for company in companies %}
-                                    <option value="{{ company.id }}">{{ company.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contract Type</label>
-                            <div class="space-y-2">
-                                {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}
-                                    <label class="flex items-center text-sm text-gray-600">
-                                        <input type="checkbox" name="contract[]" value="{{ type }}" class="rounded text-blue-600 mr-2">
-                                        {{ type }}
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <button type="reset" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Clear all filters</button>
-                    </form>
-                </div>
-            </aside>
-
-            <main class="w-full md:w-3/4">
-                <div id="jobsContainer" class="grid grid-cols-1 gap-6">
+        <!-- Jobs Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-8">
+            <main>
+                <div id="jobsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for job in jobs %}
-                        <div class="job-card bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-blue-300 transition-all group">
-                            <div class="flex items-start justify-between">
-                                <div class="flex gap-4">
-                                    <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-xl font-bold text-blue-600">
+                        <div class="job-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all group h-full flex flex-col">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex gap-3">
+                                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 dark:text-blue-400">
                                         {{ job.company_name|slice(0,1) }}
                                     </div>
-                                    <div>
-                                        <h2 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">{{ job.title }}</h2>
-                                        <p class="text-gray-600 font-medium">{{ job.company_name }} • <span class="text-gray-400 font-normal">{{ job.location }}</span></p>
+                                    <div class="flex-1">
+                                        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-1">
+                                            {{ job.title }}
+                                        </h2>
+                                        <p class="text-gray-600 dark:text-gray-300 text-sm font-medium mt-1">
+                                            {{ job.company_name }}
+                                        </p>
+                                        <p class="text-gray-400 dark:text-gray-500 text-sm">{{ job.location }}</p>
                                     </div>
                                 </div>
-                                <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase">
-                            {{ job.contract_type }}
-                        </span>
+                                <span class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap">
+                                    {{ job.contract_type }}
+                                </span>
                             </div>
 
-                            <div class="mt-4">
-                                <p class="text-gray-600 line-clamp-2 text-sm">
+                            <div class="mt-3 mb-4 flex-grow">
+                                <p class="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
                                     {{ job.description|striptags }}
                                 </p>
                             </div>
 
-                            <div class="mt-4 flex flex-wrap gap-2">
+                            <div class="mt-4 flex flex-wrap gap-1.5">
                                 {% for skill in job.skills|split(',') %}
-                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">#{{ skill|trim }}</span>
+                                    {% if loop.index <= 4 %}
+                                        <span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs">
+                                            #{{ skill|trim }}
+                                        </span>
+                                    {% endif %}
                                 {% endfor %}
+                                {% if job.skills|split(',')|length > 4 %}
+                                    <span class="text-gray-400 dark:text-gray-500 text-xs">
+                                        +{{ job.skills|split(',')|length - 4 }} more
+                                    </span>
+                                {% endif %}
                             </div>
 
-                            <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
-                                <span class="text-gray-400 text-xs italic">Posted {{ job.created_at|date("d M Y") }}</span>
-                                <a href="job/{{ job.id }}" class="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition">
-                                View Details
+                            <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                                <span class="text-gray-400 dark:text-gray-500 text-xs italic">
+                                    Posted {{ job.created_at|date("d M Y") }}
+                                </span>
+                                <a href="/job/{{ job.id }}" class="bg-gray-900 dark:bg-gray-700 text-white dark:text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 transition whitespace-nowrap">
+                                    View Details
                                 </a>
                             </div>
                         </div>
                     {% else %}
-                        <div class="bg-white p-12 text-center rounded-xl shadow-sm">
-                            <p class="text-gray-500">No offers matching your criteria were found.</p>
+                        <div class="col-span-3 bg-white dark:bg-gray-800 p-12 text-center rounded-xl shadow-sm">
+                            <p class="text-gray-500 dark:text-gray-400 text-lg">No offers matching your criteria were found.</p>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Try adjusting your filters or search terms</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -104,69 +81,77 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // Additional home page specific JavaScript
         $(document).ready(function() {
-            // Basic AJAX logic for Module 6 (Real-time Search)
-            $('#jobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
-                const query = $('#jobSearch').val() || '';
-                const formData = $('#filterForm').serialize();
+            // Initialize job cards interaction
+            $('.job-card').hover(
+                function() {
+                    $(this).addClass('shadow-lg');
+                },
+                function() {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
 
-                // This would call your JobController search method
-                $.ajax({
-                    url: 'jobs/search',  // Fixed URL - removed /Job-Dating/public/
-                    method: 'GET',
-                    data: formData + '&q=' + query,
-                    dataType: 'json',
-                    success: function(jobs) {
-                        updateJobContainer(jobs);
-                    },
-                    error: function() {
-                        console.log('search fail');
-                    }
-                });
-            });
-
+            // AJAX search implementation
             function updateJobContainer(jobs) {
                 let html = '';
                 if (jobs && jobs.length > 0) {
                     jobs.forEach(function(job) {
-                        const skills = job.skills ? job.skills.split(',').map(skill =>
-                            `<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">#${skill.trim()}</span>`
-                        ).join('') : '';
+                        const skills = job.skills ? job.skills.split(',').map((skill, index) => {
+                            if (index < 4) {
+                                return `<span class="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs">#${skill.trim()}</span>`;
+                            }
+                            return '';
+                        }).join('') : '';
+
+                        const extraSkills = job.skills ? job.skills.split(',').length - 4 : 0;
+                        const extraSkillsHtml = extraSkills > 0 ?
+                            `<span class="text-gray-400 dark:text-gray-500 text-xs">+${extraSkills} more</span>` : '';
 
                         html += `
-                    <div class="job-card bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-blue-300 transition-all group">
-                        <div class="flex items-start justify-between">
-                            <div class="flex gap-4">
-                                <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-xl font-bold text-blue-600">
+                    <div class="job-card bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all group h-full flex flex-col">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex gap-3">
+                                <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 dark:text-blue-400">
                                     ${job.company_name ? job.company_name.charAt(0) : 'C'}
                                 </div>
-                                <div>
-                                    <h2 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">${job.title || 'No Title'}</h2>
-                                    <p class="text-gray-600 font-medium">${job.company_name || 'Unknown Company'} • <span class="text-gray-400 font-normal">${job.location || 'Remote'}</span></p>
+                                <div class="flex-1">
+                                    <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-1">
+                                        ${job.title || 'No Title'}
+                                    </h2>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm font-medium mt-1">
+                                        ${job.company_name || 'Unknown Company'}
+                                    </p>
+                                    <p class="text-gray-400 dark:text-gray-500 text-sm">${job.location || 'Remote'}</p>
                                 </div>
                             </div>
-                            <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase">
+                            <span class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs font-bold uppercase whitespace-nowrap">
                                 ${job.contract_type || 'Contract'}
                             </span>
                         </div>
-                        <div class="mt-4">
-                            <p class="text-gray-600 line-clamp-2 text-sm">${job.description || 'No description available'}</p>
+                        <div class="mt-3 mb-4 flex-grow">
+                            <p class="text-gray-600 dark:text-gray-300 line-clamp-3 text-sm">
+                                ${job.description || 'No description available'}
+                            </p>
                         </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
+                        <div class="mt-4 flex flex-wrap gap-1.5">
                             ${skills}
+                            ${extraSkillsHtml}
                         </div>
-                        <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
-                            <span class="text-gray-400 text-xs italic">Posted ${job.created_at ? new Date(job.created_at).toLocaleDateString() : 'Recently'}</span>
-                            <a href="job/${job.id}" class="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition">
+                        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                            <span class="text-gray-400 dark:text-gray-500 text-xs italic">
+                                Posted ${job.created_at ? new Date(job.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
+                            </span>
+                            <a href="/job/${job.id}" class="bg-gray-900 dark:bg-gray-700 text-white dark:text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 dark:hover:bg-blue-500 transition whitespace-nowrap">
                                 View Details
                             </a>
                         </div>
                     </div>`;
                     });
                 } else {
-                    html = '<div class="bg-white p-12 text-center rounded-xl shadow-sm"><p class="text-gray-500">No offers matching your criteria were found.</p></div>';
+                    html = '<div class="col-span-3 bg-white dark:bg-gray-800 p-12 text-center rounded-xl shadow-sm"><p class="text-gray-500 dark:text-gray-400 text-lg">No offers matching your criteria were found.</p><p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Try adjusting your filters or search terms</p></div>';
                 }
                 $('#jobsContainer').html(html);
             }

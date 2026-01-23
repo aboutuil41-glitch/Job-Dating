@@ -68,10 +68,10 @@ public function store()
     $user->setDate(date('Y-m-d H:i:s'));
 
     if ($user->create()) {
-        header('Location: /Job-Dating/public/StudentsIndex');
+        header('Location: /StudentsIndex');
         exit;
     } else {
-        header('Location: /Job-Dating/public/AddStudents/new?error=1');
+        header('Location: /AddStudents/new?error=1');
         exit;
     }
 }
@@ -95,7 +95,7 @@ public function showEditForm($id)
 public function update($id)
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header("Location: /Job-Dating/public/Current/Students/Edit/$id");
+        header("Location: /Students/Edit/$id");
         exit;
     }
 
@@ -103,18 +103,18 @@ public function update($id)
     $user = $user->loadById($id);
 
     if (!$user) {
-        header('Location: /Job-Dating/public/StudentsIndex');
+        header('Location: /StudentsIndex');
         exit;
     }
 
     $user->setName($_POST['name'] ?? '');
 
     if ($user->updateOnly(['name'])) {
-        header('Location: /Job-Dating/public/StudentsIndex');
+        header('Location: /StudentsIndex');
         exit;
     }
 
-    header("Location: /Job-Dating/public/Current/Students/Edit/$id?error=1");
+    header("Location: /Students/Edit/$id?error=1");
     exit;
 }
 
@@ -124,21 +124,18 @@ public function delete($id)
     $user = $user->loadById($id);
 
     if (!$user) {
-        header('Location: /Job-Dating/public/StudentsIndex?error=notfound');
+        header('Location: /StudentsIndex?error=notfound');
         exit;
     }
 
     if ($user->delete()) {
-        header('Location: /Job-Dating/public/StudentsIndex?success=deleted');
+        header('Location: /StudentsIndex?success=deleted');
         exit;
     }
 
-    header('Location: /Job-Dating/public/StudentsIndex?error=fail');
+    header('Location: /StudentsIndex?error=fail');
     exit;
 }
-
-
-
 
 public function test3()
 {

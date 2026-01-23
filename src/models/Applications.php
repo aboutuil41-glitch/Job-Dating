@@ -2,52 +2,71 @@
 namespace App\models;
 use App\Core\BaseModel;
 use PDO;
+
 class Applications extends BaseModel
 {
     protected $user_id;
     protected $announcement_id;
-    protected $full_name;
+    protected $first_name;
+    protected $last_name;
     protected $email;
-    protected $cover_letter;
-    protected $resume_path;
+    protected $name;
+    protected $specialization;
+    protected $promotion;
+    protected $motivational_message;
     protected $status;
     protected $created_at;
+
     public function setUserId(int $userId): void { $this->user_id = $userId; }
     public function getUserId(): ?int { return $this->user_id; }
 
     public function setAnnouncementId(int $announcementId): void { $this->announcement_id = $announcementId; }
     public function getAnnouncementId(): ?int { return $this->announcement_id; }
 
-    public function setFullName(string $fullName): void { $this->full_name = $fullName; }
-    public function getFullName(): ?string { return $this->full_name; }
+    public function setFirstName(string $firstName): void { $this->first_name = $firstName; }
+    public function getFirstName(): ?string { return $this->first_name; }
+
+    public function setLastName(string $lastName): void { $this->last_name = $lastName; }
+    public function getLastName(): ?string { return $this->last_name; }
 
     public function setEmail(string $email): void { $this->email = $email; }
     public function getEmail(): ?string { return $this->email; }
 
-    public function setCoverLetter(?string $coverLetter): void { $this->cover_letter = $coverLetter; }
-    public function getCoverLetter(): ?string { return $this->cover_letter; }
+    public function setName(string $name): void { $this->name = $name; }
+    public function getName(): ?string { return $this->name; }
 
-    public function setResumePath(?string $resumePath): void { $this->resume_path = $resumePath; }
-    public function getResumePath(): ?string { return $this->resume_path; }
+    public function setSpecialization(string $specialization): void { $this->specialization = $specialization; }
+    public function getSpecialization(): ?string { return $this->specialization; }
+
+    public function setPromotion(string $promotion): void { $this->promotion = $promotion; }
+    public function getPromotion(): ?string { return $this->promotion; }
+
+    public function setMotivationalMessage(?string $message): void { $this->motivational_message = $message; }
+    public function getMotivationalMessage(): ?string { return $this->motivational_message; }
 
     public function setStatus(string $status): void { $this->status = $status; }
     public function getStatus(): ?string { return $this->status; }
 
     public function setCreatedAt(string $date): void { $this->created_at = $date; }
     public function getCreatedAt(): ?string { return $this->created_at; }
+
     protected function getTable(): string
     {
         return 'applications';
     }
+
     protected function getColumns(): array
     {
         return [
             'user_id',
             'announcement_id',
-            'full_name',
+            'first_name',
+            'last_name',
             'email',
-            'cover_letter',
-            'resume_path',
+            'name',
+            'specialization',
+            'promotion',
+            'motivational_message',
             'status',
             'created_at'
         ];

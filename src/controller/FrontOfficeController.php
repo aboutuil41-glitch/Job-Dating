@@ -104,6 +104,62 @@ class FrontOfficeController extends BaseController
         ]);
     }
 
+    public function companies()
+    {
+        Auth::requireAuth();
+        
+        // Get companies with job counts
+        $sql = "SELECT c.*, COUNT(a.id) as active_jobs 
+                FROM companies c 
+                LEFT JOIN announcements a ON c.id = a.company_id AND a.deleted = 0
+                GROUP BY c.id 
+                ORDER BY c.name";
+        
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $companies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $this->renderTwigFront('companies', [
+            'user' => Auth::user(),
+            'companies' => $companies
+        ]);
+    }
+
+    public function companyDetails($id)
+    {
+        Auth::requireAuth();
+        
+        // Get company with job details
+        $sql = "SELECT c.*, COUNT(a.id) as active_jobs 
+                FROM companies c 
+                LEFT JOIN announcements a ON c.id = a.company_id AND a.deleted = 0
+                WHERE c.id = :id
+                GROUP BY c.id";
+        
+        $db = Database::getInstance()->getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $company = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$company) {
+            header('Location: /Job-Dating/public/companies');
+            exit;
+        }
+        
+        // Get company jobs
+        $jobsSql = "SELECT * FROM announcements WHERE company_id = :id AND deleted = 0 ORDER BY created_at DESC";
+        $jobsStmt = $db->prepare($jobsSql);
+        $jobsStmt->execute(['id' => $id]);
+        $jobs = $jobsStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $this->renderTwigFront('company_details', [
+            'user' => Auth::user(),
+            'company' => $company,
+            'jobs' => $jobs
+        ]);
+    }
+
     public function applyToJob($id)
     {
         Auth::requireAuth();
@@ -122,12 +178,24 @@ class FrontOfficeController extends BaseController
             exit;
         }
 
+        // Validate required fields
+        if (empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['name']) || 
+            empty($_POST['email']) || empty($_POST['specialization']) || empty($_POST['promotion']) || 
+            empty($_POST['motivational_message'])) {
+            header("Location: /Job-Dating/public/job/$id?error=missing_fields");
+            exit;
+        }
+
         // Create application
         $applicationsModel->setUserId($user['id']);
         $applicationsModel->setAnnouncementId($id);
-        $applicationsModel->setFullName($_POST['full_name'] ?? '');
-        $applicationsModel->setEmail($_POST['email'] ?? '');
-        $applicationsModel->setCoverLetter($_POST['cover_letter'] ?? null);
+        $applicationsModel->setFirstName($_POST['first_name']);
+        $applicationsModel->setLastName($_POST['last_name']);
+        $applicationsModel->setEmail($_POST['email']);
+        $applicationsModel->setName($_POST['name']);
+        $applicationsModel->setSpecialization($_POST['specialization']);
+        $applicationsModel->setPromotion($_POST['promotion']);
+        $applicationsModel->setMotivationalMessage($_POST['motivational_message']);
         $applicationsModel->setStatus('pending');
         $applicationsModel->setCreatedAt(date('Y-m-d H:i:s'));
 

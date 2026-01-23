@@ -99,6 +99,42 @@
             background: rgba(31, 41, 55, 0.7);
             border: 1px solid rgba(75, 85, 99, 0.2);
         }
+
+        /* Additional styles for layout */
+        .nav-link {
+            @apply text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+        }
+
+        .mobile-nav-link {
+            @apply block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
+        }
+
+        .dropdown-item {
+            @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150;
+        }
+
+        /* Animation for flash messages */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
     </style>
     {% block styles %}{% endblock %}
 </head>
@@ -120,20 +156,86 @@
                 </div>
             </div>
 
+            <!-- Search Bar -->
+            <div class="hidden md:block w-full md:w-auto md:flex-1 md:max-w-xl mx-0 md:mx-4">
+                <div class="relative">
+                    <input type="text" id="jobSearch"
+                           placeholder="Search jobs, companies, keywords..."
+                           class="w-full pl-12 pr-4 py-2.5 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent">
+                    <span class="absolute left-4 top-2.5 text-gray-400">🔍</span>
+                </div>
+            </div>
+
             <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="/home" class="nav-link">
-                    <i class="fas fa-home mr-2"></i>
-                    Accueil
-                </a>
-                <a href="/offres" class="nav-link">
-                    <i class="fas fa-search mr-2"></i>
-                    Offres d'emploi
-                </a>
-                <a href="/entreprises" class="nav-link">
-                    <i class="fas fa-building mr-2"></i>
-                    Entreprises
-                </a>
+            <div class="hidden md:flex items-center space-x-4">
+                <!-- Navigation Links -->
+                <div class="flex items-center space-x-2">
+                    <a href="/home" class="nav-link {% if current_page == 'home' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-home mr-2"></i>
+                        Accueil
+                    </a>
+                    <a href="/offres" class="nav-link {% if current_page == 'offres' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-search mr-2"></i>
+                        Offres d'emploi
+                    </a>
+                    <a href="/entreprises" class="nav-link {% if current_page == 'entreprises' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-building mr-2"></i>
+                        Entreprises
+                    </a>
+                </div>
+
+                <!-- Filters Button -->
+                <div class="relative">
+                    <button id="filtersToggle" class="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        <span>📂 Filters</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Filters Dropdown Panel -->
+                    <div id="filtersPanel" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 z-50">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 dark:text-white text-lg">Filter Jobs</h3>
+                            <button type="button" onclick="closeFilters()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                ✕
+                            </button>
+                        </div>
+
+                        <form id="filterForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Company</label>
+                                <select name="company" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">All Companies</option>
+                                    {% for company in companies|default([]) %}
+                                        <option value="{{ company.id }}">{{ company.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Contract Type</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}
+                                        <label class="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
+                                            <input type="checkbox" name="contract[]" value="{{ type }}" class="rounded text-blue-600 mr-2">
+                                            {{ type }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <button type="reset" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 font-medium">
+                                    Clear all
+                                </button>
+                                <button type="button" onclick="closeFilters()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
                 <!-- User Dropdown -->
                 <div class="relative group">
@@ -150,20 +252,20 @@
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ user_name|default('Utilisateur') }}</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ user_email|default('user@example.com') }}</p>
                             </div>
-                            <a href="/Job-Dating/public/profile" class="dropdown-item">
+                            <a href="/profile" class="dropdown-item">
                                 <i class="fas fa-user mr-3"></i>
                                 Mon Profil
                             </a>
-                            <a href="/Job-Dating/public/applications" class="dropdown-item">
+                            <a href="/applications" class="dropdown-item">
                                 <i class="fas fa-file-alt mr-3"></i>
                                 Mes Candidatures
                             </a>
-                            <a href="/Job-Dating/public/saved-jobs" class="dropdown-item">
+                            <a href="/saved-jobs" class="dropdown-item">
                                 <i class="fas fa-bookmark mr-3"></i>
                                 Offres Sauvegardées
                             </a>
                             <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
-                                <a href="/Job-Dating/public/logout" class="dropdown-item text-red-600 hover:text-red-700 dark:text-red-400">
+                                <a href="/logout" class="dropdown-item text-red-600 hover:text-red-700 dark:text-red-400">
                                     <i class="fas fa-sign-out-alt mr-3"></i>
                                     Déconnexion
                                 </a>
@@ -174,46 +276,94 @@
             </div>
 
             <!-- Mobile menu button -->
-            <div class="md:hidden">
-                <button id="mobileMenuButton" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+            <div class="md:hidden flex items-center space-x-4">
+                <!-- Mobile Search Button -->
+                <button id="mobileSearchButton" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-search text-xl"></i>
+                </button>
+
+                <button id="mobileMenuButton" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div id="mobileSearch" class="md:hidden hidden py-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="relative">
+                <input type="text" id="mobileJobSearch"
+                       placeholder="Search jobs, companies, keywords..."
+                       class="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent">
+                <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
             </div>
         </div>
 
         <!-- Mobile menu -->
         <div id="mobileMenu" class="md:hidden hidden py-4 border-t border-gray-200 dark:border-gray-700">
             <div class="space-y-3">
-                <a href="/Job-Dating/public/home" class="mobile-nav-link">
+                <a href="/home" class="mobile-nav-link {% if current_page == 'home' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
                     <i class="fas fa-home mr-3"></i>
                     Accueil
                 </a>
-                <a href="/Job-Dating/public/jobs" class="mobile-nav-link">
+                <a href="/offres" class="mobile-nav-link {% if current_page == 'offres' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
                     <i class="fas fa-search mr-3"></i>
                     Offres d'emploi
                 </a>
-                <a href="/Job-Dating/public/companies" class="mobile-nav-link">
+                <a href="/entreprises" class="mobile-nav-link {% if current_page == 'entreprises' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
                     <i class="fas fa-building mr-3"></i>
                     Entreprises
                 </a>
-                <a href="/Job-Dating/public/dashboard" class="mobile-nav-link">
+                <a href="/dashboard" class="mobile-nav-link {% if current_page == 'dashboard' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
                     <i class="fas fa-tachometer-alt mr-3"></i>
                     Dashboard
                 </a>
-                <a href="/Job-Dating/public/profile" class="mobile-nav-link">
-                    <i class="fas fa-user mr-3"></i>
-                    Mon Profil
-                </a>
-                <a href="/Job-Dating/public/applications" class="mobile-nav-link">
-                    <i class="fas fa-file-alt mr-3"></i>
-                    Mes Candidatures
-                </a>
-                <a href="/Job-Dating/public/saved-jobs" class="mobile-nav-link">
-                    <i class="fas fa-bookmark mr-3"></i>
-                    Offres Sauvegardées
-                </a>
+
+                <!-- Mobile Filters -->
+                <div class="px-4 py-3">
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Filters</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Company</label>
+                            <select name="company" class="w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg text-sm p-2">
+                                <option value="">All Companies</option>
+                                {% for company in companies|default([]) %}
+                                    <option value="{{ company.id }}">{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Contract Type</label>
+                            <div class="flex flex-wrap gap-2">
+                                {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}
+                                    <label class="flex items-center text-xs text-gray-600 dark:text-gray-400">
+                                        <input type="checkbox" name="contract[]" value="{{ type }}" class="rounded text-blue-600 mr-1">
+                                        {{ type }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <button type="reset" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+                            Clear all filters
+                        </button>
+                    </div>
+                </div>
+
                 <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <a href="/Job-Dating/public/logout" class="mobile-nav-link text-red-600 hover:text-red-700 dark:text-red-400">
+                    <a href="/profile" class="mobile-nav-link {% if current_page == 'profile' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-user mr-3"></i>
+                        Mon Profil
+                    </a>
+                    <a href="/applications" class="mobile-nav-link {% if current_page == 'applications' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Mes Candidatures
+                    </a>
+                    <a href="/saved-jobs" class="mobile-nav-link {% if current_page == 'saved-jobs' %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400{% endif %}">
+                        <i class="fas fa-bookmark mr-3"></i>
+                        Offres Sauvegardées
+                    </a>
+                    <a href="/logout" class="mobile-nav-link text-red-600 hover:text-red-700 dark:text-red-400">
                         <i class="fas fa-sign-out-alt mr-3"></i>
                         Déconnexion
                     </a>
@@ -247,10 +397,10 @@
             <div>
                 <h3 class="text-lg font-bold mb-4">Liens rapides</h3>
                 <ul class="space-y-2">
-                    <li><a href="/Job-Dating/public/jobs" class="text-gray-400 hover:text-white transition">Offres d'emploi</a></li>
-                    <li><a href="/Job-Dating/public/companies" class="text-gray-400 hover:text-white transition">Entreprises</a></li>
-                    <li><a href="/Job-Dating/public/about" class="text-gray-400 hover:text-white transition">À propos</a></li>
-                    <li><a href="/Job-Dating/public/contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    <li><a href="/offres" class="text-gray-400 hover:text-white transition">Offres d'emploi</a></li>
+                    <li><a href="/entreprises" class="text-gray-400 hover:text-white transition">Entreprises</a></li>
+                    <li><a href="/about" class="text-gray-400 hover:text-white transition">À propos</a></li>
+                    <li><a href="/contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
                 </ul>
             </div>
 
@@ -290,11 +440,63 @@
         $('#mobileMenu').slideToggle(200);
     });
 
+    // Mobile search toggle
+    $('#mobileSearchButton').on('click', function() {
+        $('#mobileSearch').slideToggle(200);
+    });
+
     // Close mobile menu when clicking outside
     $(document).on('click', function(e) {
-        if (!$(e.target).closest('#mobileMenu, #mobileMenuButton').length) {
+        if (!$(e.target).closest('#mobileMenu, #mobileMenuButton, #mobileSearch, #mobileSearchButton').length) {
             $('#mobileMenu').slideUp(200);
+            $('#mobileSearch').slideUp(200);
         }
+    });
+
+    // Toggle filters panel
+    $('#filtersToggle').on('click', function(e) {
+        e.stopPropagation();
+        $('#filtersPanel').toggleClass('hidden');
+    });
+
+    // Close filters when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#filtersPanel, #filtersToggle').length) {
+            $('#filtersPanel').addClass('hidden');
+        }
+    });
+
+    // Close filters function
+    function closeFilters() {
+        $('#filtersPanel').addClass('hidden');
+    }
+
+    // Search functionality
+    function performSearch() {
+        const query = $('#jobSearch').val() || $('#mobileJobSearch').val() || '';
+        const formData = $('#filterForm').serialize();
+
+        // AJAX search would go here
+        console.log('Searching for:', query);
+        console.log('Filters:', formData);
+
+        // This would trigger your AJAX search
+        // $.ajax({
+        //     url: '/jobs/search',
+        //     method: 'GET',
+        //     data: formData + '&q=' + query,
+        //     dataType: 'json',
+        //     success: function(jobs) {
+        //         // Update job listings
+        //     }
+        // });
+    }
+
+    // Debounced search
+    let searchTimeout;
+    $('#jobSearch, #mobileJobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
     });
 
     // Flash messages handling
@@ -314,14 +516,14 @@
         };
 
         const flashHtml = `
-                <div class="flash-message ${colors[type]} text-white rounded-lg shadow-lg p-4 border-l-4 flex items-center space-x-3 animate-slide-in">
-                    <i class="fas fa-${icon[type]} text-lg"></i>
-                    <span class="flex-1">${message}</span>
-                    <button class="close-flash text-white hover:text-gray-200">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
+            <div class="flash-message ${colors[type]} text-white rounded-lg shadow-lg p-4 border-l-4 flex items-center space-x-3 animate-slide-in">
+                <i class="fas fa-${icon[type]} text-lg"></i>
+                <span class="flex-1">${message}</span>
+                <button class="close-flash text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
 
         $('#flashMessages').append(flashHtml);
 
@@ -356,41 +558,3 @@
 {% block scripts %}{% endblock %}
 </body>
 </html>
-
-<style>
-    /* Additional styles for layout */
-    .nav-link {
-        @apply text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
-    }
-
-    .mobile-nav-link {
-        @apply block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700;
-    }
-
-    .dropdown-item {
-        @apply block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150;
-    }
-
-    /* Animation for flash messages */
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    .animate-slide-in {
-        animation: slideIn 0.3s ease-out;
-    }
-
-    /* Smooth transitions */
-    .transition-all {
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 200ms;
-    }
-</style>
