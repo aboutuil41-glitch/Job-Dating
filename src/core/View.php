@@ -88,30 +88,4 @@ class View
 
         echo self::$twig->render($template . '.twig', $data);
     }
-        public static function renderTwigFront(string $template, array $data = []): void
-    {
-        if (self::$twig === null) {
-            $loader = new FilesystemLoader(__DIR__.'/../view/frontoffice');
-
-            self::$twig = new Environment($loader, [
-                'cache' => false, // __DIR__ . '/../../storage/cache' in prod
-                'debug' => true,
-            ]);
-        }
-
-        echo self::$twig->render($template . '.twig', $data);
-    }
-            public static function renderTwigAuth(string $template, array $data = []): void
-    {
-        if (self::$twig === null) {
-            $loader = new FilesystemLoader(__DIR__.'/../view/auth');
-
-            self::$twig = new Environment($loader, [
-                'cache' => false, // __DIR__ . '/../../storage/cache' in prod
-                'debug' => true,
-            ]);
-        }
-
-        echo self::$twig->render($template . '.twig', $data);
-    }
 }

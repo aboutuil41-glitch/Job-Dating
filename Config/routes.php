@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\controller\FrontOfficeController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\UserController;
