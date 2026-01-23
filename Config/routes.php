@@ -8,7 +8,8 @@ use App\Controller\UserController;
 use App\Controller\CompanyController;
 use App\Controller\AdsController;
 use App\Controller\DashboardController;
-use App\Controller\FrontOfficeController;
+use App\Controller\HomeController;
+use App\Controller\ApplicationController;
 
 $router = Router::getRouter();
 
@@ -17,6 +18,11 @@ $router = Router::getRouter();
 // Home & Dashboard
 $router->get('', [AuthController::class, 'login']);
 $router->get('dashboard', [DashboardController::class, 'index']);
+
+// ========== FRONTOFFICE (STUDENTS) ==========
+$router->get('home', [FrontOfficeController::class, 'home']);
+$router->get('jobs', [FrontOfficeController::class, 'jobs']);
+$router->get('job/{id}', [FrontOfficeController::class, 'jobDetails']);
 
 // Old test routes
 $router->get('user/{name}/{id}', fn($name, $id) => 'Welcome ' .$name. ' Your ID is ' .$id);
@@ -89,6 +95,17 @@ $router->post('login', [AuthController::class, 'login']);
 
 // Logout
 $router->get('logout', [AuthController::class, 'logout']);
+
+// Dashboard (admin)
+$router->get('dashboard', [DashboardController::class, 'index']);
+
+$router->get('home', [HomeController::class, 'home']);
+$router->get('applicantes', [ApplicationController::class, 'loadTheApplicantes']);
+$router->get('applicantes/accept/{id}', [ApplicationController::class, 'accept']);
+$router->get('applicantes/refuse/{id}', [ApplicationController::class, 'refuse']);
+
+
+
 
 // Dashboard (admin)
 $router->get('dashboard', [DashboardController::class, 'index']);

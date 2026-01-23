@@ -30,7 +30,6 @@ protected function renderTwigFront(string $view, array $data = []): void
     View::renderTwigFront($view, $data);
 }
 
-
 }
 
 

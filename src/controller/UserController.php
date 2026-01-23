@@ -56,7 +56,7 @@ public function showCreateForm()
 public function store()
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header('Location: /AddStudents/new');
+        header('Location: /users/new');
         exit;
     }
 
@@ -71,7 +71,7 @@ public function store()
         header('Location: /StudentsIndex');
         exit;
     } else {
-        header('Location: /AddStudents/new?error=1');
+        header('Location: /users/new?error=1');
         exit;
     }
 }
@@ -95,7 +95,7 @@ public function showEditForm($id)
 public function update($id)
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header("Location: /Students/Edit/$id");
+        header("Location: /Current/Students/Edit/$id");
         exit;
     }
 
@@ -114,7 +114,7 @@ public function update($id)
         exit;
     }
 
-    header("Location: /Students/Edit/$id?error=1");
+    header("Location: /Current/Students/Edit/$id?error=1");
     exit;
 }
 
@@ -136,6 +136,9 @@ public function delete($id)
     header('Location: /StudentsIndex?error=fail');
     exit;
 }
+
+
+
 
 public function test3()
 {

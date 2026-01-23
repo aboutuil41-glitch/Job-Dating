@@ -1,8 +1,8 @@
 {% extends "layout.twig" %}
 
-{% set active = 'archived' %}
+{% set active = 'applicants' %}
 
-{% block title %}Archived Job Ads - Job Dating Admin{% endblock %}
+{% block title %}Applicants - Job Dating Admin{% endblock %}
 
 {% block content %}
 <div class="animated-background">
@@ -14,71 +14,63 @@
 <div class="header-modern">
     <div class="header-content">
         <div>
-            <h1><i class="fas fa-archive"></i> Archived Advertisements</h1>
-            <p class="subtitle">Restore or permanently delete archived jobs</p>
+            <h1><i class="fas fa-user-check"></i> Applicants</h1>
+            <p class="subtitle">Review and manage job applications</p>
         </div>
-        <a href="/Ads" class="btn-modern btn-primary-modern">
-            <i class="fas fa-arrow-left"></i> Back to Active Ads
-        </a>
     </div>
 </div>
-
-{% if app.request.query.get('success') == 'restored' %}
-<div class="alert-modern alert-success">
-    <i class="fas fa-check-circle"></i>
-    <span>Job ad successfully restored!</span>
-</div>
-{% endif %}
-
-{% if app.request.query.get('success') == 'deleted' %}
-<div class="alert-modern alert-danger">
-    <i class="fas fa-trash-alt"></i>
-    <span>Job ad permanently deleted!</span>
-</div>
-{% endif %}
 
 <div class="cards-container">
     {% if all is empty %}
         <div class="empty-state">
             <div class="empty-icon">
-                <i class="fas fa-archive"></i>
+                <i class="fas fa-inbox"></i>
             </div>
-            <h2>Archive is Empty</h2>
-            <p>No archived job advertisements</p>
+            <h2>No Applicants Yet</h2>
+            <p>Applications will appear here when students apply for positions</p>
         </div>
     {% else %}
-        {% for ad in all %}
-        <div class="job-card archived-card">
-            <div class="archived-overlay">
-                <i class="fas fa-archive"></i>
+        {% for app in all %}
+        <div class="applicant-card">
+            <div class="applicant-icon">
+                <i class="fas fa-user-graduate"></i>
             </div>
             
-            <div class="card-header-badge">
-                <span class="contract-badge archived-badge">{{ ad.contract_type }}</span>
-                <span class="date-badge">
-                    <i class="fas fa-calendar-alt"></i> {{ ad.created_at|date('M d, Y') }}
-                </span>
+            <h3 class="applicant-name">{{ app.first_name }} {{ app.last_name }}</h3>
+            
+            <div class="specialization-badge">
+                <i class="fas fa-graduation-cap"></i>
+                {{ app.specialization }}
             </div>
             
-            <h3 class="job-title">{{ ad.title }}</h3>
+            <div class="applicant-details">
+                <div class="detail-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ app.email }}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Promotion {{ app.promotion }}</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>applied at {{ app.created_at }}</span>
+                </div>
+            </div>
             
-            <div class="job-meta">
-                <div class="meta-item">
-                    <i class="fas fa-building"></i>
-                    <span>{{ ad.company_name }}</span>
+            <div class="motivation-section">
+                <div class="motivation-label">
+                    <i class="fas fa-comment-dots"></i> Motivation
                 </div>
-                <div class="meta-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>{{ ad.location }}</span>
-                </div>
+                <p class="motivation-text">{{ app.motivational_message }}</p>
             </div>
             
             <div class="card-actions">
-                <a href="/Ads/Restore/{{ ad.id }}" class="btn-modern btn-restore" onclick="return confirm('Restore this job ad?')">
-                    <i class="fas fa-undo"></i> Restore
+                <a href="/applicantes/accept/{{ app.id }}" class="btn-modern btn-accept">
+                    <i class="fas fa-check"></i> Accept
                 </a>
-                <a href="/Ads/HardDelete/{{ ad.id }}" class="btn-modern btn-delete-permanent" onclick="return confirm('⚠️ PERMANENTLY DELETE? This cannot be undone!')">
-                    <i class="fas fa-trash-alt"></i> Delete
+                <a href="/applicantes/refuse/{{ app.id }}" class="btn-modern btn-refuse" onclick="return confirm('Refuse this applicant?')">
+                    <i class="fas fa-times"></i> Refuse
                 </a>
             </div>
         </div>
@@ -101,6 +93,9 @@
         --text-primary: #e0e0e0;
         --text-secondary: #a0a0a0;
         --border: #2a2a4a;
+        --cyan: #06b6d4;
+        --teal: #14b8a6;
+        --purple: #a855f7;
     }
 
     .animated-background {
@@ -118,14 +113,14 @@
         position: absolute;
         border-radius: 50%;
         filter: blur(80px);
-        opacity: 0.3;
+        opacity: 0.4;
         animation: float 20s infinite ease-in-out;
     }
 
     .orb-1 {
         width: 500px;
         height: 500px;
-        background: radial-gradient(circle, var(--danger) 0%, transparent 70%);
+        background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
         top: -10%;
         left: -10%;
         animation-delay: 0s;
@@ -134,7 +129,7 @@
     .orb-2 {
         width: 400px;
         height: 400px;
-        background: radial-gradient(circle, var(--warning) 0%, transparent 70%);
+        background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
         bottom: -10%;
         right: -10%;
         animation-delay: -7s;
@@ -143,7 +138,7 @@
     .orb-3 {
         width: 350px;
         height: 350px;
-        background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
         top: 50%;
         left: 50%;
         animation-delay: -14s;
@@ -166,7 +161,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 30px;
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
         border-radius: 20px;
         border: 1px solid var(--border);
         backdrop-filter: blur(10px);
@@ -175,7 +170,7 @@
     .header-content h1 {
         font-size: 32px;
         margin: 0 0 8px 0;
-        background: linear-gradient(135deg, var(--danger) 0%, var(--warning) 100%);
+        background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -198,29 +193,6 @@
         }
     }
 
-    .alert-modern {
-        padding: 16px 24px;
-        border-radius: 12px;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 600;
-        animation: slideDown 0.5s ease-out;
-    }
-
-    .alert-success {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
-        color: var(--success);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .alert-danger {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
-        color: var(--danger);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
     .btn-modern {
         padding: 12px 24px;
         border-radius: 12px;
@@ -235,81 +207,47 @@
         font-size: 14px;
     }
 
-    .btn-primary-modern {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        color: white;
-        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-    }
-
-    .btn-primary-modern:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
-    }
-
     .cards-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 24px;
         padding: 20px 0;
     }
 
-    .job-card {
+    .applicant-card {
         background: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: 20px;
-        padding: 24px;
+        padding: 28px;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         animation: fadeInUp 0.5s ease-out;
         animation-fill-mode: both;
         position: relative;
         overflow: hidden;
+        text-align: center;
     }
 
-    .archived-card {
-        opacity: 0.7;
-    }
-
-    .archived-card:hover {
-        opacity: 1;
-    }
-
-    .archived-overlay {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--danger);
-        font-size: 18px;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .job-card::before {
+    .applicant-card::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--danger), var(--warning));
+        background: linear-gradient(90deg, var(--purple), var(--accent), var(--primary));
         transform: scaleX(0);
         transition: transform 0.4s ease;
     }
 
-    .job-card:hover::before {
+    .applicant-card:hover::before {
         transform: scaleX(1);
     }
 
-    .job-card:hover {
+    .applicant-card:hover {
         transform: translateY(-8px);
         background: var(--card-hover);
-        border-color: var(--danger);
-        box-shadow: 0 20px 60px rgba(239, 68, 68, 0.2);
+        border-color: var(--purple);
+        box-shadow: 0 20px 60px rgba(168, 85, 247, 0.25);
     }
 
     @keyframes fadeInUp {
@@ -318,71 +256,116 @@
             transform: translateY(30px);
         }
         to {
-            opacity: 0.7;
+            opacity: 1;
             transform: translateY(0);
         }
     }
 
-    .job-card:nth-child(1) { animation-delay: 0.1s; }
-    .job-card:nth-child(2) { animation-delay: 0.15s; }
-    .job-card:nth-child(3) { animation-delay: 0.2s; }
-    .job-card:nth-child(4) { animation-delay: 0.25s; }
-    .job-card:nth-child(5) { animation-delay: 0.3s; }
-    .job-card:nth-child(6) { animation-delay: 0.35s; }
+    .applicant-card:nth-child(1) { animation-delay: 0.1s; }
+    .applicant-card:nth-child(2) { animation-delay: 0.15s; }
+    .applicant-card:nth-child(3) { animation-delay: 0.2s; }
+    .applicant-card:nth-child(4) { animation-delay: 0.25s; }
+    .applicant-card:nth-child(5) { animation-delay: 0.3s; }
+    .applicant-card:nth-child(6) { animation-delay: 0.35s; }
 
-    .card-header-badge {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .archived-badge {
-        padding: 6px 16px;
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
-        color: var(--danger);
+    .applicant-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
         border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    .date-badge {
-        color: var(--text-secondary);
-        font-size: 12px;
         display: flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        font-size: 36px;
+        color: var(--purple);
+        border: 2px solid rgba(168, 85, 247, 0.3);
+        transition: all 0.3s ease;
     }
 
-    .job-title {
-        font-size: 22px;
+    .applicant-card:hover .applicant-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    }
+
+    .applicant-name {
+        font-size: 24px;
         margin: 0 0 16px 0;
         color: var(--text-primary);
         font-weight: 700;
-        line-height: 1.3;
     }
 
-    .job-meta {
+    .specialization-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 18px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        margin-bottom: 24px;
+    }
+
+    .applicant-details {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding: 20px 0;
+        border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
     }
 
-    .meta-item {
+    .detail-item {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         color: var(--text-secondary);
         font-size: 14px;
+        text-align: left;
     }
 
-    .meta-item i {
-        color: var(--danger);
-        width: 16px;
+    .detail-item i {
+        color: var(--purple);
+        width: 20px;
+        font-size: 16px;
+    }
+
+    .detail-item span {
+        flex: 1;
+        word-break: break-word;
+    }
+
+    .motivation-section {
+        margin-bottom: 24px;
+        text-align: left;
+    }
+
+    .motivation-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .motivation-text {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 16px;
+        border-radius: 12px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        font-style: italic;
+        border-left: 3px solid var(--accent);
+        margin: 0;
     }
 
     .card-actions {
@@ -390,21 +373,21 @@
         gap: 10px;
     }
 
-    .btn-restore {
+    .btn-accept {
         flex: 1;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(20, 184, 166, 0.2) 100%);
         color: var(--success);
         border: 1px solid rgba(16, 185, 129, 0.3);
         justify-content: center;
     }
 
-    .btn-restore:hover {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%);
+    .btn-accept:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(20, 184, 166, 0.3) 100%);
         transform: translateY(-2px);
         box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
     }
 
-    .btn-delete-permanent {
+    .btn-refuse {
         flex: 1;
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
         color: var(--danger);
@@ -412,7 +395,7 @@
         justify-content: center;
     }
 
-    .btn-delete-permanent:hover {
+    .btn-refuse:hover {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
         transform: translateY(-2px);
         box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
@@ -427,7 +410,7 @@
 
     .empty-icon {
         font-size: 80px;
-        color: var(--danger);
+        color: var(--purple);
         margin-bottom: 24px;
         opacity: 0.3;
         animation: pulse 2s infinite;
@@ -446,7 +429,7 @@
 
     .empty-state p {
         color: var(--text-secondary);
-        margin: 0;
+        margin: 0 0 24px 0;
         font-size: 16px;
     }
 </style>

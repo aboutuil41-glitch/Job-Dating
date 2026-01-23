@@ -142,14 +142,21 @@ class announcements extends BaseModel
         return (int)($result['total'] ?? 0);
     }
 
-        public function RenderAds(): array
-    {
-        $stmt = $this->db->prepare(
-            "SELECT * FROM {$this->getTable()} WHERE deleted = 0"
-        );
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+public function RenderAds(): array
+{
+    $stmt = $this->db->prepare(
+        "SELECT 
+            a.*,
+            c.name AS company_name
+         FROM {$this->getTable()} a
+         JOIN companies c ON c.id = a.company_id
+         WHERE a.deleted = 0"
+    );
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
     public function deletedAdCount(): int
     {
@@ -164,11 +171,17 @@ class announcements extends BaseModel
 
     public function RenderArchivedAds(): array
     {
-        $stmt = $this->db->prepare(
-            "SELECT * FROM {$this->getTable()} WHERE deleted = 1"
-        );
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $this->db->prepare(
+        "SELECT 
+            a.*,
+            c.name AS company_name
+         FROM {$this->getTable()} a
+         JOIN companies c ON c.id = a.company_id
+         WHERE a.deleted = 1"
+    );
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 public function softDelete(): bool
@@ -190,5 +203,14 @@ public function restore(): bool
 
     return $stmt->execute(['id' => $this->id]);
 }
+    public function RenderRecentAds(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->getTable()} ORDER BY created_at DESC LIMIT 3"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

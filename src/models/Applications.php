@@ -29,11 +29,11 @@ class Applications extends BaseModel
     public function setLastName(string $lastName): void { $this->last_name = $lastName; }
     public function getLastName(): ?string { return $this->last_name; }
 
-    public function setEmail(string $email): void { $this->email = $email; }
-    public function getEmail(): ?string { return $this->email; }
-
     public function setName(string $name): void { $this->name = $name; }
     public function getName(): ?string { return $this->name; }
+
+    public function setEmail(string $email): void { $this->email = $email; }
+    public function getEmail(): ?string { return $this->email; }
 
     public function setSpecialization(string $specialization): void { $this->specialization = $specialization; }
     public function getSpecialization(): ?string { return $this->specialization; }
@@ -62,8 +62,8 @@ class Applications extends BaseModel
             'announcement_id',
             'first_name',
             'last_name',
-            'email',
             'name',
+            'email',
             'specialization',
             'promotion',
             'motivational_message',
@@ -88,4 +88,31 @@ class Applications extends BaseModel
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return (int)($result['count'] ?? 0) > 0;
     }
+    public function Refuse(): bool
+{
+    if (!$this->id) return false;
+
+    $sql = "UPDATE {$this->getTable()} SET status = 'rejected' WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute(['id' => $this->id]);
+}
+    public function Accept(): bool
+{
+    if (!$this->id) return false;
+
+    $sql = "UPDATE {$this->getTable()} SET status = 'accepted' WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute(['id' => $this->id]);
+}
+    public function loadOnlyPending(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM {$this->getTable()} WHERE status = 'pending' ORDER BY created_at DESC"
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
