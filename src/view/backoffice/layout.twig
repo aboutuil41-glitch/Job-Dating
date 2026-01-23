@@ -50,6 +50,8 @@
             box-shadow: 4px 0 30px rgba(99, 102, 241, 0.2);
             z-index: 1000;
             border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
         }
 
         .logo {
@@ -63,6 +65,11 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .nav-links {
+            flex: 1;
+            overflow-y: auto;
         }
 
         .nav-link {
@@ -112,6 +119,36 @@
         }
 
         .nav-link i {
+            font-size: 18px;
+            width: 24px;
+        }
+
+        .logout-section {
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--danger);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn i {
             font-size: 18px;
             width: 24px;
         }
@@ -325,28 +362,40 @@
             <i class="fas fa-briefcase"></i>
             Job Dating
         </div>
-        <nav>
-            <a href="/dashboard" class="nav-link {% if active == 'dashboard' %}active{% endif %}">
-                <i class="fas fa-chart-line"></i>
-                Dashboard
+        <div class="nav-links">
+            <nav>
+                <a href="/dashboard" class="nav-link {% if active == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+                <a href="/StudentsIndex" class="nav-link {% if active == 'students' %}active{% endif %}">
+                    <i class="fas fa-user-graduate"></i>
+                    Students
+                </a>
+                <a href="/CompanyIndex" class="nav-link {% if active == 'companies' %}active{% endif %}">
+                    <i class="fas fa-building"></i>
+                    Companies
+                </a>
+                <a href="/Ads" class="nav-link {% if active == 'ads' %}active{% endif %}">
+                    <i class="fas fa-bullhorn"></i>
+                    Job Ads
+                </a>
+                <a href="/applicantes" class="nav-link {% if active == 'applicants' %}active{% endif %}">
+                    <i class="fas fa-user-check"></i>
+                    Applicants
+                </a>
+                <a href="/Ads/Archive" class="nav-link {% if active == 'archived' %}active{% endif %}">
+                    <i class="fas fa-archive"></i>
+                    Archived Ads
+                </a>
+            </nav>
+        </div>
+        <div class="logout-section">
+            <a href="/logout" class="logout-btn" onclick="return confirm('Are you sure you want to logout?')">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
             </a>
-            <a href="/StudentsIndex" class="nav-link {% if active == 'students' %}active{% endif %}">
-                <i class="fas fa-user-graduate"></i>
-                Students
-            </a>
-            <a href="/CompanyIndex" class="nav-link {% if active == 'companies' %}active{% endif %}">
-                <i class="fas fa-building"></i>
-                Companies
-            </a>
-            <a href="/Ads" class="nav-link {% if active == 'ads' %}active{% endif %}">
-                <i class="fas fa-bullhorn"></i>
-                Job Ads
-            </a>
-            <a href="/Ads/Archive" class="nav-link {% if active == 'archived' %}active{% endif %}">
-                <i class="fas fa-archive"></i>
-                Archived Ads
-            </a>
-        </nav>
+        </div>
     </div>
 
     <div class="main-content">
