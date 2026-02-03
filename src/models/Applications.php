@@ -10,7 +10,6 @@ class Applications extends BaseModel
     protected $first_name;
     protected $last_name;
     protected $email;
-    protected $name;
     protected $specialization;
     protected $promotion;
     protected $motivational_message;
@@ -28,9 +27,6 @@ class Applications extends BaseModel
 
     public function setLastName(string $lastName): void { $this->last_name = $lastName; }
     public function getLastName(): ?string { return $this->last_name; }
-
-    public function setName(string $name): void { $this->name = $name; }
-    public function getName(): ?string { return $this->name; }
 
     public function setEmail(string $email): void { $this->email = $email; }
     public function getEmail(): ?string { return $this->email; }
@@ -62,7 +58,7 @@ class Applications extends BaseModel
             'announcement_id',
             'first_name',
             'last_name',
-            'name',
+
             'email',
             'specialization',
             'promotion',

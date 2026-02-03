@@ -16,7 +16,7 @@ class ApplicationController extends BaseController
 
     public function __construct()
     {
-        $this->db = new PDO("sqlite::memory:");
+        // $this->db = new PDO("sqlite::memory:");
     }
 
     public function loadTheApplicantes(){

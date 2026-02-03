@@ -179,7 +179,7 @@ class FrontOfficeController extends BaseController
         }
 
         // Validate required fields
-        if (empty($_POST['first_name']) || empty($_POST['last_name']) || empty($_POST['name']) || 
+        if (empty($_POST['first_name']) || empty($_POST['last_name']) ||
             empty($_POST['email']) || empty($_POST['specialization']) || empty($_POST['promotion']) || 
             empty($_POST['motivational_message'])) {
             header("Location: /Job-Dating/public/job/$id?error=missing_fields");
@@ -192,7 +192,6 @@ class FrontOfficeController extends BaseController
         $applicationsModel->setFirstName($_POST['first_name']);
         $applicationsModel->setLastName($_POST['last_name']);
         $applicationsModel->setEmail($_POST['email']);
-        $applicationsModel->setName($_POST['name']);
         $applicationsModel->setSpecialization($_POST['specialization']);
         $applicationsModel->setPromotion($_POST['promotion']);
         $applicationsModel->setMotivationalMessage($_POST['motivational_message']);
