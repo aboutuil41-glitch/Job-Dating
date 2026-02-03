@@ -3,7 +3,7 @@
         'name' => 'pc/play_time',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b0453961d459a360a53781f6743e808d0cc89c29',
+        'reference' => 'd86b85f6b830095243632be20dc12c4a1ce8b022',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'pc/play_time' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b0453961d459a360a53781f6743e808d0cc89c29',
+            'reference' => 'd86b85f6b830095243632be20dc12c4a1ce8b022',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
