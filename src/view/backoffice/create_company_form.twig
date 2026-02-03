@@ -5,52 +5,66 @@
 {% block title %}Add Company - Job Dating Admin{% endblock %}
 
 {% block content %}
-<div class="header">
-    <h1><i class="fas fa-building"></i> Add New Company</h1>
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
 </div>
 
-<div class="card">
+<div class="header-modern">
+    <div class="header-content">
+        <div>
+            <h1><i class="fas fa-building"></i> Add New Company</h1>
+            <p class="subtitle">Register a new partner company</p>
+        </div>
+        <a href="/CompanyIndex" class="btn-modern btn-secondary-modern">
+            <i class="fas fa-arrow-left"></i> Back to Companies
+        </a>
+    </div>
+</div>
+
+<div class="form-card">
     <form action="/AddCompany/store" method="POST">
         <div class="form-group">
             <label for="name">
                 <i class="fas fa-building"></i> Company Name
             </label>
-            <input type="text" id="name" name="name" class="form-control" required placeholder="Enter company name">
+            <input type="text" id="name" name="name" class="form-control-modern" required placeholder="Enter company name">
         </div>
 
         <div class="form-group">
             <label for="sector">
                 <i class="fas fa-industry"></i> Sector
             </label>
-            <input type="text" id="sector" name="sector" class="form-control" required placeholder="e.g., Technology, Finance, Healthcare">
+            <input type="text" id="sector" name="sector" class="form-control-modern" required placeholder="e.g., Technology, Finance, Healthcare">
         </div>
 
         <div class="form-group">
             <label for="location">
                 <i class="fas fa-map-marker-alt"></i> Location
             </label>
-            <input type="text" id="location" name="location" class="form-control" required placeholder="Enter location">
+            <input type="text" id="location" name="location" class="form-control-modern" required placeholder="Enter location">
         </div>
 
         <div class="form-group">
             <label for="email">
                 <i class="fas fa-envelope"></i> Email Address
             </label>
-            <input type="email" id="email" name="email" class="form-control" required placeholder="Enter email address">
+            <input type="email" id="email" name="email" class="form-control-modern" required placeholder="Enter email address">
         </div>
 
         <div class="form-group">
             <label for="phone">
                 <i class="fas fa-phone"></i> Phone Number
             </label>
-            <input type="tel" id="phone" name="phone" class="form-control" required placeholder="Enter phone number">
+            <input type="tel" id="phone" name="phone" class="form-control-modern" required placeholder="Enter phone number">
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 30px;">
-            <button type="submit" class="btn btn-primary">
+        <div class="form-actions">
+            <button type="submit" class="btn-modern btn-primary-modern">
                 <i class="fas fa-save"></i> Create Company
             </button>
-            <a href="/CompanyIndex" class="btn btn-danger">
+            <a href="/CompanyIndex" class="btn-modern btn-danger-modern">
                 <i class="fas fa-times"></i> Cancel
             </a>
         </div>
@@ -58,10 +72,112 @@
 </div>
 
 <style>
-    @keyframes fadeIn {
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #8b5cf6;
+        --accent: #ec4899;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark-bg: #0f0f23;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+        --cyan: #06b6d4;
+        --teal: #14b8a6;
+    }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+        animation-delay: 0s;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--teal) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    .orb-3 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        animation-delay: -14s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(50px, -50px) scale(1.1); }
+        50% { transform: translate(-30px, 50px) scale(0.9); }
+        75% { transform: translate(40px, 30px) scale(1.05); }
+    }
+
+    .header-modern {
+        margin-bottom: 40px;
+        animation: slideDown 0.6s ease-out;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        backdrop-filter: blur(10px);
+    }
+
+    .header-content h1 {
+        font-size: 32px;
+        margin: 0 0 8px 0;
+        background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    @keyframes slideDown {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(-30px);
         }
         to {
             opacity: 1;
@@ -69,12 +185,79 @@
         }
     }
 
-    .card {
-        animation: fadeIn 0.5s ease-out;
+    .btn-modern {
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .btn-primary-modern {
+        background: linear-gradient(135deg, var(--cyan) 0%, var(--teal) 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(6, 182, 212, 0.4);
+    }
+
+    .btn-secondary-modern {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+        color: var(--secondary);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-secondary-modern:hover {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger-modern {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger-modern:hover {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(220, 38, 38, 0.3) 100%);
+        transform: translateY(-2px);
+    }
+
+    .form-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 40px;
+        animation: fadeInUp 0.6s ease-out;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .form-group {
+        margin-bottom: 24px;
         animation: fadeIn 0.5s ease-out;
+        animation-fill-mode: both;
     }
 
     .form-group:nth-child(1) { animation-delay: 0.1s; }
@@ -82,5 +265,65 @@
     .form-group:nth-child(3) { animation-delay: 0.2s; }
     .form-group:nth-child(4) { animation-delay: 0.25s; }
     .form-group:nth-child(5) { animation-delay: 0.3s; }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .form-group label i {
+        color: var(--cyan);
+        font-size: 16px;
+    }
+
+    .form-control-modern {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-control-modern::placeholder {
+        color: var(--text-secondary);
+        opacity: 0.6;
+    }
+
+    .form-control-modern:focus {
+        outline: none;
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+        animation: fadeIn 0.5s ease-out 0.35s;
+        animation-fill-mode: both;
+    }
 </style>
 {% endblock %}

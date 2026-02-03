@@ -1,0 +1,310 @@
+{% extends "layout.twig" %}
+
+{% block title %}Partner Companies - YouCode Job Dating{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #8b5cf6;
+        --card-bg: #1a1a2e;
+        --card-hover: #25253f;
+        --text-primary: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border: #2a2a4a;
+        --cyan: #06b6d4;
+        --success: #10b981;
+    }
+
+    body { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%); }
+
+    .animated-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .gradient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        animation: float 20s infinite ease-in-out;
+    }
+
+    .orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        top: -10%;
+        left: -10%;
+    }
+
+    .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(50px, -50px); }
+        50% { transform: translate(-30px, 50px); }
+        75% { transform: translate(40px, 30px); }
+    }
+
+    .hero-section {
+        padding: 60px 24px;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+        border-radius: 24px;
+        margin-bottom: 40px;
+        text-align: center;
+        animation: slideDown 0.6s ease-out;
+        border: 1px solid var(--border);
+    }
+
+    .hero-section h1 {
+        font-size: 40px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        max-width: 800px;
+        margin: 32px auto 0;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--cyan) 0%, var(--success) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .company-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.5s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .company-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .company-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .company-card:hover {
+        transform: translateY(-8px);
+        background: var(--card-hover);
+        box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    }
+
+    .company-card:nth-child(1) { animation-delay: 0.1s; }
+    .company-card:nth-child(2) { animation-delay: 0.2s; }
+    .company-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .company-logo {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+    }
+
+    .company-card:hover .company-logo {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .jobs-badge {
+        padding: 6px 16px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%);
+        border: 2px solid rgba(16, 185, 129, 0.3);
+        color: var(--success);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .view-company-btn {
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .view-company-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="animated-background">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="hero-section">
+        <h1>🏢 Partner Companies</h1>
+        <p style="color: var(--text-secondary); font-size: 18px;">
+            Discover companies that trust YouCode talents
+        </p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ companies|length }}</div>
+                <div style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">Companies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_jobs|default(0) }}</div>
+                <div style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">Active Jobs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_hires|default(0) }}</div>
+                <div style="color: var(--text-secondary); font-size: 13px; margin-top: 4px;">Talents Hired</div>
+            </div>
+        </div>
+    </div>
+
+    {% if companies|length > 0 %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for company in companies %}
+                <div class="company-card" style="position: relative;">
+                    <div style="padding: 28px;">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="company-logo">
+                                    {{ company.name|slice(0,2)|upper }}
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+                                        {{ company.name }}
+                                    </h3>
+                                    <div style="color: var(--text-secondary); font-size: 13px;">
+                                        📍 {{ company.location|default('Morocco') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="jobs-badge">
+                                {{ company.active_jobs|default(0) }} jobs
+                            </span>
+                        </div>
+
+                        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 16px;" class="line-clamp-3">
+                            {{ company.description|default('YouCode partner company specialized in recruiting tech talents.') }}
+                        </p>
+
+                        <div style="margin-bottom: 16px;">
+                            <div style="color: var(--text-secondary); font-size: 13px; margin-bottom: 8px;">
+                                <span>🏭 {{ company.industry|default('Technology') }}</span>
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 13px;">
+                                <span>👥 {{ company.size|default('50-200') }} employees</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(99, 102, 241, 0.05); padding: 20px; border-top: 1px solid var(--border);">
+                        <div class="flex justify-between items-center">
+                            <div style="color: var(--success); font-size: 12px; font-weight: 600;">
+                                ✓ {{ company.hired_students|default(random(5, 50)) }} talents hired
+                            </div>
+                            <a href="/company/{{ company.id|default(loop.index) }}" class="view-company-btn">
+                                Details →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 60px 40px; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🏢</div>
+            <h3 style="color: var(--text-primary); font-size: 20px; font-weight: 700; margin-bottom: 8px;">
+                No Companies Available
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                No partner companies at the moment
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add hover effects
+    document.querySelectorAll('.company-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+{% endblock %}

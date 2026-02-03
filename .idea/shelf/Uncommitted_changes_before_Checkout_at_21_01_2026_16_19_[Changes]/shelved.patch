@@ -1,0 +1,1694 @@
+Index: src/view/frontoffice/job_details.twig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"frontoffice/layout.twig\" %}\r\n\r\n{% block title %}{{ job.title }} - YouCode Job Dating{% endblock %}\r\n\r\n{% block content %}\r\n    <div class=\"bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8\">\r\n        <div class=\"max-w-4xl mx-auto\">\r\n            <!-- Breadcrumb -->\r\n            <nav class=\"mb-6\" aria-label=\"Breadcrumb\">\r\n                <ol class=\"flex items-center space-x-2 text-sm\">\r\n                    <li>\r\n                        <a href=\"/jobs\" class=\"text-blue-600 hover:text-blue-800 transition\">Job Offers</a>\r\n                    </li>\r\n                    <li class=\"text-gray-400\">/</li>\r\n                    <li>\r\n                        <a href=\"/companies/{{ job.company_id }}\" class=\"text-blue-600 hover:text-blue-800 transition\">{{ job.company_name }}</a>\r\n                    </li>\r\n                    <li class=\"text-gray-400\">/</li>\r\n                    <li class=\"text-gray-800 font-medium truncate\">{{ job.title }}</li>\r\n                </ol>\r\n            </nav>\r\n\r\n            <!-- Main Job Card -->\r\n            <div class=\"bg-white rounded-xl shadow-lg overflow-hidden mb-8\">\r\n                <!-- Job Header -->\r\n                <div class=\"p-6 border-b border-gray-100\">\r\n                    <div class=\"flex flex-col md:flex-row md:items-start justify-between gap-4\">\r\n                        <div class=\"flex items-start space-x-4\">\r\n                            <!-- Company Logo/Avatar -->\r\n                            <div class=\"w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center text-2xl font-bold text-blue-600\">\r\n                                {{ job.company_name|slice(0,1) }}\r\n                            </div>\r\n\r\n                            <!-- Job Info -->\r\n                            <div class=\"flex-1\">\r\n                                <h1 class=\"text-2xl font-bold text-gray-900 mb-2\">{{ job.title }}</h1>\r\n                                <div class=\"flex items-center text-gray-600 mb-1\">\r\n                                    <svg class=\"w-5 h-5 mr-2 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4\"/>\r\n                                    </svg>\r\n                                    <span class=\"font-medium\">{{ job.company_name }}</span>\r\n                                </div>\r\n                                <div class=\"flex flex-wrap items-center gap-4 text-sm text-gray-500\">\r\n                                    <div class=\"flex items-center\">\r\n                                        <svg class=\"w-5 h-5 mr-1 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"/>\r\n                                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"/>\r\n                                        </svg>\r\n                                        {{ job.location }}\r\n                                    </div>\r\n                                    <div class=\"flex items-center\">\r\n                                        <svg class=\"w-5 h-5 mr-1 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"/>\r\n                                        </svg>\r\n                                        Posted {{ job.created_at|date(\"F d, Y\") }}\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n\r\n                        <!-- Contract Badge & Apply Button -->\r\n                        <div class=\"flex flex-col items-start md:items-end space-y-3\">\r\n                        <span class=\"inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase\r\n                            {% if job.contract_type == 'CDI' %}bg-green-100 text-green-800\r\n                            {% elseif job.contract_type == 'CDD' %}bg-yellow-100 text-yellow-800\r\n                            {% elseif job.contract_type == 'Internship' %}bg-blue-100 text-blue-800\r\n                            {% else %}bg-purple-100 text-purple-800\r\n                            {% endif %}\">\r\n                            {{ job.contract_type }}\r\n                        </span>\r\n\r\n                            <button id=\"applyButton\" class=\"bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2\">\r\n                                Apply Now\r\n                            </button>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n\r\n                <!-- Job Content -->\r\n                <div class=\"p-6 md:p-8\">\r\n                    <div class=\"grid grid-cols-1 lg:grid-cols-3 gap-8\">\r\n                        <!-- Main Content -->\r\n                        <div class=\"lg:col-span-2\">\r\n                            <!-- Job Description -->\r\n                            <section class=\"mb-8\">\r\n                                <h2 class=\"text-xl font-bold text-gray-900 mb-4 flex items-center\">\r\n                                    <svg class=\"w-6 h-6 mr-2 text-blue-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\"/>\r\n                                    </svg>\r\n                                    Job Description\r\n                                </h2>\r\n                                <div class=\"prose max-w-none text-gray-700\">\r\n                                    {{ job.description|raw }}\r\n                                </div>\r\n                            </section>\r\n\r\n                            <!-- Required Skills -->\r\n                            <section class=\"mb-8\">\r\n                                <h2 class=\"text-xl font-bold text-gray-900 mb-4 flex items-center\">\r\n                                    <svg class=\"w-6 h-6 mr-2 text-blue-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2\"/>\r\n                                    </svg>\r\n                                    Required Skills\r\n                                </h2>\r\n                                <div class=\"flex flex-wrap gap-2\">\r\n                                    {% for skill in job.skills|split(',') %}\r\n                                        <span class=\"bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-100 transition\">\r\n                                        {{ skill|trim }}\r\n                                    </span>\r\n                                    {% endfor %}\r\n                                </div>\r\n                            </section>\r\n                        </div>\r\n\r\n                        <!-- Sidebar -->\r\n                        <div class=\"lg:col-span-1\">\r\n                            <!-- Company Info Card -->\r\n                            <div class=\"bg-gray-50 rounded-xl p-6 mb-6\">\r\n                                <h3 class=\"text-lg font-bold text-gray-900 mb-4 flex items-center\">\r\n                                    <svg class=\"w-5 h-5 mr-2 text-blue-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4\"/>\r\n                                    </svg>\r\n                                    About the Company\r\n                                </h3>\r\n                                <div class=\"space-y-4\">\r\n                                    <div class=\"flex items-center\">\r\n                                        <div class=\"w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 mr-3\">\r\n                                            {{ job.company_name|slice(0,1) }}\r\n                                        </div>\r\n                                        <div>\r\n                                            <h4 class=\"font-bold text-gray-900\">{{ job.company_name }}</h4>\r\n                                            <p class=\"text-sm text-gray-600\">{{ job.company_sector }}</p>\r\n                                        </div>\r\n                                    </div>\r\n\r\n                                    <div class=\"space-y-2 text-sm\">\r\n                                        <div class=\"flex items-center text-gray-600\">\r\n                                            <svg class=\"w-4 h-4 mr-2 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"/>\r\n                                            </svg>\r\n                                            {{ job.company_location }}\r\n                                        </div>\r\n                                        <div class=\"flex items-center text-gray-600\">\r\n                                            <svg class=\"w-4 h-4 mr-2 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\"/>\r\n                                            </svg>\r\n                                            {{ job.company_email }}\r\n                                        </div>\r\n                                        {% if job.company_phone %}\r\n                                            <div class=\"flex items-center text-gray-600\">\r\n                                                <svg class=\"w-4 h-4 mr-2 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z\"/>\r\n                                                </svg>\r\n                                                {{ job.company_phone }}\r\n                                            </div>\r\n                                        {% endif %}\r\n                                    </div>\r\n\r\n                                    <a href=\"/companies/{{ job.company_id }}\" class=\"block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium text-sm\">\r\n                                        View Company Profile →\r\n                                    </a>\r\n                                </div>\r\n                            </div>\r\n\r\n                            <!-- Job Details Card -->\r\n                            <div class=\"bg-gray-50 rounded-xl p-6\">\r\n                                <h3 class=\"text-lg font-bold text-gray-900 mb-4 flex items-center\">\r\n                                    <svg class=\"w-5 h-5 mr-2 text-blue-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"/>\r\n                                    </svg>\r\n                                    Job Details\r\n                                </h3>\r\n                                <div class=\"space-y-3\">\r\n                                    <div class=\"flex justify-between py-2 border-b border-gray-200\">\r\n                                        <span class=\"text-gray-600\">Contract Type</span>\r\n                                        <span class=\"font-medium\">{{ job.contract_type }}</span>\r\n                                    </div>\r\n                                    <div class=\"flex justify-between py-2 border-b border-gray-200\">\r\n                                        <span class=\"text-gray-600\">Location</span>\r\n                                        <span class=\"font-medium\">{{ job.location }}</span>\r\n                                    </div>\r\n                                    <div class=\"flex justify-between py-2 border-b border-gray-200\">\r\n                                        <span class=\"text-gray-600\">Posted Date</span>\r\n                                        <span class=\"font-medium\">{{ job.created_at|date(\"M d, Y\") }}</span>\r\n                                    </div>\r\n                                    {% if job.updated_at and job.updated_at != job.created_at %}\r\n                                        <div class=\"flex justify-between py-2\">\r\n                                            <span class=\"text-gray-600\">Last Updated</span>\r\n                                            <span class=\"font-medium\">{{ job.updated_at|date(\"M d, Y\") }}</span>\r\n                                        </div>\r\n                                    {% endif %}\r\n                                </div>\r\n                            </div>\r\n\r\n                            <!-- Similar Jobs (Placeholder) -->\r\n                            <div class=\"mt-6\">\r\n                                <h4 class=\"text-sm font-bold text-gray-900 mb-3\">Similar Opportunities</h4>\r\n                                <div class=\"space-y-3\">\r\n                                    {% for similar_job in similar_jobs|default([]) %}\r\n                                        <a href=\"/jobs/view/{{ similar_job.id }}\" class=\"block p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition\">\r\n                                            <div class=\"flex justify-between items-start\">\r\n                                                <div>\r\n                                                    <h5 class=\"font-medium text-gray-900 text-sm\">{{ similar_job.title|slice(0, 30) }}{% if similar_job.title|length > 30 %}...{% endif %}</h5>\r\n                                                    <p class=\"text-xs text-gray-500\">{{ similar_job.company_name }}</p>\r\n                                                </div>\r\n                                                <span class=\"text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded\">\r\n                                            {{ similar_job.contract_type }}\r\n                                        </span>\r\n                                            </div>\r\n                                        </a>\r\n                                    {% else %}\r\n                                        <p class=\"text-sm text-gray-500 text-center py-2\">No similar jobs found</p>\r\n                                    {% endfor %}\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n            <!-- Application Modal (Hidden by default) -->\r\n            <div id=\"applicationModal\" class=\"hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4\">\r\n                <div class=\"bg-white rounded-xl shadow-xl max-w-md w-full\">\r\n                    <div class=\"p-6\">\r\n                        <div class=\"flex justify-between items-center mb-4\">\r\n                            <h3 class=\"text-lg font-bold text-gray-900\">Apply for Position</h3>\r\n                            <button id=\"closeModal\" class=\"text-gray-400 hover:text-gray-600\">\r\n                                <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"/>\r\n                                </svg>\r\n                            </button>\r\n                        </div>\r\n\r\n                        <p class=\"text-gray-600 mb-6\">You're about to apply for <span class=\"font-bold\">{{ job.title }}</span> at <span class=\"font-bold\">{{ job.company_name }}</span>.</p>\r\n\r\n                        <div class=\"space-y-4\">\r\n                            <div>\r\n                                <label class=\"block text-sm font-medium text-gray-700 mb-1\">Full Name</label>\r\n                                <input type=\"text\" class=\"w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"\r\n                                       placeholder=\"Your full name\">\r\n                            </div>\r\n                            <div>\r\n                                <label class=\"block text-sm font-medium text-gray-700 mb-1\">Email Address</label>\r\n                                <input type=\"email\" class=\"w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"\r\n                                       placeholder=\"your.email@example.com\">\r\n                            </div>\r\n                            <div>\r\n                                <label class=\"block text-sm font-medium text-gray-700 mb-1\">Cover Letter (Optional)</label>\r\n                                <textarea rows=\"4\" class=\"w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500\"\r\n                                          placeholder=\"Tell us why you're interested in this position...\"></textarea>\r\n                            </div>\r\n                            <div>\r\n                                <label class=\"block text-sm font-medium text-gray-700 mb-1\">Resume/CV</label>\r\n                                <div class=\"border-2 border-dashed border-gray-300 rounded-lg p-4 text-center\">\r\n                                    <svg class=\"mx-auto h-12 w-12 text-gray-400\" stroke=\"currentColor\" fill=\"none\" viewBox=\"0 0 48 48\">\r\n                                        <path d=\"M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\r\n                                    </svg>\r\n                                    <p class=\"mt-1 text-sm text-gray-600\">Drop your resume here, or click to browse</p>\r\n                                    <input type=\"file\" class=\"hidden\" accept=\".pdf,.doc,.docx\">\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n\r\n                        <div class=\"mt-6 flex justify-end space-x-3\">\r\n                            <button id=\"cancelApply\" class=\"px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition\">\r\n                                Cancel\r\n                            </button>\r\n                            <button class=\"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium\">\r\n                                Submit Application\r\n                            </button>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n            <!-- Back to Jobs Link -->\r\n            <div class=\"text-center mt-8\">\r\n                <a href=\"/jobs\" class=\"inline-flex items-center text-blue-600 hover:text-blue-800 font-medium\">\r\n                    <svg class=\"w-5 h-5 mr-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M10 19l-7-7m0 0l7-7m-7 7h18\"/>\r\n                    </svg>\r\n                    Back to Job Offers\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n{% endblock %}\r\n\r\n{% block scripts %}\r\n    <script>\r\n        document.addEventListener('DOMContentLoaded', function() {\r\n            // Application Modal\r\n            const applyButton = document.getElementById('applyButton');\r\n            const applicationModal = document.getElementById('applicationModal');\r\n            const closeModal = document.getElementById('closeModal');\r\n            const cancelApply = document.getElementById('cancelApply');\r\n\r\n            if (applyButton) {\r\n                applyButton.addEventListener('click', function() {\r\n                    applicationModal.classList.remove('hidden');\r\n                });\r\n            }\r\n\r\n            if (closeModal) {\r\n                closeModal.addEventListener('click', function() {\r\n                    applicationModal.classList.add('hidden');\r\n                });\r\n            }\r\n\r\n            if (cancelApply) {\r\n                cancelApply.addEventListener('click', function() {\r\n                    applicationModal.classList.add('hidden');\r\n                });\r\n            }\r\n\r\n            // Close modal when clicking outside\r\n            applicationModal.addEventListener('click', function(e) {\r\n                if (e.target === applicationModal) {\r\n                    applicationModal.classList.add('hidden');\r\n                }\r\n            });\r\n\r\n            // File upload interaction\r\n            const fileInput = document.querySelector('input[type=\"file\"]');\r\n            const fileDropZone = fileInput ? fileInput.parentElement : null;\r\n\r\n            if (fileDropZone) {\r\n                fileDropZone.addEventListener('click', function() {\r\n                    fileInput.click();\r\n                });\r\n\r\n                fileDropZone.addEventListener('dragover', function(e) {\r\n                    e.preventDefault();\r\n                    fileDropZone.classList.add('border-blue-500', 'bg-blue-50');\r\n                });\r\n\r\n                fileDropZone.addEventListener('dragleave', function() {\r\n                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');\r\n                });\r\n\r\n                fileDropZone.addEventListener('drop', function(e) {\r\n                    e.preventDefault();\r\n                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');\r\n                    // Handle file drop here\r\n                });\r\n\r\n                fileInput.addEventListener('change', function() {\r\n                    if (fileInput.files.length > 0) {\r\n                        fileDropZone.innerHTML = `\r\n                    <svg class=\"mx-auto h-12 w-12 text-green-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\r\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\" />\r\n                    </svg>\r\n                    <p class=\"mt-1 text-sm text-gray-600\">${fileInput.files[0].name}</p>\r\n                `;\r\n                    }\r\n                });\r\n            }\r\n        });\r\n    </script>\r\n{% endblock %}
+===================================================================
+diff --git a/src/view/frontoffice/job_details.twig b/src/view/frontoffice/job_details.twig
+--- a/src/view/frontoffice/job_details.twig	(revision 4d1e7bea850ac2a86a7875bf1dc9d59be003bbd3)
++++ b/src/view/frontoffice/job_details.twig	(date 1769008316053)
+@@ -1,360 +1,622 @@
+ {% extends "frontoffice/layout.twig" %}
+ 
+-{% block title %}{{ job.title }} - YouCode Job Dating{% endblock %}
++{% block title %}Opportunités d'Emploi - YouCode Job Dating{% endblock %}
+ 
+ {% block content %}
+-    <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+-        <div class="max-w-4xl mx-auto">
+-            <!-- Breadcrumb -->
+-            <nav class="mb-6" aria-label="Breadcrumb">
+-                <ol class="flex items-center space-x-2 text-sm">
+-                    <li>
+-                        <a href="/jobs" class="text-blue-600 hover:text-blue-800 transition">Job Offers</a>
+-                    </li>
+-                    <li class="text-gray-400">/</li>
+-                    <li>
+-                        <a href="/companies/{{ job.company_id }}" class="text-blue-600 hover:text-blue-800 transition">{{ job.company_name }}</a>
+-                    </li>
+-                    <li class="text-gray-400">/</li>
+-                    <li class="text-gray-800 font-medium truncate">{{ job.title }}</li>
+-                </ol>
+-            </nav>
++    <div class="min-h-screen bg-gray-50">
++        <!-- Hero Section -->
++        <div class="relative bg-gradient-to-r from-blue-600 to-purple-600 py-16 px-4 sm:px-6 lg:px-8">
++            <div class="absolute inset-0 bg-black opacity-20"></div>
++            <div class="relative max-w-7xl mx-auto text-center">
++                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
++                    Trouvez Votre Prochaine Opportunité
++                </h1>
++                <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
++                    Explorez les offres exclusives de nos entreprises partenaires et lancez votre carrière
++                </p>
+ 
+-            <!-- Main Job Card -->
+-            <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+-                <!-- Job Header -->
+-                <div class="p-6 border-b border-gray-100">
+-                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+-                        <div class="flex items-start space-x-4">
+-                            <!-- Company Logo/Avatar -->
+-                            <div class="w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center text-2xl font-bold text-blue-600">
+-                                {{ job.company_name|slice(0,1) }}
+-                            </div>
+-
+-                            <!-- Job Info -->
+-                            <div class="flex-1">
+-                                <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ job.title }}</h1>
+-                                <div class="flex items-center text-gray-600 mb-1">
+-                                    <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+-                                    </svg>
+-                                    <span class="font-medium">{{ job.company_name }}</span>
+-                                </div>
+-                                <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+-                                    <div class="flex items-center">
+-                                        <svg class="w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+-                                        </svg>
+-                                        {{ job.location }}
+-                                    </div>
+-                                    <div class="flex items-center">
+-                                        <svg class="w-5 h-5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+-                                        </svg>
+-                                        Posted {{ job.created_at|date("F d, Y") }}
+-                                    </div>
+-                                </div>
+-                            </div>
+-                        </div>
++                <!-- Search Bar -->
++                <div class="max-w-3xl mx-auto">
++                    <div class="relative">
++                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
++                            <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
++                            </svg>
++                        </div>
++                        <input
++                                type="text"
++                                id="jobSearch"
++                                placeholder="Rechercher par titre, entreprise, compétence ou localisation..."
++                                class="block w-full pl-12 pr-4 py-4 text-lg rounded-2xl border-0 shadow-lg focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50"
++                        >
++                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
++                        <span id="resultCount" class="text-gray-500 text-sm bg-white px-2 py-1 rounded-full">
++                            {{ jobs|length }} offres
++                        </span>
++                        </div>
++                    </div>
++                </div>
++            </div>
++        </div>
+ 
+-                        <!-- Contract Badge & Apply Button -->
+-                        <div class="flex flex-col items-start md:items-end space-y-3">
+-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase
+-                            {% if job.contract_type == 'CDI' %}bg-green-100 text-green-800
+-                            {% elseif job.contract_type == 'CDD' %}bg-yellow-100 text-yellow-800
+-                            {% elseif job.contract_type == 'Internship' %}bg-blue-100 text-blue-800
+-                            {% else %}bg-purple-100 text-purple-800
+-                            {% endif %}">
+-                            {{ job.contract_type }}
+-                        </span>
+-
+-                            <button id="applyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+-                                Apply Now
+-                            </button>
+-                        </div>
+-                    </div>
+-                </div>
++        <!-- Main Content -->
++        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
++            <div class="flex flex-col lg:flex-row gap-8">
++                <!-- Sidebar Filters -->
++                <div class="lg:w-1/4">
++                    <div class="bg-white rounded-xl shadow-lg sticky top-6">
++                        <!-- Filters Header -->
++                        <div class="p-6 border-b border-gray-100">
++                            <div class="flex items-center justify-between">
++                                <h2 class="text-xl font-bold text-gray-900 flex items-center">
++                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
++                                    </svg>
++                                    Filtres
++                                </h2>
++                                <button id="clearFilters" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
++                                    Tout effacer
++                                </button>
++                            </div>
++                        </div>
+ 
+-                <!-- Job Content -->
+-                <div class="p-6 md:p-8">
+-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+-                        <!-- Main Content -->
+-                        <div class="lg:col-span-2">
+-                            <!-- Job Description -->
+-                            <section class="mb-8">
+-                                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+-                                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
++                        <!-- Filters Form -->
++                        <form id="filterForm" class="p-6 space-y-6">
++                            <!-- Company Filter -->
++                            <div>
++                                <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
++                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                     </svg>
+-                                    Job Description
+-                                </h2>
+-                                <div class="prose max-w-none text-gray-700">
+-                                    {{ job.description|raw }}
+-                                </div>
+-                            </section>
++                                    Entreprise
++                                </label>
++                                <select name="company" id="companyFilter"
++                                        class="w-full border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
++                                    <option value="">Toutes les entreprises</option>
++                                    {% for company in companies %}
++                                        <option value="{{ company.id }}">{{ company.name }}</option>
++                                    {% endfor %}
++                                </select>
++                            </div>
+ 
+-                            <!-- Required Skills -->
+-                            <section class="mb-8">
+-                                <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+-                                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
++                            <!-- Contract Type Filter -->
++                            <div>
++                                <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
++                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                     </svg>
+-                                    Required Skills
+-                                </h2>
+-                                <div class="flex flex-wrap gap-2">
+-                                    {% for skill in job.skills|split(',') %}
+-                                        <span class="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-100 transition">
+-                                        {{ skill|trim }}
+-                                    </span>
++                                    Type de contrat
++                                </label>
++                                <div class="space-y-2">
++                                    {% for type in contractTypes %}
++                                        <label class="flex items-center text-sm text-gray-700 hover:bg-gray-50 p-2 rounded cursor-pointer">
++                                            <input type="checkbox" name="contract[]" value="{{ type }}"
++                                                   class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300">
++                                            <span class="ml-3">{{ type }}</span>
++                                        </label>
+                                     {% endfor %}
+                                 </div>
+-                            </section>
+-                        </div>
++                            </div>
+ 
+-                        <!-- Sidebar -->
+-                        <div class="lg:col-span-1">
+-                            <!-- Company Info Card -->
+-                            <div class="bg-gray-50 rounded-xl p-6 mb-6">
+-                                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+-                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
++                            <!-- Location Filter -->
++                            <div>
++                                <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
++                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                     </svg>
+-                                    About the Company
+-                                </h3>
+-                                <div class="space-y-4">
+-                                    <div class="flex items-center">
+-                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-lg font-bold text-blue-600 mr-3">
+-                                            {{ job.company_name|slice(0,1) }}
+-                                        </div>
+-                                        <div>
+-                                            <h4 class="font-bold text-gray-900">{{ job.company_name }}</h4>
+-                                            <p class="text-sm text-gray-600">{{ job.company_sector }}</p>
+-                                        </div>
+-                                    </div>
+-
+-                                    <div class="space-y-2 text-sm">
+-                                        <div class="flex items-center text-gray-600">
+-                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+-                                            </svg>
+-                                            {{ job.company_location }}
+-                                        </div>
+-                                        <div class="flex items-center text-gray-600">
+-                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+-                                            </svg>
+-                                            {{ job.company_email }}
+-                                        </div>
+-                                        {% if job.company_phone %}
+-                                            <div class="flex items-center text-gray-600">
+-                                                <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+-                                                </svg>
+-                                                {{ job.company_phone }}
+-                                            </div>
+-                                        {% endif %}
+-                                    </div>
++                                    Localisation
++                                </label>
++                                <select name="location" id="locationFilter"
++                                        class="w-full border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
++                                    <option value="">Toutes les villes</option>
++                                    {% for location in locations %}
++                                        <option value="{{ location }}">{{ location }}</option>
++                                    {% endfor %}
++                                </select>
++                            </div>
++
++                            <!-- Skills Filter -->
++                            <div>
++                                <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
++                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
++                                    </svg>
++                                    Compétences
++                                </label>
++                                <div class="space-y-2 max-h-48 overflow-y-auto p-1">
++                                    {% for skill in skills %}
++                                        <label class="flex items-center text-sm text-gray-700 hover:bg-gray-50 p-2 rounded cursor-pointer">
++                                            <input type="checkbox" name="skills[]" value="{{ skill }}"
++                                                   class="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300">
++                                            <span class="ml-3">{{ skill }}</span>
++                                        </label>
++                                    {% endfor %}
++                                </div>
++                            </div>
++
++                            <!-- Sort Options -->
++                            <div>
++                                <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
++                                    <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
++                                    </svg>
++                                    Trier par
++                                </label>
++                                <select name="sort" id="sortFilter"
++                                        class="w-full border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
++                                    <option value="newest">Plus récentes</option>
++                                    <option value="oldest">Plus anciennes</option>
++                                    <option value="title">Titre (A-Z)</option>
++                                    <option value="company">Entreprise (A-Z)</option>
++                                </select>
++                            </div>
++                        </form>
++                    </div>
+ 
+-                                    <a href="/companies/{{ job.company_id }}" class="block mt-4 text-center text-blue-600 hover:text-blue-800 font-medium text-sm">
+-                                        View Company Profile →
+-                                    </a>
+-                                </div>
+-                            </div>
+-
+-                            <!-- Job Details Card -->
+-                            <div class="bg-gray-50 rounded-xl p-6">
+-                                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+-                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+-                                    </svg>
+-                                    Job Details
+-                                </h3>
+-                                <div class="space-y-3">
+-                                    <div class="flex justify-between py-2 border-b border-gray-200">
+-                                        <span class="text-gray-600">Contract Type</span>
+-                                        <span class="font-medium">{{ job.contract_type }}</span>
+-                                    </div>
+-                                    <div class="flex justify-between py-2 border-b border-gray-200">
+-                                        <span class="text-gray-600">Location</span>
+-                                        <span class="font-medium">{{ job.location }}</span>
+-                                    </div>
+-                                    <div class="flex justify-between py-2 border-b border-gray-200">
+-                                        <span class="text-gray-600">Posted Date</span>
+-                                        <span class="font-medium">{{ job.created_at|date("M d, Y") }}</span>
+-                                    </div>
+-                                    {% if job.updated_at and job.updated_at != job.created_at %}
+-                                        <div class="flex justify-between py-2">
+-                                            <span class="text-gray-600">Last Updated</span>
+-                                            <span class="font-medium">{{ job.updated_at|date("M d, Y") }}</span>
+-                                        </div>
+-                                    {% endif %}
+-                                </div>
+-                            </div>
++                    <!-- Statistics Widget -->
++                    <div class="mt-6 bg-white rounded-xl shadow-lg p-6">
++                        <h3 class="font-bold text-gray-900 mb-4">Statistiques</h3>
++                        <div class="space-y-3">
++                            <div class="flex justify-between items-center">
++                                <span class="text-sm text-gray-600">Total d'offres</span>
++                                <span class="font-bold text-blue-600">{{ totalJobs }}</span>
++                            </div>
++                            <div class="flex justify-between items-center">
++                                <span class="text-sm text-gray-600">Entreprises</span>
++                                <span class="font-bold text-purple-600">{{ companies|length }}</span>
++                            </div>
++                            <div class="flex justify-between items-center">
++                                <span class="text-sm text-gray-600">Localisations</span>
++                                <span class="font-bold text-green-600">{{ locations|length }}</span>
++                            </div>
++                        </div>
++                    </div>
++                </div>
+ 
+-                            <!-- Similar Jobs (Placeholder) -->
+-                            <div class="mt-6">
+-                                <h4 class="text-sm font-bold text-gray-900 mb-3">Similar Opportunities</h4>
+-                                <div class="space-y-3">
+-                                    {% for similar_job in similar_jobs|default([]) %}
+-                                        <a href="/jobs/view/{{ similar_job.id }}" class="block p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition">
+-                                            <div class="flex justify-between items-start">
+-                                                <div>
+-                                                    <h5 class="font-medium text-gray-900 text-sm">{{ similar_job.title|slice(0, 30) }}{% if similar_job.title|length > 30 %}...{% endif %}</h5>
+-                                                    <p class="text-xs text-gray-500">{{ similar_job.company_name }}</p>
+-                                                </div>
+-                                                <span class="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded">
+-                                            {{ similar_job.contract_type }}
+-                                        </span>
+-                                            </div>
+-                                        </a>
+-                                    {% else %}
+-                                        <p class="text-sm text-gray-500 text-center py-2">No similar jobs found</p>
+-                                    {% endfor %}
+-                                </div>
+-                            </div>
+-                        </div>
++                <!-- Main Content - Jobs List -->
++                <div class="lg:w-3/4">
++                    <!-- Results Header -->
++                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
++                        <div>
++                            <h2 class="text-2xl font-bold text-gray-900">
++                                Offres d'emploi
++                                <span id="filteredCount" class="text-lg text-blue-600 ml-2">
++                                ({{ jobs|length }} résultats)
++                            </span>
++                            </h2>
++                            <p id="activeFilters" class="text-sm text-gray-600 mt-1"></p>
++                        </div>
++                        <div class="mt-4 sm:mt-0 flex items-center space-x-4">
++                        <span class="text-sm text-gray-500 hidden sm:block">
++                            <span id="jobsPerPage">12</span> offres par page
++                        </span>
++                            <div class="flex space-x-2">
++                                <button id="gridView" class="p-2 rounded-lg bg-blue-50 text-blue-600">
++                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
++                                    </svg>
++                                </button>
++                                <button id="listView" class="p-2 rounded-lg text-gray-400 hover:bg-gray-100">
++                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
++                                    </svg>
++                                </button>
++                            </div>
++                        </div>
++                    </div>
++
++                    <!-- Jobs Container -->
++                    <div id="jobsContainer" class="space-y-6">
++                        {% for job in jobs %}
++                            {% include 'frontoffice/partials/job_card.twig' with {'job': job} %}
++                        {% else %}
++                            <div class="bg-white rounded-xl shadow-lg p-12 text-center">
++                                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
++                                </svg>
++                                <h3 class="text-xl font-semibold text-gray-900 mb-2">Aucune offre trouvée</h3>
++                                <p class="text-gray-600 mb-4">Aucune offre ne correspond à vos critères de recherche.</p>
++                                <button id="resetSearch" class="text-blue-600 hover:text-blue-800 font-medium">
++                                    Réinitialiser les filtres
++                                </button>
++                            </div>
++                        {% endfor %}
+                     </div>
+-                </div>
+-            </div>
++
++                    <!-- Loading Indicator -->
++                    <div id="loadingIndicator" class="hidden text-center py-8">
++                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
++                        <p class="text-gray-600 mt-2">Chargement des offres...</p>
++                    </div>
++
++                    <!-- Pagination -->
++                    {% if jobs|length > 0 %}
++                        <div id="pagination" class="mt-8 flex justify-center">
++                            <nav class="flex items-center space-x-2">
++                                <button id="prevPage" class="p-2 rounded-lg hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed">
++                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
++                                    </svg>
++                                </button>
++
++                                <div class="flex space-x-1" id="pageNumbers">
++                                    <!-- Page numbers will be generated by JavaScript -->
++                                </div>
+ 
+-            <!-- Application Modal (Hidden by default) -->
+-            <div id="applicationModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
+-                <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
+-                    <div class="p-6">
+-                        <div class="flex justify-between items-center mb-4">
+-                            <h3 class="text-lg font-bold text-gray-900">Apply for Position</h3>
+-                            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+-                                </svg>
+-                            </button>
++                                <button id="nextPage" class="p-2 rounded-lg hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed">
++                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
++                                    </svg>
++                                </button>
++                            </nav>
+                         </div>
+-
+-                        <p class="text-gray-600 mb-6">You're about to apply for <span class="font-bold">{{ job.title }}</span> at <span class="font-bold">{{ job.company_name }}</span>.</p>
+-
+-                        <div class="space-y-4">
+-                            <div>
+-                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+-                                <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+-                                       placeholder="Your full name">
+-                            </div>
+-                            <div>
+-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+-                                <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+-                                       placeholder="your.email@example.com">
+-                            </div>
+-                            <div>
+-                                <label class="block text-sm font-medium text-gray-700 mb-1">Cover Letter (Optional)</label>
+-                                <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+-                                          placeholder="Tell us why you're interested in this position..."></textarea>
+-                            </div>
+-                            <div>
+-                                <label class="block text-sm font-medium text-gray-700 mb-1">Resume/CV</label>
+-                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+-                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+-                                    </svg>
+-                                    <p class="mt-1 text-sm text-gray-600">Drop your resume here, or click to browse</p>
+-                                    <input type="file" class="hidden" accept=".pdf,.doc,.docx">
+-                                </div>
+-                            </div>
+-                        </div>
+-
+-                        <div class="mt-6 flex justify-end space-x-3">
+-                            <button id="cancelApply" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+-                                Cancel
+-                            </button>
+-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+-                                Submit Application
+-                            </button>
+-                        </div>
+-                    </div>
++                    {% endif %}
++                </div>
++            </div>
++        </div>
++    </div>
++
++    <!-- Job Card Partial (job_card.twig) -->
++    <template id="jobCardTemplate">
++        <div class="job-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-transparent hover:border-blue-200 overflow-hidden">
++            <div class="p-6">
++                <div class="flex items-start justify-between">
++                    <div class="flex items-start space-x-4">
++                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center text-2xl font-bold text-blue-600 border border-blue-100">
++                            {{ '{{ company_initials }}' }}
++                        </div>
++                        <div class="flex-1">
++                            <h3 class="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors">
++                                <a href="/jobs/view/{{ '{{ id }}' }}">{{ '{{ title }}' }}</a>
++                            </h3>
++                            <div class="flex items-center text-gray-700 mt-1">
++                                <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
++                                </svg>
++                                <span class="font-medium">{{ '{{ company_name }}' }}</span>
++                                <span class="mx-2">•</span>
++                                <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
++                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
++                                </svg>
++                                <span>{{ '{{ location }}' }}</span>
++                            </div>
++                        </div>
++                    </div>
++                    <div>
++                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase
++                        {{ '{{ contract_class }}' }}">
++                        {{ '{{ contract_type }}' }}
++                    </span>
++                    </div>
++                </div>
++
++                <div class="mt-4">
++                    <p class="text-gray-600 line-clamp-2 text-sm">
++                        {{ '{{ description_short }}' }}
++                    </p>
+                 </div>
+-            </div>
++
++                <div class="mt-4 flex flex-wrap gap-2">
++                    {{ '{{ skills_html }}' }}
++                </div>
+ 
+-            <!-- Back to Jobs Link -->
+-            <div class="text-center mt-8">
+-                <a href="/jobs" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+-                    </svg>
+-                    Back to Job Offers
+-                </a>
+-            </div>
+-        </div>
+-    </div>
++                <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center">
++                    <div class="flex items-center text-gray-500 text-sm">
++                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
++                        </svg>
++                        Publiée le {{ '{{ created_at }}' }}
++                    </div>
++                    <div class="flex items-center space-x-3">
++                        <button class="save-job-btn text-gray-400 hover:text-yellow-500 transition-colors" data-job-id="{{ '{{ id }}' }}">
++                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
++                            </svg>
++                        </button>
++                        <a href="/jobs/view/{{ '{{ id }}' }}" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5">
++                            Voir les détails
++                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
++                            </svg>
++                        </a>
++                    </div>
++                </div>
++            </div>
++        </div>
++    </template>
+ {% endblock %}
+ 
+ {% block scripts %}
++    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script>
+-        document.addEventListener('DOMContentLoaded', function() {
+-            // Application Modal
+-            const applyButton = document.getElementById('applyButton');
+-            const applicationModal = document.getElementById('applicationModal');
+-            const closeModal = document.getElementById('closeModal');
+-            const cancelApply = document.getElementById('cancelApply');
++        $(document).ready(function() {
++            let currentPage = 1;
++            let totalPages = {{ totalPages|default(1) }};
++            let currentView = 'grid';
++            let isLoading = false;
++
++            // Initialize pagination
++            updatePagination();
+ 
+-            if (applyButton) {
+-                applyButton.addEventListener('click', function() {
+-                    applicationModal.classList.remove('hidden');
+-                });
+-            }
++            // Real-time search and filtering
++            let searchTimeout;
++            $('#jobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
++                clearTimeout(searchTimeout);
++                searchTimeout = setTimeout(performSearch, 500);
++                updateActiveFilters();
++            });
+ 
+-            if (closeModal) {
+-                closeModal.addEventListener('click', function() {
+-                    applicationModal.classList.add('hidden');
+-                });
+-            }
++            // Clear all filters
++            $('#clearFilters, #resetSearch').on('click', function() {
++                $('#jobSearch').val('');
++                $('#filterForm')[0].reset();
++                performSearch();
++                updateActiveFilters();
++            });
++
++            // View toggle
++            $('#gridView').on('click', function() {
++                currentView = 'grid';
++                $('#jobsContainer').removeClass('grid grid-cols-1 md:grid-cols-2 gap-6').addClass('space-y-6');
++                $('#gridView').addClass('bg-blue-50 text-blue-600').removeClass('text-gray-400 hover:bg-gray-100');
++                $('#listView').addClass('text-gray-400 hover:bg-gray-100').removeClass('bg-blue-50 text-blue-600');
++            });
+ 
+-            if (cancelApply) {
+-                cancelApply.addEventListener('click', function() {
+-                    applicationModal.classList.add('hidden');
+-                });
+-            }
++            $('#listView').on('click', function() {
++                currentView = 'list';
++                $('#jobsContainer').removeClass('space-y-6').addClass('grid grid-cols-1 md:grid-cols-2 gap-6');
++                $('#listView').addClass('bg-blue-50 text-blue-600').removeClass('text-gray-400 hover:bg-gray-100');
++                $('#gridView').addClass('text-gray-400 hover:bg-gray-100').removeClass('bg-blue-50 text-blue-600');
++            });
++
++            // Pagination
++            $('#prevPage').on('click', function() {
++                if (currentPage > 1) {
++                    currentPage--;
++                    performSearch();
++                }
++            });
+ 
+-            // Close modal when clicking outside
+-            applicationModal.addEventListener('click', function(e) {
+-                if (e.target === applicationModal) {
+-                    applicationModal.classList.add('hidden');
++            $('#nextPage').on('click', function() {
++                if (currentPage < totalPages) {
++                    currentPage++;
++                    performSearch();
+                 }
+             });
+ 
+-            // File upload interaction
+-            const fileInput = document.querySelector('input[type="file"]');
+-            const fileDropZone = fileInput ? fileInput.parentElement : null;
++            // Save job functionality
++            $(document).on('click', '.save-job-btn', function() {
++                const jobId = $(this).data('job-id');
++                const button = $(this);
+ 
+-            if (fileDropZone) {
+-                fileDropZone.addEventListener('click', function() {
+-                    fileInput.click();
++                $.ajax({
++                    url: '/jobs/save',
++                    method: 'POST',
++                    data: {
++                        job_id: jobId,
++                        csrf_token: '{{ csrf_token() }}'
++                    },
++                    success: function(response) {
++                        if (response.saved) {
++                            button.addClass('text-yellow-500');
++                            button.html('<svg class="w-5 h-5" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>');
++                        } else {
++                            button.removeClass('text-yellow-500');
++                            button.html('<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>');
++                        }
++                    }
+                 });
+-
+-                fileDropZone.addEventListener('dragover', function(e) {
+-                    e.preventDefault();
+-                    fileDropZone.classList.add('border-blue-500', 'bg-blue-50');
+-                });
++            });
+ 
+-                fileDropZone.addEventListener('dragleave', function() {
+-                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+-                });
++            // Main search function
++            function performSearch() {
++                if (isLoading) return;
+ 
+-                fileDropZone.addEventListener('drop', function(e) {
+-                    e.preventDefault();
+-                    fileDropZone.classList.remove('border-blue-500', 'bg-blue-50');
+-                    // Handle file drop here
+-                });
++                isLoading = true;
++                $('#loadingIndicator').removeClass('hidden');
++
++                const formData = $('#filterForm').serialize();
++                const searchQuery = $('#jobSearch').val();
++
++                $.ajax({
++                    url: '/jobs/search',
++                    method: 'GET',
++                    data: formData + '&q=' + encodeURIComponent(searchQuery) + '&page=' + currentPage,
++                    success: function(response) {
++                        if (response.html) {
++                            $('#jobsContainer').html(response.html);
++                            totalPages = response.totalPages || 1;
++                            currentPage = response.currentPage || 1;
++
++                            // Update counters
++                            $('#resultCount').text(response.total + ' offres');
++                            $('#filteredCount').text('(' + response.total + ' résultats)');
++                            $('#jobsPerPage').text(response.perPage || 12);
+ 
+-                fileInput.addEventListener('change', function() {
+-                    if (fileInput.files.length > 0) {
+-                        fileDropZone.innerHTML = `
+-                    <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+-                    </svg>
+-                    <p class="mt-1 text-sm text-gray-600">${fileInput.files[0].name}</p>
+-                `;
++                            updatePagination();
++                        }
++                    },
++                    error: function(xhr, status, error) {
++                        console.error('Search error:', error);
++                        $('#jobsContainer').html(`
++                    <div class="bg-white rounded-xl shadow-lg p-12 text-center">
++                        <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
++                        </svg>
++                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Erreur de recherche</h3>
++                        <p class="text-gray-600">Une erreur est survenue lors de la recherche. Veuillez réessayer.</p>
++                    </div>
++                `);
++                    },
++                    complete: function() {
++                        isLoading = false;
++                        $('#loadingIndicator').addClass('hidden');
+                     }
+                 });
+             }
++
++            // Update active filters display
++            function updateActiveFilters() {
++                const activeFilters = [];
++                const searchQuery = $('#jobSearch').val();
++
++                if (searchQuery) {
++                    activeFilters.push(`"${searchQuery}"`);
++                }
++
++                const company = $('#companyFilter').val();
++                if (company) {
++                    activeFilters.push($('#companyFilter option:selected').text());
++                }
++
++                const location = $('#locationFilter').val();
++                if (location) {
++                    activeFilters.push(location);
++                }
++
++                const checkedContracts = $('input[name="contract[]"]:checked').map(function() {
++                    return $(this).next('span').text();
++                }).get();
++
++                if (checkedContracts.length > 0) {
++                    activeFilters.push(checkedContracts.join(', '));
++                }
++
++                const checkedSkills = $('input[name="skills[]"]:checked').map(function() {
++                    return $(this).next('span').text();
++                }).get();
++
++                if (checkedSkills.length > 0) {
++                    activeFilters.push(checkedSkills.join(', '));
++                }
++
++                if (activeFilters.length > 0) {
++                    $('#activeFilters').html(
++                        '<span class="font-medium">Filtres actifs:</span> ' +
++                        activeFilters.join(' • ')
++                    );
++                } else {
++                    $('#activeFilters').html('');
++                }
++            }
++
++            // Update pagination controls
++            function updatePagination() {
++                const pageNumbers = $('#pageNumbers');
++                pageNumbers.empty();
++
++                // Always show first page
++                addPageButton(1);
++
++                // Calculate range of pages to show
++                let startPage = Math.max(2, currentPage - 2);
++                let endPage = Math.min(totalPages - 1, currentPage + 2);
++
++                // Add ellipsis if needed
++                if (startPage > 2) {
++                    pageNumbers.append('<span class="px-3 py-2">...</span>');
++                }
++
++                // Add middle pages
++                for (let i = startPage; i <= endPage; i++) {
++                    addPageButton(i);
++                }
++
++                // Add ellipsis if needed
++                if (endPage < totalPages - 1) {
++                    pageNumbers.append('<span class="px-3 py-2">...</span>');
++                }
++
++                // Always show last page if there is more than one page
++                if (totalPages > 1) {
++                    addPageButton(totalPages);
++                }
++
++                // Update button states
++                $('#prevPage').prop('disabled', currentPage === 1);
++                $('#nextPage').prop('disabled', currentPage === totalPages);
++            }
++
++            function addPageButton(page) {
++                const button = $(`
++            <button class="page-btn px-4 py-2 rounded-lg ${page === currentPage ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 text-gray-700'}">
++                ${page}
++            </button>
++        `);
++
++                button.on('click', function() {
++                    if (page !== currentPage) {
++                        currentPage = page;
++                        performSearch();
++                    }
++                });
++
++                $('#pageNumbers').append(button);
++            }
++
++            // Initialize active filters
++            updateActiveFilters();
+         });
+     </script>
++
++    <style>
++        .contract-cdi {
++            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
++            color: white;
++        }
++
++        .contract-cdd {
++            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
++            color: white;
++        }
++
++        .contract-internship {
++            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
++            color: white;
++        }
++
++        .contract-freelance {
++            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
++            color: white;
++        }
++
++        .job-card {
++            transition: all 0.3s ease;
++        }
++
++        .job-card:hover {
++            transform: translateY(-4px);
++        }
++
++        /* Scrollbar styling for skills filter */
++        .max-h-48::-webkit-scrollbar {
++            width: 6px;
++        }
++
++        .max-h-48::-webkit-scrollbar-track {
++            background: #f1f1f1;
++            border-radius: 10px;
++        }
++
++        .max-h-48::-webkit-scrollbar-thumb {
++            background: #c1c1c1;
++            border-radius: 10px;
++        }
++
++        .max-h-48::-webkit-scrollbar-thumb:hover {
++            background: #a1a1a1;
++        }
++
++        /* Loading animation */
++        @keyframes spin {
++            from { transform: rotate(0deg); }
++            to { transform: rotate(360deg); }
++        }
++
++        .animate-spin {
++            animation: spin 1s linear infinite;
++        }
++    </style>
+ {% endblock %}
+\ No newline at end of file
+Index: src/view/frontoffice/home.twig
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"frontoffice/layout.twig\" %}\r\n{% block title %} Find Your opportunite - youcode job datin {% endblock %}\r\n{% block content %}\r\n    <div class=\"bg-gray-50 min-h-screen\">\r\n        <div class=\"bg-blue-700 py-12 px-6 mb-8\">\r\n            <div class=\"max-w-6xl mx-auto text-center\">\r\n                <h1 class=\"text-3xl md:text-4xl font-extrabold text-white mb-4\">\r\n                    Ready for your next challenge, Apprenant?\r\n                </h1>\r\n                <p class=\"text-blue-100 text-lg mb-8\">Browse and apply to exclusive offers from YouCode partners.</p>\r\n\r\n                <div class=\"max-w-2xl mx-auto relative\">\r\n                    <input type=\"text\" id=\"jobSearch\"\r\n                           placeholder=\"Search by title, company, or keywords...\"\r\n                           class=\"w-full pl-12 pr-4 py-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400\">\r\n                    <span class=\"absolute left-4 top-4 text-gray-400\">\uD83D\uDD0D</span>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n        <div class=\"max-w-6xl mx-auto px-6 pb-12 flex flex-col md:flex-row gap-8\">\r\n\r\n            <aside class=\"w-full md:w-1/4\">\r\n                <div class=\"bg-white p-6 rounded-xl shadow-sm sticky top-6\">\r\n                    <h3 class=\"font-bold text-gray-800 mb-4 flex items-center\">\r\n                        <span class=\"mr-2\">\uD83D\uDCC2</span> Filters\r\n                    </h3>\r\n\r\n                    <form id=\"filterForm\" class=\"space-y-6\">\r\n                        <div>\r\n                            <label class=\"block text-sm font-semibold text-gray-700 mb-2\">Company</label>\r\n                            <select name=\"company\" class=\"w-full border-gray-200 rounded-lg text-sm focus:ring-blue-500\">\r\n                                <option value=\"\">All Companies</option>\r\n                                {% for company in companies %}\r\n                                    <option value=\"{{ company.id }}\">{{ company.name }}</option>\r\n                                {% endfor %}\r\n                            </select>\r\n                        </div>\r\n\r\n                        <div>\r\n                            <label class=\"block text-sm font-semibold text-gray-700 mb-2\">Contract Type</label>\r\n                            <div class=\"space-y-2\">\r\n                                {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}\r\n                                    <label class=\"flex items-center text-sm text-gray-600\">\r\n                                        <input type=\"checkbox\" name=\"contract[]\" value=\"{{ type }}\" class=\"rounded text-blue-600 mr-2\">\r\n                                        {{ type }}\r\n                                    </label>\r\n                                {% endfor %}\r\n                            </div>\r\n                        </div>\r\n\r\n                        <button type=\"reset\" class=\"text-sm text-blue-600 hover:text-blue-800 font-medium\">Clear all filters</button>\r\n                    </form>\r\n                </div>\r\n            </aside>\r\n\r\n            <main class=\"w-full md:w-3/4\">\r\n                <div id=\"jobsContainer\" class=\"grid grid-cols-1 gap-6\">\r\n                    {% for job in jobs %}\r\n                        <div class=\"job-card bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-blue-300 transition-all group\">\r\n                            <div class=\"flex items-start justify-between\">\r\n                                <div class=\"flex gap-4\">\r\n                                    <div class=\"w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-xl font-bold text-blue-600\">\r\n                                        {{ job.company_name|slice(0,1) }}\r\n                                    </div>\r\n                                    <div>\r\n                                        <h2 class=\"text-xl font-bold text-gray-900 group-hover:text-blue-600 transition\">{{ job.title }}</h2>\r\n                                        <p class=\"text-gray-600 font-medium\">{{ job.company_name }} • <span class=\"text-gray-400 font-normal\">{{ job.location }}</span></p>\r\n                                    </div>\r\n                                </div>\r\n                                <span class=\"bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase\">\r\n                            {{ job.contract_type }}\r\n                        </span>\r\n                            </div>\r\n\r\n                            <div class=\"mt-4\">\r\n                                <p class=\"text-gray-600 line-clamp-2 text-sm\">\r\n                                    {{ job.description|striptags }}\r\n                                </p>\r\n                            </div>\r\n\r\n                            <div class=\"mt-4 flex flex-wrap gap-2\">\r\n                                {% for skill in job.skills|split(',') %}\r\n                                    <span class=\"bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs\">#{{ skill|trim }}</span>\r\n                                {% endfor %}\r\n                            </div>\r\n\r\n                            <div class=\"mt-6 pt-4 border-t border-gray-50 flex justify-between items-center\">\r\n                                <span class=\"text-gray-400 text-xs italic\">Posted {{ job.created_at|date(\"d M Y\") }}</span>\r\n                                <a href=\"/jobs/view/{{ job.id }}\" class=\"bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition\">\r\n                                    View Details\r\n                                </a>\r\n                            </div>\r\n                        </div>\r\n                    {% else %}\r\n                        <div class=\"bg-white p-12 text-center rounded-xl shadow-sm\">\r\n                            <p class=\"text-gray-500\">No offers matching your criteria were found.</p>\r\n                        </div>\r\n                    {% endfor %}\r\n                </div>\r\n            </main>\r\n        </div>\r\n    </div>\r\n{% endblock %}\r\n\r\n{% block scripts %}\r\n    <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\r\n    <script>\r\n        $(document).ready(function() {\r\n            // Basic AJAX logic for Module 6 (Real-time Search)\r\n            $('#jobSearch, #filterForm input, #filterForm select').on('keyup change', function() {\r\n                const query = $('#jobSearch').val();\r\n                const formData = $('#filterForm').serialize();\r\n\r\n                // This would call your JobController search method\r\n                $.ajax({\r\n                    url: '/jobs/search',\r\n                    method: 'GET',\r\n                    data: formData + '&q=' + query,\r\n                    success: function(response) {\r\n                        // Update #jobsContainer with the partial view returned\r\n                        $('#jobsContainer').html(response);\r\n                    }\r\n                });\r\n            });\r\n        });\r\n    </script>\r\n{% endblock %}
+===================================================================
+diff --git a/src/view/frontoffice/home.twig b/src/view/frontoffice/home.twig
+--- a/src/view/frontoffice/home.twig	(revision 4d1e7bea850ac2a86a7875bf1dc9d59be003bbd3)
++++ b/src/view/frontoffice/home.twig	(date 1769007924022)
+@@ -1,128 +1,620 @@
+ {% extends "frontoffice/layout.twig" %}
+-{% block title %} Find Your opportunite - youcode job datin {% endblock %}
++
++{% set active = 'dashboard' %}
++
++{% block title %}Mon Dashboard - YouCode Job Dating{% endblock %}
++
+ {% block content %}
+-    <div class="bg-gray-50 min-h-screen">
+-        <div class="bg-blue-700 py-12 px-6 mb-8">
+-            <div class="max-w-6xl mx-auto text-center">
+-                <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+-                    Ready for your next challenge, Apprenant?
+-                </h1>
+-                <p class="text-blue-100 text-lg mb-8">Browse and apply to exclusive offers from YouCode partners.</p>
+-
+-                <div class="max-w-2xl mx-auto relative">
+-                    <input type="text" id="jobSearch"
+-                           placeholder="Search by title, company, or keywords..."
+-                           class="w-full pl-12 pr-4 py-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+-                    <span class="absolute left-4 top-4 text-gray-400">🔍</span>
++    <div class="min-h-screen bg-gray-900 text-gray-100 p-6">
++        <!-- Header -->
++        <div class="mb-8">
++            <h1 class="text-3xl font-bold flex items-center gap-3 mb-2">
++                <div class="p-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600">
++                    <i class="fas fa-tachometer-alt text-white"></i>
++                </div>
++                Bienvenue, {{ student.first_name }} !
++            </h1>
++            <p class="text-gray-400">Votre espace personnel pour gérer votre recherche d'opportunités</p>
++        </div>
++
++        <!-- Stats Grid -->
++        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
++            <!-- Applied Jobs Card -->
++            <div class="stat-card gradient-purple">
++                <div class="stat-icon">
++                    <i class="fas fa-paper-plane"></i>
+                 </div>
+-            </div>
+-        </div>
++                <div class="stat-label">Candidatures envoyées</div>
++                <div class="stat-value">{{ applicationsCount|default('0') }}</div>
++                <div class="stat-trend text-sm text-green-400 mt-2">
++                    <i class="fas fa-arrow-up mr-1"></i> {{ applicationsThisMonth|default('0') }} ce mois
++                </div>
++            </div>
+ 
+-        <div class="max-w-6xl mx-auto px-6 pb-12 flex flex-col md:flex-row gap-8">
++            <!-- Saved Jobs Card -->
++            <div class="stat-card gradient-blue">
++                <div class="stat-icon">
++                    <i class="fas fa-bookmark"></i>
++                </div>
++                <div class="stat-label">Offres sauvegardées</div>
++                <div class="stat-value">{{ savedJobsCount|default('0') }}</div>
++                <div class="stat-trend text-sm text-blue-400 mt-2">
++                    <i class="fas fa-star mr-1"></i> {{ savedThisWeek|default('0') }} cette semaine
++                </div>
++            </div>
+ 
+-            <aside class="w-full md:w-1/4">
+-                <div class="bg-white p-6 rounded-xl shadow-sm sticky top-6">
+-                    <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+-                        <span class="mr-2">📂</span> Filters
+-                    </h3>
++            <!-- Interviews Card -->
++            <div class="stat-card gradient-pink">
++                <div class="stat-icon">
++                    <i class="fas fa-calendar-check"></i>
++                </div>
++                <div class="stat-label">Entretiens planifiés</div>
++                <div class="stat-value">{{ interviewsCount|default('0') }}</div>
++                {% if nextInterview %}
++                    <div class="stat-trend text-sm text-yellow-400 mt-2">
++                        <i class="fas fa-clock mr-1"></i> {{ nextInterview.date|date('d/m') }}
++                    </div>
++                {% endif %}
++            </div>
+ 
+-                    <form id="filterForm" class="space-y-6">
+-                        <div>
+-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Company</label>
+-                            <select name="company" class="w-full border-gray-200 rounded-lg text-sm focus:ring-blue-500">
+-                                <option value="">All Companies</option>
+-                                {% for company in companies %}
+-                                    <option value="{{ company.id }}">{{ company.name }}</option>
+-                                {% endfor %}
+-                            </select>
+-                        </div>
+-
+-                        <div>
+-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contract Type</label>
+-                            <div class="space-y-2">
+-                                {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}
+-                                    <label class="flex items-center text-sm text-gray-600">
+-                                        <input type="checkbox" name="contract[]" value="{{ type }}" class="rounded text-blue-600 mr-2">
+-                                        {{ type }}
+-                                    </label>
++            <!-- Profile Completion Card -->
++            <div class="stat-card gradient-red">
++                <div class="stat-icon">
++                    <i class="fas fa-user-check"></i>
++                </div>
++                <div class="stat-label">Profil complété</div>
++                <div class="stat-value">{{ profileCompletion|default('0') }}%</div>
++                <div class="w-full bg-gray-700 h-2 rounded-full mt-3">
++                    <div class="h-full rounded-full bg-gradient-to-r from-green-400 to-blue-500"
++                         style="width: {{ profileCompletion|default('0') }}%"></div>
++                </div>
++            </div>
++        </div>
++
++        <!-- Main Content Grid -->
++        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
++            <!-- Left Column -->
++            <div class="lg:col-span-2 space-y-6">
++                <!-- Recent Applications -->
++                <div class="card">
++                    <div class="card-header">
++                        <h2 class="text-xl font-bold flex items-center gap-2">
++                            <i class="fas fa-history text-blue-400"></i>
++                            Candidatures récentes
++                        </h2>
++                        <a href="/applications" class="text-sm text-blue-400 hover:text-blue-300">
++                            Voir tout →
++                        </a>
++                    </div>
++                    <div class="card-content">
++                        {% if recentApplications|length > 0 %}
++                            <div class="space-y-4">
++                                {% for app in recentApplications %}
++                                    <div class="application-item">
++                                        <div class="flex items-start justify-between">
++                                            <div>
++                                                <h3 class="font-semibold">{{ app.job_title }}</h3>
++                                                <p class="text-sm text-gray-400">{{ app.company_name }}</p>
++                                            </div>
++                                            <span class="status-badge status-{{ app.status|lower }}">
++                                    {{ app.status }}
++                                </span>
++                                        </div>
++                                        <div class="flex items-center justify-between mt-3">
++                                <span class="text-xs text-gray-500">
++                                    <i class="fas fa-calendar mr-1"></i>
++                                    {{ app.applied_at|date('d M Y') }}
++                                </span>
++                                            <a href="/jobs/view/{{ app.job_id }}" class="text-sm text-blue-400 hover:text-blue-300">
++                                                <i class="fas fa-eye mr-1"></i> Voir l'offre
++                                            </a>
++                                        </div>
++                                    </div>
+                                 {% endfor %}
+                             </div>
+-                        </div>
+-
+-                        <button type="reset" class="text-sm text-blue-600 hover:text-blue-800 font-medium">Clear all filters</button>
+-                    </form>
+-                </div>
+-            </aside>
+-
+-            <main class="w-full md:w-3/4">
+-                <div id="jobsContainer" class="grid grid-cols-1 gap-6">
+-                    {% for job in jobs %}
+-                        <div class="job-card bg-white p-6 rounded-xl shadow-sm border border-transparent hover:border-blue-300 transition-all group">
+-                            <div class="flex items-start justify-between">
+-                                <div class="flex gap-4">
+-                                    <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center text-xl font-bold text-blue-600">
+-                                        {{ job.company_name|slice(0,1) }}
+-                                    </div>
+-                                    <div>
+-                                        <h2 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition">{{ job.title }}</h2>
+-                                        <p class="text-gray-600 font-medium">{{ job.company_name }} • <span class="text-gray-400 font-normal">{{ job.location }}</span></p>
+-                                    </div>
+-                                </div>
+-                                <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase">
+-                            {{ job.contract_type }}
+-                        </span>
+-                            </div>
+-
+-                            <div class="mt-4">
+-                                <p class="text-gray-600 line-clamp-2 text-sm">
+-                                    {{ job.description|striptags }}
+-                                </p>
+-                            </div>
+-
+-                            <div class="mt-4 flex flex-wrap gap-2">
+-                                {% for skill in job.skills|split(',') %}
+-                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">#{{ skill|trim }}</span>
+-                                {% endfor %}
+-                            </div>
+-
+-                            <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+-                                <span class="text-gray-400 text-xs italic">Posted {{ job.created_at|date("d M Y") }}</span>
+-                                <a href="/jobs/view/{{ job.id }}" class="bg-gray-900 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-600 transition">
+-                                    View Details
+-                                </a>
+-                            </div>
+-                        </div>
+-                    {% else %}
+-                        <div class="bg-white p-12 text-center rounded-xl shadow-sm">
+-                            <p class="text-gray-500">No offers matching your criteria were found.</p>
+-                        </div>
+-                    {% endfor %}
+-                </div>
+-            </main>
++                        {% else %}
++                            <div class="text-center py-8 text-gray-500">
++                                <i class="fas fa-inbox text-4xl mb-3"></i>
++                                <p>Aucune candidature pour le moment</p>
++                                <a href="/jobs" class="inline-block mt-3 text-blue-400 hover:text-blue-300">
++                                    Parcourir les offres →
++                                </a>
++                            </div>
++                        {% endif %}
++                    </div>
++                </div>
++
++                <!-- Recommended Jobs -->
++                <div class="card">
++                    <div class="card-header">
++                        <h2 class="text-xl font-bold flex items-center gap-2">
++                            <i class="fas fa-bullseye text-pink-400"></i>
++                            Offres recommandées pour vous
++                        </h2>
++                    </div>
++                    <div class="card-content">
++                        {% if recommendedJobs|length > 0 %}
++                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
++                                {% for job in recommendedJobs %}
++                                    <div class="job-recommendation">
++                                        <div class="flex items-start gap-3">
++                                            <div class="w-12 h-12 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
++                                                {{ job.company_name|slice(0,1) }}
++                                            </div>
++                                            <div class="flex-1">
++                                                <h3 class="font-semibold">{{ job.title|slice(0,30) }}{% if job.title|length > 30 %}...{% endif %}</h3>
++                                                <p class="text-sm text-gray-400">{{ job.company_name }}</p>
++                                                <div class="flex items-center gap-2 mt-2">
++                                        <span class="text-xs px-2 py-1 rounded bg-gray-800">
++                                            {{ job.contract_type }}
++                                        </span>
++                                                    <span class="text-xs text-gray-500">
++                                            <i class="fas fa-map-marker-alt mr-1"></i>{{ job.location }}
++                                        </span>
++                                                </div>
++                                            </div>
++                                        </div>
++                                        <div class="mt-4 flex justify-between items-center">
++                                <span class="text-xs text-gray-500">
++                                    Postée {{ job.created_at|date('d/m') }}
++                                </span>
++                                            <div class="flex gap-2">
++                                                <button class="save-btn" data-job-id="{{ job.id }}">
++                                                    <i class="fas fa-bookmark"></i>
++                                                </button>
++                                                <a href="/jobs/view/{{ job.id }}" class="apply-btn">
++                                                    Postuler
++                                                </a>
++                                            </div>
++                                        </div>
++                                    </div>
++                                {% endfor %}
++                            </div>
++                        {% else %}
++                            <div class="text-center py-8 text-gray-500">
++                                <i class="fas fa-search text-4xl mb-3"></i>
++                                <p>Complétez votre profil pour obtenir des recommandations personnalisées</p>
++                            </div>
++                        {% endif %}
++                    </div>
++                </div>
++            </div>
++
++            <!-- Right Column -->
++            <div class="space-y-6">
++                <!-- Profile Summary -->
++                <div class="card">
++                    <div class="card-header">
++                        <h2 class="text-xl font-bold flex items-center gap-2">
++                            <i class="fas fa-user-circle text-green-400"></i>
++                            Mon profil
++                        </h2>
++                    </div>
++                    <div class="card-content">
++                        <div class="text-center mb-4">
++                            <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold mb-3">
++                                {{ student.first_name|slice(0,1) }}{{ student.last_name|slice(0,1) }}
++                            </div>
++                            <h3 class="font-bold">{{ student.first_name }} {{ student.last_name }}</h3>
++                            <p class="text-gray-400 text-sm">{{ student.email }}</p>
++                        </div>
++
++                        <div class="space-y-3">
++                            <div class="profile-info">
++                                <span class="label">Promotion</span>
++                                <span class="value">{{ student.promotion|default('Non spécifiée') }}</span>
++                            </div>
++                            <div class="profile-info">
++                                <span class="label">Spécialisation</span>
++                                <span class="value">{{ student.specialization|default('Non spécifiée') }}</span>
++                            </div>
++                            <div class="profile-info">
++                                <span class="label">CV</span>
++                                <span class="value">
++                                {% if student.cv_path %}
++                                    <a href="{{ student.cv_path }}" class="text-blue-400 hover:text-blue-300">
++                                    <i class="fas fa-file-pdf mr-1"></i>Télécharger
++                                </a>
++                                {% else %}
++                                    <span class="text-red-400">Non uploadé</span>
++                                {% endif %}
++                            </span>
++                            </div>
++                        </div>
++
++                        <a href="/profile/edit" class="edit-profile-btn">
++                            <i class="fas fa-edit mr-2"></i> Modifier mon profil
++                        </a>
++                    </div>
++                </div>
++
++                <!-- Quick Actions -->
++                <div class="card">
++                    <div class="card-header">
++                        <h2 class="text-xl font-bold flex items-center gap-2">
++                            <i class="fas fa-bolt text-yellow-400"></i>
++                            Actions rapides
++                        </h2>
++                    </div>
++                    <div class="card-content">
++                        <div class="space-y-3">
++                            <a href="/jobs" class="quick-action-btn gradient-blue">
++                                <i class="fas fa-search"></i>
++                                <span>Parcourir les offres</span>
++                            </a>
++                            <a href="/companies" class="quick-action-btn gradient-purple">
++                                <i class="fas fa-building"></i>
++                                <span>Voir les entreprises</span>
++                            </a>
++                            {% if not student.cv_path %}
++                                <a href="/profile/upload-cv" class="quick-action-btn gradient-pink">
++                                    <i class="fas fa-upload"></i>
++                                    <span>Uploader mon CV</span>
++                                </a>
++                            {% endif %}
++                            <a href="/profile/saved-jobs" class="quick-action-btn gradient-red">
++                                <i class="fas fa-bookmark"></i>
++                                <span>Offres sauvegardées</span>
++                            </a>
++                        </div>
++                    </div>
++                </div>
++
++                <!-- Upcoming Events -->
++                {% if upcomingEvents|length > 0 %}
++                    <div class="card">
++                        <div class="card-header">
++                            <h2 class="text-xl font-bold flex items-center gap-2">
++                                <i class="fas fa-calendar-alt text-orange-400"></i>
++                                Événements à venir
++                            </h2>
++                        </div>
++                        <div class="card-content">
++                            <div class="space-y-3">
++                                {% for event in upcomingEvents %}
++                                    <div class="event-item">
++                                        <div class="event-date">
++                                            <span class="day">{{ event.date|date('d') }}</span>
++                                            <span class="month">{{ event.date|date('M') }}</span>
++                                        </div>
++                                        <div class="event-details">
++                                            <h3 class="font-semibold">{{ event.title }}</h3>
++                                            <p class="text-sm text-gray-400">{{ event.description|slice(0,50) }}...</p>
++                                        </div>
++                                    </div>
++                                {% endfor %}
++                            </div>
++                        </div>
++                    </div>
++                {% endif %}
++            </div>
+         </div>
+     </div>
+-{% endblock %}
++
++    <style>
++        .card {
++            background: linear-gradient(135deg, #1e1e30 0%, #151525 100%);
++            border-radius: 15px;
++            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
++            overflow: hidden;
++        }
++
++        .card-header {
++            padding: 20px;
++            border-bottom: 1px solid #2a2a3e;
++            display: flex;
++            justify-content: space-between;
++            align-items: center;
++        }
++
++        .card-content {
++            padding: 20px;
++        }
++
++        .stat-card {
++            background: linear-gradient(135deg, #1e1e30 0%, #151525 100%);
++            padding: 25px;
++            border-radius: 15px;
++            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
++            position: relative;
++            overflow: hidden;
++        }
++
++        .stat-card::before {
++            content: '';
++            position: absolute;
++            top: 0;
++            left: 0;
++            width: 100%;
++            height: 4px;
++        }
++
++        .gradient-purple::before {
++            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
++        }
++
++        .gradient-blue::before {
++            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
++        }
++
++        .gradient-pink::before {
++            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
++        }
++
++        .gradient-red::before {
++            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
++        }
++
++        .stat-icon {
++            font-size: 32px;
++            margin-bottom: 15px;
++        }
++
++        .gradient-purple .stat-icon {
++            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
++            -webkit-background-clip: text;
++            -webkit-text-fill-color: transparent;
++        }
++
++        .gradient-blue .stat-icon {
++            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
++            -webkit-background-clip: text;
++            -webkit-text-fill-color: transparent;
++        }
++
++        .gradient-pink .stat-icon {
++            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
++            -webkit-background-clip: text;
++            -webkit-text-fill-color: transparent;
++        }
++
++        .gradient-red .stat-icon {
++            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
++            -webkit-background-clip: text;
++            -webkit-text-fill-color: transparent;
++        }
++
++        .stat-label {
++            color: #b0b0b0;
++            font-size: 14px;
++            margin-bottom: 8px;
++            text-transform: uppercase;
++            letter-spacing: 0.5px;
++        }
++
++        .stat-value {
++            font-size: 32px;
++            font-weight: bold;
++            color: #fff;
++        }
++
++        .application-item {
++            padding: 15px;
++            background: #2a2a3e;
++            border-radius: 10px;
++            transition: transform 0.2s;
++        }
++
++        .application-item:hover {
++            transform: translateX(5px);
++        }
++
++        .status-badge {
++            padding: 4px 12px;
++            border-radius: 20px;
++            font-size: 12px;
++            font-weight: 600;
++            text-transform: uppercase;
++        }
++
++        .status-pending {
++            background: rgba(255, 193, 7, 0.2);
++            color: #ffc107;
++        }
++
++        .status-reviewed {
++            background: rgba(0, 123, 255, 0.2);
++            color: #007bff;
++        }
++
++        .status-accepted {
++            background: rgba(40, 167, 69, 0.2);
++            color: #28a745;
++        }
++
++        .status-rejected {
++            background: rgba(220, 53, 69, 0.2);
++            color: #dc3545;
++        }
++
++        .job-recommendation {
++            padding: 15px;
++            background: #2a2a3e;
++            border-radius: 10px;
++            border-left: 4px solid #667eea;
++        }
++
++        .save-btn {
++            padding: 6px 12px;
++            background: transparent;
++            border: 1px solid #4a5568;
++            border-radius: 6px;
++            color: #cbd5e0;
++            cursor: pointer;
++            transition: all 0.2s;
++        }
++
++        .save-btn:hover {
++            background: rgba(102, 126, 234, 0.1);
++            border-color: #667eea;
++            color: #667eea;
++        }
++
++        .apply-btn {
++            padding: 6px 16px;
++            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
++            border-radius: 6px;
++            color: white;
++            font-weight: 600;
++            text-decoration: none;
++            transition: transform 0.2s;
++        }
++
++        .apply-btn:hover {
++            transform: translateY(-2px);
++            color: white;
++        }
++
++        .profile-info {
++            display: flex;
++            justify-content: space-between;
++            padding: 10px 0;
++            border-bottom: 1px solid #2a2a3e;
++        }
++
++        .profile-info:last-child {
++            border-bottom: none;
++        }
++
++        .profile-info .label {
++            color: #b0b0b0;
++            font-size: 14px;
++        }
++
++        .profile-info .value {
++            font-weight: 600;
++        }
++
++        .edit-profile-btn {
++            display: block;
++            width: 100%;
++            margin-top: 20px;
++            padding: 12px;
++            text-align: center;
++            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
++            border-radius: 10px;
++            color: white;
++            font-weight: 600;
++            text-decoration: none;
++            transition: transform 0.2s;
++        }
++
++        .edit-profile-btn:hover {
++            transform: translateY(-2px);
++            color: white;
++        }
++
++        .quick-action-btn {
++            display: flex;
++            align-items: center;
++            gap: 12px;
++            padding: 15px;
++            background: #2a2a3e;
++            border-radius: 10px;
++            text-decoration: none;
++            color: #e2e8f0;
++            transition: all 0.3s;
++            border: 2px solid transparent;
++        }
++
++        .quick-action-btn:hover {
++            transform: translateY(-3px);
++            border-color: #667eea;
++            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
++            color: #e2e8f0;
++        }
++
++        .quick-action-btn i {
++            font-size: 20px;
++        }
++
++        .gradient-blue {
++            border-left: 4px solid #4facfe;
++        }
++
++        .gradient-purple {
++            border-left: 4px solid #667eea;
++        }
++
++        .gradient-pink {
++            border-left: 4px solid #fa709a;
++        }
++
++        .gradient-red {
++            border-left: 4px solid #f5576c;
++        }
++
++        .event-item {
++            display: flex;
++            align-items: center;
++            gap: 15px;
++            padding: 12px;
++            background: #2a2a3e;
++            border-radius: 10px;
++        }
++
++        .event-date {
++            display: flex;
++            flex-direction: column;
++            align-items: center;
++            min-width: 50px;
++            padding: 8px;
++            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
++            border-radius: 8px;
++        }
++
++        .event-date .day {
++            font-size: 18px;
++            font-weight: bold;
++        }
++
++        .event-date .month {
++            font-size: 12px;
++            text-transform: uppercase;
++        }
++    </style>
+ 
+-{% block scripts %}
+-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+-    <script>
+-        $(document).ready(function() {
+-            // Basic AJAX logic for Module 6 (Real-time Search)
+-            $('#jobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
+-                const query = $('#jobSearch').val();
+-                const formData = $('#filterForm').serialize();
++    {% block scripts %}
++        <script>
++            // Script pour sauvegarder les offres
++            document.querySelectorAll('.save-btn').forEach(button => {
++                button.addEventListener('click', function() {
++                    const jobId = this.dataset.jobId;
++                    const icon = this.querySelector('i');
++
++                    fetch(`/jobs/save/${jobId}`, {
++                        method: 'POST',
++                        headers: {
++                            'Content-Type': 'application/json',
++                            'X-CSRF-Token': '{{ csrf_token() }}'
++                        }
++                    })
++                        .then(response => response.json())
++                        .then(data => {
++                            if (data.success) {
++                                if (icon.classList.contains('far')) {
++                                    icon.classList.remove('far');
++                                    icon.classList.add('fas');
++                                    this.classList.add('text-yellow-400');
++                                } else {
++                                    icon.classList.remove('fas');
++                                    icon.classList.add('far');
++                                    this.classList.remove('text-yellow-400');
++                                }
+ 
+-                // This would call your JobController search method
+-                $.ajax({
+-                    url: '/jobs/search',
+-                    method: 'GET',
+-                    data: formData + '&q=' + query,
+-                    success: function(response) {
+-                        // Update #jobsContainer with the partial view returned
+-                        $('#jobsContainer').html(response);
+-                    }
+-                });
+-            });
+-        });
+-    </script>
++                                // Mettre à jour le compteur si nécessaire
++                                updateSavedCount(data.newCount);
++                            }
++                        });
++                });
++            });
++
++            function updateSavedCount(count) {
++                const savedCountElement = document.querySelector('.stat-value:contains("Sauvegardées")');
++                if (savedCountElement) {
++                    savedCountElement.textContent = count;
++                }
++            }
++        </script>
++    {% endblock %}
+ {% endblock %}
+\ No newline at end of file

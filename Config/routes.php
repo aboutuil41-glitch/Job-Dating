@@ -2,12 +2,15 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\controller\FrontOfficeController;
 use App\Core\Router;
 use App\Controller\AuthController;
 use App\Controller\UserController;
 use App\Controller\CompanyController;
 use App\Controller\AdsController;
 use App\Controller\DashboardController;
+use App\Controller\HomeController;
+use App\Controller\ApplicationController;
 
 $router = Router::getRouter();
 
@@ -16,6 +19,11 @@ $router = Router::getRouter();
 // Home & Dashboard
 $router->get('', [AuthController::class, 'login']);
 $router->get('dashboard', [DashboardController::class, 'index']);
+
+// ========== FRONTOFFICE (STUDENTS) ==========
+$router->get('home', [FrontOfficeController::class, 'home']);
+$router->get('jobs', [FrontOfficeController::class, 'jobs']);
+$router->get('job/{id}', [FrontOfficeController::class, 'jobDetails']);
 
 // Old test routes
 $router->get('user/{name}/{id}', fn($name, $id) => 'Welcome ' .$name. ' Your ID is ' .$id);
@@ -92,9 +100,27 @@ $router->get('logout', [AuthController::class, 'logout']);
 // Dashboard (admin)
 $router->get('dashboard', [DashboardController::class, 'index']);
 
+$router->get('home', [HomeController::class, 'home']);
+$router->get('applicantes', [ApplicationController::class, 'loadTheApplicantes']);
+$router->get('applicantes/accept/{id}', [ApplicationController::class, 'accept']);
+$router->get('applicantes/refuse/{id}', [ApplicationController::class, 'refuse']);
+
+
+
+
+// Dashboard (admin)
+$router->get('dashboard', [DashboardController::class, 'index']);
+
 // Home (student)
-$router->get('home', fn() => "Welcome student!"); // You can replace with StudentController later
+$router->get('home',[FrontOfficeController::class,'home']); // You can replace with StudentController later
+$router -> get('jobs',[FrontOfficeController::class,'jobs']);
+$router -> get('offres',[FrontOfficeController::class ,'jobs']);
+$router -> get('jobs/search',[FrontOfficeController::class,'searchJobs']);
+$router -> get('job/{id}',[FrontOfficeController::class,'jobDetails']);
+$router -> get('companies',[FrontOfficeController::class,'companies']);
+$router -> get('entreprises',[FrontOfficeController::class,'companies']);
+$router -> get('company/{id}',[FrontOfficeController::class,'companyDetails']);
 
-
+$router -> post('job/{id}/apply',[FrontOfficeController::class, 'applyToJob']);
 
 $router->dispatch();

@@ -1,39 +1,589 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Job Dating - YouCode{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --dark-bg: #0f0f23;
+            --card-bg: #1a1a2e;
+            --card-hover: #25253f;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a4a;
+            --cyan: #06b6d4;
+            --nav-bg: #16162a;
+        }
+
+        body { 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: var(--text-primary);
+        }
+
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 10px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .mobile-nav-link {
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 12px 16px;
+            border-radius: 10px;
+        }
+
+        .mobile-nav-link:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .mobile-nav-link.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text-primary);
+        }
+
+        /* Search Bar */
+        .search-input {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 10px 16px 10px 48px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Filters Panel */
+        .filters-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .form-select, .form-input {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 8px 12px;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* User Dropdown */
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--nav-bg);
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        /* Flash Messages */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .flash-message {
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Animations */
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
     </style>
+    {% block styles %}{% endblock %}
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-white shadow-sm border-b">
-        <div class="max-w-6xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-xl font-bold text-blue-600">YouCode Job Dating</h1>
+<body>
+<!-- Navigation -->
+<nav class="shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo / Brand -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);">
+                    <i class="fas fa-briefcase text-white"></i>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/home" class="text-gray-600 hover:text-blue-600">Home</a>
-                    <a href="/dashboard" class="text-gray-600 hover:text-blue-600">Dashboard</a>
-                    <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</a>
+                <div>
+                    <h1 class="text-xl font-bold" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        YouCode Job Dating
+                    </h1>
+                    <p class="text-xs" style="color: var(--text-secondary);">Opportunités professionnelles</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="hidden md:block w-full md:w-auto md:flex-1 md:max-w-xl mx-0 md:mx-4">
+                <div class="relative">
+                    <input type="text" id="jobSearch"
+                           placeholder="Search jobs, companies, keywords..."
+                           class="w-full search-input">
+                    <span class="absolute left-4 top-3 text-gray-400">🔍</span>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <a href="/home" class="nav-link {% if current_page == 'home' %}active{% endif %}">
+                        <i class="fas fa-home mr-2"></i>
+                        Accueil
+                    </a>
+                    <a href="/offres" class="nav-link {% if current_page == 'offres' %}active{% endif %}">
+                        <i class="fas fa-search mr-2"></i>
+                        Offres d'emploi
+                    </a>
+                    <a href="/entreprises" class="nav-link {% if current_page == 'entreprises' %}active{% endif %}">
+                        <i class="fas fa-building mr-2"></i>
+                        Entreprises
+                    </a>
+                </div>
+
+                <!-- Filters Button -->
+                <div class="relative">
+                    <button id="filtersToggle" class="btn-primary flex items-center gap-2">
+                        <span>📂 Filters</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <div id="filtersPanel" class="hidden absolute right-0 mt-2 w-80 filters-panel p-6 z-50">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-lg" style="color: var(--text-primary);">Filter Jobs</h3>
+                            <button type="button" onclick="closeFilters()" style="color: var(--text-secondary);" class="hover:text-primary">
+                                ✕
+                            </button>
+                        </div>
+
+                        <form id="filterForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">Company</label>
+                                <select name="company" class="w-full form-select">
+                                    <option value="">All Companies</option>
+                                    {% for company in companies|default([]) %}
+                                        <option value="{{ company.id }}">{{ company.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">Contract Type</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {% for type in ['CDI', 'CDD', 'Internship', 'Freelance'] %}
+                                        <label class="flex items-center text-sm p-2 rounded" style="color: var(--text-secondary);">
+                                            <input type="checkbox" name="contract[]" value="{{ type }}" class="rounded mr-2" style="accent-color: var(--primary);">
+                                            {{ type }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4" style="border-top: 1px solid var(--border);">
+                                <button type="reset" class="text-sm font-medium" style="color: var(--text-secondary);">
+                                    Clear all
+                                </button>
+                                <button type="button" onclick="closeFilters()" class="btn-primary text-sm">
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- User Dropdown -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-2 focus:outline-none">
+                        <div class="user-avatar">
+                            {{ user_initials|default('U') }}
+                        </div>
+                        <i class="fas fa-chevron-down text-sm" style="color: var(--text-secondary);"></i>
+                    </button>
+
+                    <div class="absolute right-0 mt-2 w-48 dropdown-menu opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                        <div class="py-2">
+                            <div class="px-4 py-2" style="border-bottom: 1px solid var(--border);">
+                                <p class="text-sm font-semibold" style="color: var(--text-primary);">{{ user_name|default('Utilisateur') }}</p>
+                                <p class="text-xs" style="color: var(--text-secondary);">{{ user_email|default('user@example.com') }}</p>
+                            </div>
+                            <a href="/profile" class="dropdown-item">
+                                <i class="fas fa-user mr-3"></i>
+                                Mon Profil
+                            </a>
+                            <a href="/applications" class="dropdown-item">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                Mes Candidatures
+                            </a>
+                            <a href="/saved-jobs" class="dropdown-item">
+                                <i class="fas fa-bookmark mr-3"></i>
+                                Offres Sauvegardées
+                            </a>
+                            <div style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px;">
+                                <a href="/logout" class="dropdown-item" style="color: #ef4444;">
+                                    <i class="fas fa-sign-out-alt mr-3"></i>
+                                    Déconnexion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center space-x-4">
+                <button id="mobileSearchButton" style="color: var(--text-secondary);">
+                    <i class="fas fa-search text-xl"></i>
+                </button>
+                <button id="mobileMenuButton" style="color: var(--text-secondary);" class="focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar -->
+        <div id="mobileSearch" class="md:hidden hidden py-4" style="border-top: 1px solid var(--border);">
+            <div class="relative">
+                <input type="text" id="mobileJobSearch"
+                       placeholder="Search jobs, companies, keywords..."
+                       class="w-full search-input">
+                <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden py-4" style="border-top: 1px solid var(--border);">
+            <div class="space-y-3">
+                <a href="/home" class="mobile-nav-link {% if current_page == 'home' %}active{% endif %}">
+                    <i class="fas fa-home mr-3"></i>
+                    Accueil
+                </a>
+                <a href="/offres" class="mobile-nav-link {% if current_page == 'offres' %}active{% endif %}">
+                    <i class="fas fa-search mr-3"></i>
+                    Offres d'emploi
+                </a>
+                <a href="/entreprises" class="mobile-nav-link {% if current_page == 'entreprises' %}active{% endif %}">
+                    <i class="fas fa-building mr-3"></i>
+                    Entreprises
+                </a>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;">
+                    <a href="/profile" class="mobile-nav-link">
+                        <i class="fas fa-user mr-3"></i>
+                        Mon Profil
+                    </a>
+                    <a href="/applications" class="mobile-nav-link">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Mes Candidatures
+                    </a>
+                    <a href="/saved-jobs" class="mobile-nav-link">
+                        <i class="fas fa-bookmark mr-3"></i>
+                        Offres Sauvegardées
+                    </a>
+                    <a href="/logout" class="mobile-nav-link" style="color: #ef4444;">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Déconnexion
+                    </a>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+<!-- Main Content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
 
-    {% block scripts %}{% endblock %}
+<!-- Footer -->
+<footer class="mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);">
+                        <i class="fas fa-briefcase text-white"></i>
+                    </div>
+                    <h2 class="text-xl font-bold" style="color: var(--text-primary);">YouCode Job Dating</h2>
+                </div>
+                <p style="color: var(--text-secondary);">
+                    Plateforme de mise en relation entre les apprenants YouCode et les entreprises partenaires.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold mb-4" style="color: var(--text-primary);">Liens rapides</h3>
+                <ul class="space-y-2">
+                    <li><a href="/offres" class="transition" style="color: var(--text-secondary);">Offres d'emploi</a></li>
+                    <li><a href="/entreprises" class="transition" style="color: var(--text-secondary);">Entreprises</a></li>
+                    <li><a href="/about" class="transition" style="color: var(--text-secondary);">À propos</a></li>
+                    <li><a href="/contact" class="transition" style="color: var(--text-secondary);">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold mb-4" style="color: var(--text-primary);">Contact</h3>
+                <ul class="space-y-2" style="color: var(--text-secondary);">
+                    <li class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-3" style="color: var(--primary);"></i>
+                        YouCode, Safi, Maroc
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mr-3" style="color: var(--primary);"></i>
+                        contact@youcode.ma
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone mr-3" style="color: var(--primary);"></i>
+                        +212 5XX XX XX XX
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-8 pt-8 text-center" style="border-top: 1px solid var(--border); color: var(--text-secondary);">
+            <p>&copy; {{ "now"|date("Y") }} YouCode Job Dating. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Flash Messages Container -->
+<div id="flashMessages" class="fixed top-20 right-4 z-50 space-y-2 max-w-sm"></div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#mobileMenuButton').on('click', function() {
+        $('#mobileMenu').slideToggle(200);
+    });
+
+    $('#mobileSearchButton').on('click', function() {
+        $('#mobileSearch').slideToggle(200);
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#mobileMenu, #mobileMenuButton, #mobileSearch, #mobileSearchButton').length) {
+            $('#mobileMenu').slideUp(200);
+            $('#mobileSearch').slideUp(200);
+        }
+    });
+
+    $('#filtersToggle').on('click', function(e) {
+        e.stopPropagation();
+        $('#filtersPanel').toggleClass('hidden');
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#filtersPanel, #filtersToggle').length) {
+            $('#filtersPanel').addClass('hidden');
+        }
+    });
+
+    function closeFilters() {
+        $('#filtersPanel').addClass('hidden');
+    }
+
+    function performSearch() {
+        const query = $('#jobSearch').val() || $('#mobileJobSearch').val() || '';
+        const formData = $('#filterForm').serialize();
+        console.log('Searching for:', query);
+        console.log('Filters:', formData);
+    }
+
+    let searchTimeout;
+    $('#jobSearch, #mobileJobSearch, #filterForm input, #filterForm select').on('keyup change', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    function showFlashMessage(type, message) {
+        const colors = {
+            success: 'background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%); border: 2px solid rgba(16, 185, 129, 0.3); color: #10b981;',
+            error: 'background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%); border: 2px solid rgba(239, 68, 68, 0.3); color: #ef4444;',
+            warning: 'background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(251, 191, 36, 0.2) 100%); border: 2px solid rgba(245, 158, 11, 0.3); color: #f59e0b;',
+            info: 'background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border: 2px solid rgba(99, 102, 241, 0.3); color: #6366f1;'
+        };
+
+        const icon = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+
+        const flashHtml = `
+            <div class="flash-message animate-slide-in" style="${colors[type]}">
+                <i class="fas fa-${icon[type]} text-lg"></i>
+                <span class="flex-1">${message}</span>
+                <button class="close-flash hover:opacity-70">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+
+        $('#flashMessages').append(flashHtml);
+
+        setTimeout(() => {
+            $('.flash-message').first().animate({opacity: 0, right: '-100%'}, 500, function() {
+                $(this).remove();
+            });
+        }, 5000);
+    }
+
+    $(document).on('click', '.close-flash', function() {
+        $(this).closest('.flash-message').animate({opacity: 0, right: '-100%'}, 500, function() {
+            $(this).remove();
+        });
+    });
+
+    {% if flash_messages is defined %}
+    {% for flash in flash_messages %}
+    showFlashMessage('{{ flash.type }}', '{{ flash.message }}');
+    {% endfor %}
+    {% endif %}
+</script>
+
+{% block scripts %}{% endblock %}
 </body>
 </html>
